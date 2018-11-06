@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Do+Hyeon');
+
+.scene {
+}
+#backgroundImage {
+    -fx-background-image: url("../img/welcome_leopard.png");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+}
+.button {
+    -fx-font-size: 15px;
+    -fx-padding: 25px 25px 25px 25px;
+}
+.label {
+    -fx-font-size: 35px;
+    -fx-padding: 25px 25px 25px 25px;
+}
+.label, .button:focused, .button {
+    -fx-background-color: #ecede1;
+    -fx-font-family: "Do Hyeon";
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.3, 0, 0);
+}
