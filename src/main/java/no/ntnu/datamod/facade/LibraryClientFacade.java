@@ -22,4 +22,7 @@ public interface LibraryClientFacade {
      * @return Return true if the connection is active (opened), false if not.
      */
     public boolean isConnectionActive();
+
+    
+    public String getLastError();
 }

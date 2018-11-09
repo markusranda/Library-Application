@@ -28,14 +28,15 @@ public class App extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         URL r = getClass().getClassLoader().getResource("layout.fxml");
         Parent root = FXMLLoader.load(r);
         Scene scene = new Scene(root, 600, 400);
         scene.getStylesheets().add("styles/style.css");
         primaryStage.setTitle("Library Leopard Leo - Library Client");
         primaryStage.setScene(scene);
-        Image anotherIcon = new Image("styles/ntnu.png");
-        primaryStage.getIcons().add(anotherIcon);
+        //Image anotherIcon = new Image("styles/ntnu.png");
+        //primaryStage.getIcons().add(anotherIcon);
         primaryStage.show();
     }
 }
