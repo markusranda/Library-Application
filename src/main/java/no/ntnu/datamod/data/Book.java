@@ -11,6 +11,7 @@ public class Book extends Literature
 {
     private String author;
     private String edition;
+    private String imageURL;
 
     /**
      * Constructor for objects of class Book.
@@ -18,11 +19,10 @@ public class Book extends Literature
      * @param title The books title.
      * @param author The books author.
      * @param edition The books edition.
-     * @param price The books price.
      */
-    public Book(String publisher, String title, double price, String author, String edition)
+    public Book(String publisher, String title, String author, String edition)
     {
-        super(publisher, title, price);
+        super(publisher, title);
         this.author = author;
         this.edition = edition;
     }
@@ -30,13 +30,13 @@ public class Book extends Literature
     // ---------- AKSESSOR METHODS ---------- //
     
     /**
-     * Return all of the books details: publisher, title, author, edition, price
+     * Return all of the books details: publisher, title, author, edition
      * @return The books details
      */
     public String getDetails()
     {
         return getPublisher() + ", " + getTitle() + ", " 
-        + author + ", " + edition + ", " + getPrice();
+        + author + ", " + edition;
     }
 
     /**
@@ -56,4 +56,13 @@ public class Book extends Literature
     {
         return edition;
     }
+
+    /**
+     * The books image URL as a String, if the object doesn't
+     * have a string it will return null.
+     *
+     * @return The books image URL as a String, if the object doesn't
+     * have a string it will return null.
+     */
+    public String getImageURL() { return imageURL; }
 }

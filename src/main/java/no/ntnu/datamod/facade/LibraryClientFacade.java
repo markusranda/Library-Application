@@ -23,6 +23,10 @@ public interface LibraryClientFacade {
      */
     public boolean isConnectionActive();
 
-    
+    /**
+     * Returns the last error message from the server.
+     *
+     * @return Returns the last error message from the server.
+     */
     public String getLastError();
 }

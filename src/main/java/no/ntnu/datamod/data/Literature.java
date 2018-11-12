@@ -10,16 +10,14 @@ public abstract class Literature
 {
     private String title;
     private String publisher;
-    private Double price;
 
     /**
      * Constructor for objects of class Litterature
      */
-    public Literature(String publisher, String title, Double price)
+    public Literature(String publisher, String title)
     {
         this.title = title;
         this.publisher = publisher;
-        this.price = price;
     }
     
     public abstract String getDetails();
@@ -32,10 +30,5 @@ public abstract class Literature
     public String getPublisher()
     {
         return publisher;
-    }
-    
-    public Double getPrice()
-    {
-        return price;
     }
 }
