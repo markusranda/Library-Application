@@ -11,7 +11,7 @@
       <children>
             <Label fx:id="serverStatus" layoutX="289.0" layoutY="151.0" text="placeholder" />
             <Button fx:id="connectBtn" layoutX="212.0" layoutY="317.0" mnemonicParsing="false" text="Connect" />
-            <Button fx:id="storeBtn" layoutX="88.0" layoutY="317.0" mnemonicParsing="false" text="Store" />
+            <Button fx:id="storeBtn" layoutX="88.0" layoutY="317.0" mnemonicParsing="false" onAction="#openStoreWindow" text="Store" />
       </children>
     </AnchorPane>
   </children>
