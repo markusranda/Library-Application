@@ -2,6 +2,7 @@ package no.ntnu.datamod.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,6 +43,16 @@ public class StoreController implements Initializable {
      * Creates some example data in the registry for testing purposes.
      */
     private void createExampleRegistry() {
+        registry.addLiterature(new Book("Roald As","Svaner og Spader", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Spader og Svaner", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Historien om Sverige", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Vi er alle barn og/eller barnebarn", "Roald", "69"));
+        registry.addLiterature(new Book("Roald As","Spanske vitser", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Svaner og Spader", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Spader og Svaner", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Historien om Sverige", "Roald", "1"));
+        registry.addLiterature(new Book("Roald As","Vi er alle barn og/eller barnebarn", "Roald", "69"));
+        registry.addLiterature(new Book("Roald As","Spanske vitser", "Roald", "1"));
         registry.addLiterature(new Book("Roald As","Svaner og Spader", "Roald", "1"));
         registry.addLiterature(new Book("Roald As","Spader og Svaner", "Roald", "1"));
         registry.addLiterature(new Book("Roald As","Historien om Sverige", "Roald", "1"));
@@ -114,6 +125,7 @@ public class StoreController implements Initializable {
         productImgView.setPreserveRatio(true);
         productImgView.setImage(productImg);
         product.getChildren().addAll(productImgView, title, hBox);
+        product.setPadding(new Insets(80, 10, 10, 10));
         return product;
     }
 }
