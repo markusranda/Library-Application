@@ -42,9 +42,6 @@ public class GUIController implements DatabaseListener, Initializable {
     @FXML
     private Button storeBtn;
 
-    @FXML
-    private Button loanBtn = new Button("Loan");
-
     private DatabaseClient databaseClient;
 
     /**

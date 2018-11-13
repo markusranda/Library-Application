@@ -28,11 +28,11 @@ public class App extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-            URL r = getClass().getClassLoader().getResource("welcomeWindow.fxml");
+            URL r = getClass().getClassLoader().getResource("loginWindow.fxml");
             Parent root = FXMLLoader.load(r);
             Scene scene = new Scene(root, 600, 400);
             scene.getStylesheets().add("styles/style.css");
-            primaryStage.setTitle("Library Leopard Leo - Library Client");
+            primaryStage.setTitle("Library Leopard Leo - Login screen");
             primaryStage.setScene(scene);
             primaryStage.show();
     }
