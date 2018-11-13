@@ -12,7 +12,7 @@ public abstract class Literature
     private String publisher;
 
     /**
-     * Constructor for objects of class Litterature
+     * Constructor for objects of class Littrature
      */
     public Literature(String publisher, String title)
     {

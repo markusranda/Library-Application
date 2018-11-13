@@ -13,6 +13,10 @@ public class Book extends Literature
     private String edition;
     private String imageURL;
 
+    /* todo
+    finish creating this class with fields and methods
+     */
+
     /**
      * Constructor for objects of class Book.
      * @param publisher The books publisher.
