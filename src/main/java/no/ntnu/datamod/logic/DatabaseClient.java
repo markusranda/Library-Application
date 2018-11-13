@@ -9,15 +9,12 @@ import java.io.*;
 import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DatabaseClient implements LibraryClientFacade {
 
-    private InputStream in;
-    private OutputStream out;
-    private PrintWriter toServer;
-    private BufferedReader fromServer;
     private Connection connection;
-    private String lastError = null; // Last error message will be stored here
+    private String lastError = null;
 
     /**
      * Returns all the books from the table Books as an ArrayList<Book>.
@@ -113,6 +110,62 @@ public class DatabaseClient implements LibraryClientFacade {
     }
 
     /**
+     * An example on how to do a query and retrieve an entire "table" from the database which can be parsed further.
+     *
+     * @param fullCommand The SQL statement
+     * @return Returns a "table" as a result of the SQL statement
+     */
+    public ArrayList<HashMap<String,Object>> rawQuery(String fullCommand) {
+        try {
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result = null;
+            boolean returningRows = stm.execute(fullCommand);
+            if (returningRows)
+                result = stm.getResultSet();
+            else
+                return new ArrayList<>();
+
+            // Get metadata
+            ResultSetMetaData meta = null;
+            meta = result.getMetaData();
+
+            // Get column names
+            int colCount = meta.getColumnCount();
+            ArrayList<String> cols = new ArrayList<String>();
+            for (int index=1; index <= colCount; index++)
+                cols.add(meta.getColumnName(index));
+
+            // Fetch out rows
+            ArrayList<HashMap<String,Object>> rows =
+                    new ArrayList<HashMap<String,Object>>();
+
+            while (result.next()) {
+                HashMap<String,Object> row = new HashMap<String,Object>();
+                for (String colName:cols) {
+                    Object val = result.getObject(colName);
+                    row.put(colName,val);
+                }
+                rows.add(row);
+            }
+
+            //close statement
+            stm.close();
+
+            //pass back rows
+            return rows;
+        }
+        catch (Exception ex) {
+            System.out.print(ex.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Connect to a chat server.
      *
      * @param host host name or IP address of the chat server
@@ -132,36 +185,13 @@ public class DatabaseClient implements LibraryClientFacade {
             connection = DriverManager.getConnection(
                     connectionString);
             return true;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("SQLException: " + ex.getMessage());
             return false;
         }
-        finally {
-            // it is a good idea to release
-            // resources in a finally{} block
-            // in reverse-order of their creation
-            // if they are no-longer needed
 
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) {
-                } // ignore
-
-                rs = null;
-            }
-
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) {
-                } // ignore
-
-                stmt = null;
-            }
-        }
     }
+
 
     /**
      * Disconnect from the chat server (close the socket)
