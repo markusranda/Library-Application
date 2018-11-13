@@ -1,18 +1,16 @@
 package no.ntnu.datamod.gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Literature;
 import no.ntnu.datamod.logic.LiteratureRegistry;
@@ -21,22 +19,31 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+
 
 public class StoreController implements Initializable {
 
+    private LiteratureRegistry registry;
+
+    private ObservableList<String> shoppingCartObsList;
 
     @FXML
     private GridPane literatureTable;
 
     @FXML
-    private ListView shoppingCartList;
+    private ListView<String> shoppingCartListView;
 
-    private LiteratureRegistry registry = new LiteratureRegistry();
+    @FXML
+    private Button checkoutBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        shoppingCartObsList = FXCollections.observableArrayList();
+        registry = new LiteratureRegistry();
         createExampleRegistry();
         fillLiteratureTable();
+        setKeyAndClickListeners();
     }
 
     /**
@@ -84,21 +91,31 @@ public class StoreController implements Initializable {
                 }
             }
         }
-        literatureTable.setHgap(10);
-        literatureTable.setVgap(10);    }
+        literatureTable.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
+        // Calculating the required height using the number of rows and a fixed set of pixels
+        int height = 0;
+        int numberOfElements = registry.getSize();
+        int numberOfRows = numberOfElements / 3;
+        height = numberOfRows * 185;
+        literatureTable.setMinHeight(height);
+    }
 
     /**
      * This method is a helper-method for the createGridPane() method,
      * that creates each individual object that's going to be placed
      * in the GridPane.
      * @param lit takes a Literature parameter
-     * @return returns a VBox fully equipped with a the book's information.
+     * @return returns a VBox fully equipped with a the product's information.
      */
     private VBox createProduct(Literature lit) {
         Button loanBtn = new Button("Borrow");
         final double MAX_IMAGE_WIDTH = 200;
         VBox product = new VBox();
         loanBtn.setAlignment(Pos.TOP_RIGHT);
+        loanBtn.setOnAction( e -> {
+            shoppingCartObsList.add(lit.getTitle() + "\n");
+            shoppingCartListView.setItems(shoppingCartObsList);
+        });
         Label title;
         if (lit.getTitle().length() > 17) {
             title = new Label(lit.getTitle());
@@ -125,7 +142,17 @@ public class StoreController implements Initializable {
         productImgView.setPreserveRatio(true);
         productImgView.setImage(productImg);
         product.getChildren().addAll(productImgView, title, hBox);
-        product.setPadding(new Insets(80, 10, 10, 10));
+        product.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
         return product;
+    }
+
+    /**
+     * Setup mouse and keyboard event handlers.
+     */
+    private void setKeyAndClickListeners() {
+        checkoutBtn.setOnMouseClicked(event -> {
+            //TODO Update the database with borrowers name and shoppingcartlist.
+            shoppingCartObsList.clear();
+        });
     }
 }

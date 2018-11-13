@@ -27,6 +27,7 @@ import no.ntnu.datamod.logic.LiteratureRegistry;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class GUIController implements DatabaseListener, Initializable {
@@ -60,8 +61,8 @@ public class GUIController implements DatabaseListener, Initializable {
      * When this method is called it will change the scene to the store page.
      */
     private void openStoreWindow(ActionEvent event) throws IOException {
-        Parent storeParent = null;
-        storeParent = FXMLLoader.load(getClass().getClassLoader().getResource("storeWindow.fxml"));
+        Parent storeParent;
+        storeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("storeWindow.fxml")));
         Scene scene = new Scene(storeParent);
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();

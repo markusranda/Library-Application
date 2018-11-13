@@ -34,6 +34,12 @@ public class LiteratureRegistry {
     }
 
     /**
+     * Returns the size of the registry.
+     * @return Returns the size of the registry.
+     */
+    public int getSize() { return literature.size(); }
+
+    /**
      *  Removes a literature object from the registry using the object
      *  itself to determine what to delete.
      * @param literatureObject enter the Literature object that is desired to remove.
