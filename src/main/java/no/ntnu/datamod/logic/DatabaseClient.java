@@ -5,8 +5,6 @@ import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.data.User;
 import no.ntnu.datamod.facade.LibraryClientFacade;
 
-import java.io.*;
-import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,14 +15,14 @@ public class DatabaseClient implements LibraryClientFacade {
     private String lastError = null;
 
     /**
-     * Returns all the books from the table Books as an ArrayList<Book>.
+     * Returns all the books from the table Book as an ArrayList<Book>.
      *
-     * @return Returns all the books from the table Books as an ArrayList<Book>.
+     * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Book> getBooksList() {
         /*
          Todo
-         Query the database for all the books in the Books table.
+         Query the database for all the books in the Book table.
          Then create objects of the type Book, and finally place all of them in
          the list and return it.
           */
@@ -32,9 +30,9 @@ public class DatabaseClient implements LibraryClientFacade {
     }
 
     /**
-     * Returns all the books from the table Books as an ArrayList<Book>.
+     * Returns all the books from the table Book as an ArrayList<Book>.
      *
-     * @return Returns all the books from the table Books as an ArrayList<Book>.
+     * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<User> getUsersList() {
         /*
@@ -47,9 +45,9 @@ public class DatabaseClient implements LibraryClientFacade {
     }
 
     /**
-     * Returns all the books from the table Books as an ArrayList<Book>.
+     * Returns all the books from the table Book as an ArrayList<Book>.
      *
-     * @return Returns all the books from the table Books as an ArrayList<Book>.
+     * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Branch> getBranchList() {
         /*
@@ -62,14 +60,14 @@ public class DatabaseClient implements LibraryClientFacade {
     }
 
     /**
-     * Returns all the books from the table Books as an ArrayList<Book>.
+     * Returns all the books from the table Book as an ArrayList<Book>.
      *
-     * @return Returns all the books from the table Books as an ArrayList<Book>.
+     * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Loan> getLoansList() {
         /*
          Todo
-         Query the database for all the loans in the Loans table.
+         Query the database for all the loans in the Loan table.
          Then create objects of the type loan, and finally place all of them in
          the list and return it.
           */
@@ -128,6 +126,7 @@ public class DatabaseClient implements LibraryClientFacade {
             if (returningRows)
                 result = stm.getResultSet();
             else
+                // Returns a empty ArrayList if can't execute
                 return new ArrayList<>();
 
             // Get metadata
@@ -136,16 +135,16 @@ public class DatabaseClient implements LibraryClientFacade {
 
             // Get column names
             int colCount = meta.getColumnCount();
-            ArrayList<String> cols = new ArrayList<String>();
+            ArrayList<String> cols = new ArrayList<>();
             for (int index=1; index <= colCount; index++)
                 cols.add(meta.getColumnName(index));
 
             // Fetch out rows
             ArrayList<HashMap<String,Object>> rows =
-                    new ArrayList<HashMap<String,Object>>();
+                    new ArrayList<>();
 
             while (result.next()) {
-                HashMap<String,Object> row = new HashMap<String,Object>();
+                HashMap<String,Object> row = new HashMap<>();
                 for (String colName:cols) {
                     Object val = result.getObject(colName);
                     row.put(colName,val);

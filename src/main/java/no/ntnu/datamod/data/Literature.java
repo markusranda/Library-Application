@@ -1,7 +1,7 @@
 package no.ntnu.datamod.data;
 
 /**
- * Write a description of class Litterature here.
+ * Write a description of class Literature here.
  *
  * @author (your name)
  * @version (a version number or a date)
@@ -12,23 +12,21 @@ public abstract class Literature
     private String publisher;
 
     /**
-     * Constructor for objects of class Littrature
+     * Constructor for objects of class Literature
      */
     public Literature(String publisher, String title)
     {
         this.title = title;
         this.publisher = publisher;
     }
-    
-    public abstract String getDetails();
-    
-    public String getTitle()
-    {
+
+    public String getTitle() {
         return title;
     }
     
-    public String getPublisher()
-    {
+    public String getPublisher() {
         return publisher;
     }
+
+    public abstract String getImageURL();
 }

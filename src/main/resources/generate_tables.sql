@@ -18,7 +18,7 @@ CREATE SCHEMA IF NOT EXISTS `library_db` DEFAULT CHARACTER SET latin1 ;
 USE `library_db` ;
 
 -- -----------------------------------------------------
--- Table `library_db`.`Books`
+-- Table `library_db`.`Book`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Books` (
   `idBook` INT(11) NOT NULL,
@@ -33,7 +33,7 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `library_db`.`Branches`
+-- Table `library_db`.`Branch`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Branches` (
   `idBranch` INT(11) NOT NULL,
@@ -104,7 +104,7 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `library_db`.`Users`
+-- Table `library_db`.`User`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
   `idUser` INT(11) NOT NULL,
@@ -131,7 +131,7 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `library_db`.`Loans`
+-- Table `library_db`.`Loan`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
   `idLoans` INT(11) NOT NULL,

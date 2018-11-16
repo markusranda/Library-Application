@@ -50,21 +50,10 @@ public class StoreController implements Initializable {
      * Creates some example data in the registry for testing purposes.
      */
     private void createExampleRegistry() {
-        registry.addLiterature(new Book("Roald As","Svaner og Spader", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Spader og Svaner", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Historien om Sverige", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Vi er alle barn og/eller barnebarn", "Roald", "69"));
-        registry.addLiterature(new Book("Roald As","Spanske vitser", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Svaner og Spader", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Spader og Svaner", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Historien om Sverige", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Vi er alle barn og/eller barnebarn", "Roald", "69"));
-        registry.addLiterature(new Book("Roald As","Spanske vitser", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Svaner og Spader", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Spader og Svaner", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Historien om Sverige", "Roald", "1"));
-        registry.addLiterature(new Book("Roald As","Vi er alle barn og/eller barnebarn", "Roald", "69"));
-        registry.addLiterature(new Book("Roald As","Spanske vitser", "Roald", "1"));
+        registry.addLiterature(new Book("Svaner og Spader","Roald As",1, "Roald", "1"));
+        registry.addLiterature(new Book("Spader og Svaner","Roald As",2, "Roald", "1"));
+        registry.addLiterature(new Book("Historien om Sverige","Roald As",3, "Roald", "1"));
+        registry.addLiterature(new Book("Vi er alle barn og/eller barnebarn","Roald As",4, "Roald", "69"));
     }
 
     /**

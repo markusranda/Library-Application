@@ -1,18 +1,42 @@
 package no.ntnu.datamod.data;
 
+
 public class Branch {
 
-    private int branchID;
-    private String branchName;
-    private String branchAddress;
+  private long idBranch;
+  private String name;
+  private String address;
 
-    public void Branch(int branchID, String branchName, String branchAddress) {
-        this.branchID = branchID;
-        this.branchName = branchName;
-        this.branchAddress = branchAddress;
-    }
+  public Branch(long idBranch, String name, String address) {
+    this.idBranch = idBranch;
+    this.name = name;
+    this.address = address;
+  }
 
-    /* todo
-    finish creating this class with fields and methods
-     */
+  public long getIdBranch() {
+    return idBranch;
+  }
+
+  public void setIdBranch(long idBranch) {
+    this.idBranch = idBranch;
+  }
+
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
 }
