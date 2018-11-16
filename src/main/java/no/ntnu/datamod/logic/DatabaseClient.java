@@ -50,13 +50,62 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Branch> getBranchList() {
-        /*
-         Todo
-         Query the database for all the Branch in the Branch table.
-         Then create objects of the type Branch, and finally place all of them in
-         the list and return it.
-          */
-        return new ArrayList<>();
+        String fullCommand = "SELECT * FROM Branches";
+        ArrayList<HashMap<String,Object>> rows = new ArrayList<>();
+        ArrayList<Branch> rowList = new ArrayList<>();
+        Statement stm = null;
+        try {
+            // Create statement
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result = null;
+            boolean returningRows = stm.execute(fullCommand);
+            if (returningRows)
+                result = stm.getResultSet();
+            else
+                // Returns a empty ArrayList if can't execute
+                return new ArrayList<>();
+
+            // Get metadata
+            ResultSetMetaData meta = null;
+            meta = result.getMetaData();
+
+            // Get column names
+            int colCount = meta.getColumnCount();
+            ArrayList<String> cols = new ArrayList<>();
+            for (int index=1; index <= colCount; index++)
+                cols.add(meta.getColumnName(index));
+
+            // Creates an ArrayList with a HashMap that contains mappings
+            // to each of the fields values.
+            while (result.next()) {
+                HashMap<String,Object> row = new HashMap<>();
+                for (String colName:cols) {
+                    Object val = result.getObject(colName);
+                    row.put(colName,val);
+                }
+                rows.add(row);
+            }
+
+            // Uses the previously created HashMap to match key for value
+            // and creates the required object. And puts em all into a list.
+            for (HashMap<String, Object> row : rows) {
+                long idBranch = (int) row.get("idBranch");
+                String name = (String) row.get("name");
+                String address = (String) row.get("address");
+                Branch branch = new Branch(idBranch, name, address);
+                rowList.add(branch);
+            }
+
+            // Closes the statement
+            stm.close();
+            return rowList;
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -143,6 +192,7 @@ public class DatabaseClient implements LibraryClientFacade {
             ArrayList<HashMap<String,Object>> rows =
                     new ArrayList<>();
 
+
             while (result.next()) {
                 HashMap<String,Object> row = new HashMap<>();
                 for (String colName:cols) {
@@ -172,17 +222,16 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return True on success, false otherwise
      */
     @Override
-    public boolean connect(String host, int port) {
-        String database = "library_db";
+    public boolean connect(String host, int port, String database) {
         String connectionString = "jdbc:mysql://"+ host + ":" + port + "/" +
                 database + "?user=dbuser&password=password&useUnicode=true&characterEncoding=UTF-8";
-        Statement stmt = null;
-        ResultSet rs = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            System.out.println("Connecting to database: " + connectionString);
+            System.out.println("Connecting to database: " + database);
             connection = DriverManager.getConnection(
                     connectionString);
+            ArrayList<Branch> branches =  getBranchList();
+            System.out.println(branches);
             return true;
         } catch (Exception ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -190,7 +239,6 @@ public class DatabaseClient implements LibraryClientFacade {
         }
 
     }
-
 
     /**
      * Disconnect from the chat server (close the socket)

@@ -67,7 +67,7 @@ public class GUIController implements DatabaseListener, Initializable {
                 // If the connection is not active, connect to the server
                 boolean finish = false;
                 while (!finish) {
-                    setupConnection("192.168.50.50", 3306);
+                    setupConnection("192.168.50.50", 3306, "library_db");
                     connectBtn.setDisable(true);
                     finish = true;
                 }
@@ -86,13 +86,13 @@ public class GUIController implements DatabaseListener, Initializable {
      * @param host Address of Chat server. Can be IP address, can be hostname
      * @param port TCP port for the chat server
      */
-    private void setupConnection(String host, int port) {
+    private void setupConnection(String host, int port, String database) {
         serverStatus.setText("Connecting...");
         connectBtn.setText("Connecting");
-        System.out.println("Connecting to " + host + ", port " + port);
+        System.out.println("Connecting to " + host + ", port " + port + ", database: " + database);
         // Run the connection in a new background thread to avoid GUI freeze
         Thread connThread = new Thread(() -> {
-            boolean connected = databaseClient.connect(host, port);
+            boolean connected = databaseClient.connect(host, port, database);
             if (connected) {
                 System.out.println("Connection is established!");
                 // Added a change of status in the serverStatus textfield.

@@ -9,7 +9,7 @@ public interface LibraryClientFacade {
      * @param port TCP port of the chat server
      * @return True on success, false otherwise
      */
-    public boolean connect(String host, int port);
+    public boolean connect(String host, int port, String database);
 
     /**
      * Disconnect from the chat server (close the socket)
