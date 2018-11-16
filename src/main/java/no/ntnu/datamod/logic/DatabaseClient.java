@@ -1,10 +1,12 @@
 package no.ntnu.datamod.logic;
+import com.sun.xml.internal.bind.v2.TODO;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.data.User;
 import no.ntnu.datamod.facade.LibraryClientFacade;
 
+import javax.security.auth.login.Configuration;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,8 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Book> getBooksList() {
+
+
         /*
          Todo
          Query the database for all the books in the Book table.
@@ -127,20 +131,42 @@ public class DatabaseClient implements LibraryClientFacade {
      * Adds a new user to the database with the given parameter values
      * defining the user to be added.
      *
+     *
+     *
      * @param idUser The ID of the user
-     * @param fname first name
-     * @param lname last name
-     * @param address home address
-     * @param phone phone number
-     * @param email email address
      * @param password password
      * @param usertype the type of user
+     * @param username username
+     *
+     * @return Returns number of rows affected.
      */
-    public void addUserToDatabase(int idUser, String fname, String lname, String address,
-                                  String phone, String email, String password, String usertype) {
-        /* todo
-           Add the new user to the database using the parameters.
-        */
+    public int addUserToDatabase(long idUser, String username, String password, String usertype) {
+        // TODO: 16.11.2018 addUserToDatabase needs idEmploee and idCustomer to work
+
+        try {
+            String fullCommand = "INSERT INTO Users (idUser, username, password, usertype) VALUES" +
+                    "( " +
+                    idUser + ", '" +
+                    username + "', '" +
+                    password + "', '" +
+                    usertype + "' )";
+
+
+            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result = null;
+            return stm.executeUpdate(fullCommand);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+
+
+        return 0;
     }
 
     /**
@@ -231,7 +257,8 @@ public class DatabaseClient implements LibraryClientFacade {
             connection = DriverManager.getConnection(
                     connectionString);
             ArrayList<Branch> branches =  getBranchList();
-            System.out.println(branches);
+            // TODO: 16.11.2018 addUserToDatabase is called here for testing purposes. remove when done!
+            addUserToDatabase(1234,"Arneboii", "ziudshfireq","Sjef");
             return true;
         } catch (Exception ex) {
             System.out.println("SQLException: " + ex.getMessage());
