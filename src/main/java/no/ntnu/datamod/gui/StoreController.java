@@ -2,25 +2,33 @@ package no.ntnu.datamod.gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Literature;
 import no.ntnu.datamod.logic.DatabaseClient;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -44,6 +52,9 @@ public class StoreController implements Initializable {
     @FXML
     private MenuButton branchMenu;
 
+    @FXML
+    private Button backBtn;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         shoppingCartObsList = FXCollections.observableArrayList();
@@ -58,6 +69,7 @@ public class StoreController implements Initializable {
      */
     private void fillBranchMenu() {
         try {
+            branchMenu.setText("Choose Library..");
             ArrayList<Branch> branches = databaseClient.getBranchList();
             for (Branch branch : branches) {
                 MenuItem menuItem = new MenuItem(branch.getName());
@@ -177,6 +189,21 @@ public class StoreController implements Initializable {
         checkoutBtn.setOnMouseClicked(event -> {
             //TODO Update the database with borrowers name and shoppingcartlist.
             shoppingCartObsList.clear();
+        });
+        backBtn.setOnMouseClicked(event -> {
+            //noinspection Duplicates
+            try {
+                Parent welcomeParent;
+                welcomeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
+                Scene scene = new Scene(welcomeParent);
+                // This line gets the Stage information
+                Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                window.setTitle("Library Leopard Leo - Welcome");
+                window.setScene(scene);
+                window.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 }
