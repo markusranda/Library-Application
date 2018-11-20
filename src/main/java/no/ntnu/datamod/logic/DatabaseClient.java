@@ -220,19 +220,23 @@ public class DatabaseClient implements LibraryClientFacade {
      * @param password password
      * @param usertype the type of user
      * @param username username
+     * @param idCustomer Customer ID
+     * @param idEmployee Employee ID
      *
      * @return Returns number of rows affected.
      */
-    public int addUserToDatabase(long idUser, String username, String password, String usertype) {
+    public int addUserToDatabase(long idUser, String username, String password, String usertype, long idCustomer, long idEmployee) {
         // TODO: 16.11.2018 addUserToDatabase needs idEmploee and idCustomer to work
 
         try {
-            String fullCommand = "INSERT INTO Users (idUser, username, password, usertype) VALUES" +
+            String fullCommand = "INSERT INTO Users (idUser, username, password, usertype, idCustomer, idEmployee) VALUES" +
                     "( " +
                     idUser + ", '" +
                     username + "', '" +
                     password + "', '" +
-                    usertype + "' )";
+                    usertype + "', '" +
+                    idCustomer + "', '" +
+                    idEmployee + "' )";
 
 
             PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
@@ -283,7 +287,7 @@ public class DatabaseClient implements LibraryClientFacade {
                     connectionString);
             ArrayList<Branch> branches =  getBranchList();
             // TODO: 16.11.2018 addUserToDatabase is called here for testing purposes. remove when done!
-            addUserToDatabase(1234,"Arneboii", "ziudshfireq","Sjef");
+            addUserToDatabase(1234,"Arneboii", "ziudshfireq","Sjef", null, null);
             return true;
         } catch (Exception ex) {
             System.out.println("SQLException: " + ex.getMessage());
