@@ -34,6 +34,7 @@ public class LoginController implements Initializable {
     /**
      * Setup mouse and keyboard event handlers.
      */
+    @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
         loginBtn.setOnMouseClicked(event -> {
             String username = usernameField.getText();
@@ -42,12 +43,12 @@ public class LoginController implements Initializable {
             // Use the strings username and password to authenticate with the database.
             // Then change to the welcomeWindow with buttons unlocked corresponding to the usertype.
             try {
-                Parent welcomeParent;
-                welcomeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
-                Scene scene = new Scene(welcomeParent);
+                Parent mainMenuParent;
+                mainMenuParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
+                Scene scene = new Scene(mainMenuParent);
                 // This line gets the Stage information
                 Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                window.setTitle("Library Leopard Leo - Welcome");
+                window.setTitle("Library Leopard Leo - Main Menu");
                 window.setScene(scene);
                 window.show();
             } catch (IOException e) {

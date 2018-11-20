@@ -2,7 +2,6 @@ package no.ntnu.datamod.gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,15 +21,11 @@ import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Literature;
 import no.ntnu.datamod.logic.DatabaseClient;
-import no.ntnu.datamod.logic.LiteratureRegistry;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -38,7 +33,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class StoreController implements Initializable {
 
     private DatabaseClient databaseClient;
-
+    private HashMap<Literature, Branch> shoppingCartSet;
     private ObservableList<String> shoppingCartObsList;
     private Branch currentBranch;
 
@@ -60,6 +55,7 @@ public class StoreController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         shoppingCartObsList = FXCollections.observableArrayList();
+        shoppingCartSet = new HashMap<>();
         databaseClient = new DatabaseClient();
         fillBranchMenu();
         fillLiteratureTable();
@@ -150,7 +146,9 @@ public class StoreController implements Initializable {
         loanBtn.setAlignment(Pos.TOP_RIGHT);
         loanBtn.setOnAction( e -> {
             //todo add loan functionality
-            shoppingCartObsList.add(lit.getTitle() + "\n");
+            shoppingCartSet.put(lit, currentBranch);
+            updateObsList();
+            shoppingCartObsList.add(lit.getTitle());
             shoppingCartListView.setItems(shoppingCartObsList);
         });
         Label title;
@@ -190,11 +188,25 @@ public class StoreController implements Initializable {
     }
 
     /**
+     *
+     */
+    private void updateObsList() {
+        shoppingCartObsList.clear();
+
+        for (Object o : shoppingCartSet.entrySet()) {
+            Literature lit = (Literature) o;
+            shoppingCartObsList.add(lit.getTitle());
+        }
+    }
+
+    /**
      * Setup mouse and keyboard event handlers.
      */
     private void setKeyAndClickListeners() {
         checkoutBtn.setOnMouseClicked(event -> {
             //TODO Update the database with borrowers name and shoppingcartlist.
+
+            //if (databaseClient.updateQuantity(book.getIdBook(), branchID))
             shoppingCartObsList.clear();
         });
         backBtn.setOnMouseClicked(event -> {

@@ -3,6 +3,8 @@ import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.data.User;
+
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -367,6 +369,7 @@ public class DatabaseClient {
                     null + ", " +
                     null + ")";
 
+            // TODO: 20.11.2018 WHAT ARE YOU EVEN DOING ? ? ?
             PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
 
             // Create statement
@@ -398,4 +401,34 @@ public class DatabaseClient {
         return null;
     }
 
+    /**
+     * Removes one book copy in the Book_Quantity table
+     *
+     * @param idBook idBook
+     * @return Returns true if all went well, returns false if remaining copies is zero.
+     */
+    public boolean updateQuantity(long idBook, long idBranch) {
+        try {
+            DatabaseConnection connector = new DatabaseConnection(host, port, database);
+            Connection connection = connector.getConnection();
+
+            String fullCommand = 
+                            "UPDATE Book_Quantity " +
+                            "SET quantity = quantity - 1 " +
+                            "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
+
+            int currentQuantity = getQuantity(idBook, idBranch);
+            Statement stm = connection.createStatement();
+
+            if (currentQuantity > 1) {
+                stm.execute(fullCommand);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
