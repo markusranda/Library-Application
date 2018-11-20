@@ -175,19 +175,7 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   `usertype` VARCHAR(45) NOT NULL,
-  `idCustomer` INT(11),
-  `idEmployee` INT(11),
-  PRIMARY KEY (`idUser`, `idCustomer`, `idEmployee`),
-  CONSTRAINT `fk_Users_Customer1`
-    FOREIGN KEY (`idCustomer`)
-    REFERENCES `library_db`.`Customer` (`idCustomer`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Users_Employee1`
-    FOREIGN KEY (`idEmployee`)
-    REFERENCES `library_db`.`Employee` (`idEmployee`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idUser`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
@@ -214,6 +202,46 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `library_db`.`Customer_Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `library_db`.`Customer_Users` (
+  `Users_idUser` INT(11) NOT NULL,
+  `Customer_idCustomer` INT(11) NOT NULL,
+  PRIMARY KEY (`Users_idUser`, `Customer_idCustomer`),
+  CONSTRAINT `fk_Customer_Users_Users1`
+    FOREIGN KEY (`Users_idUser`)
+    REFERENCES `library_db`.`Users` (`idUser`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Customer_Users_Customer1`
+    FOREIGN KEY (`Customer_idCustomer`)
+    REFERENCES `library_db`.`Customer` (`idCustomer`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `library_db`.`Employee_Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `library_db`.`Employee_Users` (
+  `Employee_idEmployee` INT(11) NOT NULL,
+  `Users_idUser` INT(11) NOT NULL,
+  PRIMARY KEY (`Employee_idEmployee`, `Users_idUser`),
+  CONSTRAINT `fk_Employee_Users_Employee1`
+    FOREIGN KEY (`Employee_idEmployee`)
+    REFERENCES `library_db`.`Employee` (`idEmployee`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Employee_Users_Users1`
+    FOREIGN KEY (`Users_idUser`)
+    REFERENCES `library_db`.`Users` (`idUser`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
