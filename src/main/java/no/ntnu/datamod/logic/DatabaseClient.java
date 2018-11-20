@@ -272,23 +272,21 @@ public class DatabaseClient {
      *
      *
      *
-     * @param idUser The ID of the user
      * @param password password
      * @param usertype the type of user
      * @param username username
      * @return Returns number of rows affected.
      */
-    public int addUserToDatabase(long idUser, String username, String password, String usertype) throws SQLException {
+    public int addUserToDatabase(String username, String password, String usertype) throws SQLException {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
         try {
-            String fullCommand = "INSERT INTO Users (idUser, username, password, usertype) VALUES" +
-                    "( " +
-                    idUser + ", '" +
+            String fullCommand = "INSERT INTO Users (username, password, usertype) VALUES" +
+                    "( '" +
                     username + "', '" +
                     password + "', '" +
-                    usertype + "' )";
+                    usertype + "' );";
 
 
             PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
@@ -311,7 +309,6 @@ public class DatabaseClient {
 
     /**
      *
-     * @param idBook Book ID
      * @param title Book title
      * @param publisher Book publisher
      * @param ISBN Book ISBN
@@ -319,17 +316,16 @@ public class DatabaseClient {
      * @return Number of edited rows
      * @throws SQLException
      */
-    public int addBookToDatabase(long idBook, String title, String publisher, String ISBN, String image) throws SQLException{
+    public int addBookToDatabase(String title, String publisher, String ISBN, String image) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
         try {
-            String fullCommand = "INSERT INTO Books (idBook, title, publisher, ISBN, image) VALUES (" +
-                    idBook + ", '" +
+            String fullCommand = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
                     title + "', '" +
                     publisher + "', '" +
                     ISBN + "', '" +
-                    image + "')";
+                    image + "');";
 
             PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
 
@@ -351,25 +347,48 @@ public class DatabaseClient {
 
     /**
      *
-     * @param idBook ID
      * @param title Book title
      * @param publisher Book publisher
      * @return Number of edited rows
      * @throws SQLException
      */
-    public int addBookToDatabase(long idBook, String title, String publisher) throws SQLException{
+    public int addBookToDatabase(String title, String publisher) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
         try {
-            String fullCommand = "INSERT INTO Books (idBook, title, publisher, ISBN, image) VALUES (" +
-                    idBook + ", '" +
+            String fullCommand = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
                     title + "', '" +
                     publisher + "', " +
                     null + ", " +
-                    null + ")";
+                    null + ");";
 
             // TODO: 20.11.2018 WHAT ARE YOU EVEN DOING ? ? ?
+            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result = null;
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+
+    public int removeBookFromDatabase(long idBook) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+            String fullCommand = "DELETE FROM Books WHERE idBook = " + idBook + ";";
             PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
 
             // Create statement
