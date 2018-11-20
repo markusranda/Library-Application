@@ -280,8 +280,6 @@ public class DatabaseClient {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        // TODO: 16.11.2018 addUserToDatabase needs idEmploee and idCustomer to work
-
         try {
             String fullCommand = "INSERT INTO Users (idUser, username, password, usertype) VALUES" +
                     "( " +
@@ -299,13 +297,92 @@ public class DatabaseClient {
 
             // Query
             ResultSet result = null;
-            return stm.executeUpdate(fullCommand);
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
         }catch (Exception ex){
             System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
         }
+    }
 
-        connection.close();
-        return 0;
+    /**
+     *
+     * @param idBook Book ID
+     * @param title Book title
+     * @param publisher Book publisher
+     * @param ISBN Book ISBN
+     * @param image Book image???
+     * @return Number of edited rows
+     * @throws SQLException
+     */
+    public int addBookToDatabase(long idBook, String title, String publisher, String ISBN, String image) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+            String fullCommand = "INSERT INTO Books (idBook, title, publisher, ISBN, image) VALUES (" +
+                    idBook + ", '" +
+                    title + "', '" +
+                    publisher + "', '" +
+                    ISBN + "', '" +
+                    image + "')";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result = null;
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param idBook ID
+     * @param title Book title
+     * @param publisher Book publisher
+     * @return Number of edited rows
+     * @throws SQLException
+     */
+    public int addBookToDatabase(long idBook, String title, String publisher) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+            String fullCommand = "INSERT INTO Books (idBook, title, publisher, ISBN, image) VALUES (" +
+                    idBook + ", '" +
+                    title + "', '" +
+                    publisher + "', " +
+                    null + ", " +
+                    null + ")";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result = null;
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
     }
 
     /**
