@@ -240,7 +240,7 @@ public class DatabaseClient {
             String fullCommand =
                     "SELECT quantity " +
                     "FROM Book_Quantity " +
-                    "WHERE idBook = " + bookID + " AND idBranch = " + 1 + ";";
+                    "WHERE idBook = " + bookID + " AND idBranch = " + branchID + ";";
 
             Statement stm = connection.createStatement();
 

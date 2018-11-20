@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -12,9 +13,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import no.ntnu.datamod.data.Book;
+import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Literature;
 import no.ntnu.datamod.logic.DatabaseClient;
-import no.ntnu.datamod.logic.LiteratureRegistry;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -28,8 +29,8 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class StoreController implements Initializable {
 
     private DatabaseClient databaseClient;
-
     private ObservableList<String> shoppingCartObsList;
+    private Branch currentBranch;
 
     @FXML
     private GridPane literatureTable;
@@ -40,16 +41,41 @@ public class StoreController implements Initializable {
     @FXML
     private Button checkoutBtn;
 
+    @FXML
+    private MenuButton branchMenu;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         shoppingCartObsList = FXCollections.observableArrayList();
         databaseClient = new DatabaseClient();
+        fillBranchMenu();
         fillLiteratureTable();
         setKeyAndClickListeners();
     }
 
     /**
-     * Fills the LiteratureTable with data from the registry
+     * Fills the branchComboBox with data from the database
+     */
+    private void fillBranchMenu() {
+        try {
+            ArrayList<Branch> branches = databaseClient.getBranchList();
+            for (Branch branch : branches) {
+                MenuItem menuItem = new MenuItem(branch.getName());
+                branchMenu.getItems().add(menuItem);
+                menuItem.setOnAction(event -> {
+                    currentBranch = branch;
+                    branchMenu.setText(branch.getName());
+                    fillLiteratureTable();
+                });
+                currentBranch = branch;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Fills the LiteratureTable with data from the database
      */
     private void fillLiteratureTable() {
         try {
@@ -97,12 +123,14 @@ public class StoreController implements Initializable {
      * @return returns a VBox fully equipped with a the product's information.
      */
     private VBox createProduct(Literature lit) {
-        Label quantityLbl = new Label();
+        TextField quantityField = new TextField();
+        quantityField.setMaxWidth(60);
         Button loanBtn = new Button("Borrow");
         final double MAX_IMAGE_WIDTH = 200;
         VBox product = new VBox();
         loanBtn.setAlignment(Pos.TOP_RIGHT);
         loanBtn.setOnAction( e -> {
+            //todo add loan functionality
             shoppingCartObsList.add(lit.getTitle() + "\n");
             shoppingCartListView.setItems(shoppingCartObsList);
         });
@@ -125,10 +153,12 @@ public class StoreController implements Initializable {
         catch (IllegalArgumentException | NullPointerException e) {
             productImg = new Image("image/default_store_img.png");
         }
-        long bookID = ((Book) lit).getIdBook();
-        quantityLbl.setText(String.valueOf(databaseClient.getQuantity(bookID, 1)));
 
-        HBox hBox = new HBox(loanBtn, quantityLbl);
+        long bookID = ((Book) lit).getIdBook();
+        long branchID = currentBranch.getIdBranch();
+        long quantity = databaseClient.getQuantity(bookID, branchID);
+        quantityField.setText(String.valueOf(quantity));
+        HBox hBox = new HBox(loanBtn, quantityField);
 
         ImageView productImgView = new ImageView();
         productImgView.setFitWidth(MAX_IMAGE_WIDTH);
@@ -136,6 +166,7 @@ public class StoreController implements Initializable {
         productImgView.setImage(productImg);
         product.getChildren().addAll(productImgView, title, hBox);
         product.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
+        product.setPadding(new Insets(10,10,10,10));
         return product;
     }
 
