@@ -22,6 +22,7 @@ import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Literature;
 import no.ntnu.datamod.logic.DatabaseClient;
+import no.ntnu.datamod.logic.LiteratureRegistry;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +38,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class StoreController implements Initializable {
 
     private DatabaseClient databaseClient;
+
     private ObservableList<String> shoppingCartObsList;
     private Branch currentBranch;
 
@@ -91,6 +93,11 @@ public class StoreController implements Initializable {
      */
     private void fillLiteratureTable() {
         try {
+            // Adds data to the DB with addSomethingToDatabase method.
+            databaseClient.addUserToDatabase(12345,"LarsOus","JamaicaLover","Customer");
+            databaseClient.addBookToDatabase(12346,"Den tvilsomme jærnbanen","Gulldendal");
+            //databaseClient.addBookToDatabase(12345,"Den tvilsomme jærnbanen","Gulldendal",null,null);
+
             ArrayList<Book> books = databaseClient.getBooksList();
             Iterator<Book> it = books.iterator();
 
