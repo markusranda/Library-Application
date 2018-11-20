@@ -21,7 +21,7 @@ USE `library_db` ;
 -- Table `library_db`.`Authors`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Authors` (
-  `idAuthors` INT(11) NOT NULL,
+  `idAuthors` INT(11) NOT NULL AUTO_INCREMENT,
   `lName` VARCHAR(45) NULL DEFAULT NULL,
   `fName` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idAuthors`))
@@ -33,7 +33,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Books`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Books` (
-  `idBook` INT(11) NOT NULL,
+  `idBook` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
   `publisher` VARCHAR(45) NOT NULL,
   `ISBN` VARCHAR(45) NULL DEFAULT NULL,
@@ -68,7 +68,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Genre`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Genre` (
-  `idGenre` INT(11) NOT NULL,
+  `idGenre` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idGenre`))
 ENGINE = InnoDB
@@ -100,7 +100,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Branches`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Branches` (
-  `idBranch` INT(11) NOT NULL,
+  `idBranch` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idBranch`))
@@ -134,7 +134,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Customer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Customer` (
-  `idCustomer` INT(11) NOT NULL,
+  `idCustomer` INT(11) NOT NULL AUTO_INCREMENT,
   `fname` VARCHAR(45) NOT NULL,
   `lname` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
@@ -148,7 +148,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Employee`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Employee` (
-  `idEmployee` INT(11) NOT NULL,
+  `idEmployee` INT(11) NOT NULL AUTO_INCREMENT,
   `fname` VARCHAR(45) NOT NULL,
   `lname` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
@@ -171,7 +171,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
-  `idUser` INT(11) NOT NULL,
+  `idUser` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   `usertype` VARCHAR(45) NOT NULL,
@@ -184,7 +184,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Loans`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
-  `idLoans` INT(11) NOT NULL,
+  `idLoans` INT(11) NOT NULL AUTO_INCREMENT,
   `loanDate` DATE NOT NULL,
   `loanDue` DATE NOT NULL,
   `idBook` INT(11) NOT NULL,
