@@ -1,12 +1,8 @@
 package no.ntnu.datamod.logic;
-import com.sun.xml.internal.bind.v2.TODO;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.data.User;
-import no.ntnu.datamod.facade.LibraryClientFacade;
-
-import javax.security.auth.login.Configuration;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
