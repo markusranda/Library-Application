@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class GUIController implements Initializable {
+public class MainMenuController implements Initializable {
 
 
     @FXML
