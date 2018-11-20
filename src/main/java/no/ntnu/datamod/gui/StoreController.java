@@ -97,6 +97,7 @@ public class StoreController implements Initializable {
      * @return returns a VBox fully equipped with a the product's information.
      */
     private VBox createProduct(Literature lit) {
+        Label quantityLbl = new Label();
         Button loanBtn = new Button("Borrow");
         final double MAX_IMAGE_WIDTH = 200;
         VBox product = new VBox();
@@ -114,7 +115,6 @@ public class StoreController implements Initializable {
             title = new Label(lit.getTitle());
         }
         title.setMaxWidth(200);
-        HBox hBox = new HBox(loanBtn);
 
         // In case the imageUrl field is null, empty or not working,
         // a default image will be set.
@@ -125,6 +125,10 @@ public class StoreController implements Initializable {
         catch (IllegalArgumentException | NullPointerException e) {
             productImg = new Image("image/default_store_img.png");
         }
+        long bookID = ((Book) lit).getIdBook();
+        quantityLbl.setText(String.valueOf(databaseClient.getQuantity(bookID, 1)));
+
+        HBox hBox = new HBox(loanBtn, quantityLbl);
 
         ImageView productImgView = new ImageView();
         productImgView.setFitWidth(MAX_IMAGE_WIDTH);

@@ -225,6 +225,46 @@ public class DatabaseClient {
     }
 
     /**
+     * Returns the quantity of a specific Book, in a specific Branch.
+     *
+     * @param bookID bookID
+     * @param branchID branchID
+     * @return Returns the quantity of a specific Book, in a specific Branch. Returns 0 if an Exception occurs.
+     */
+    public int getQuantity(long bookID, long branchID) {
+        try {
+            DatabaseConnection connector = new DatabaseConnection(host, port, database);
+            Connection connection = connector.getConnection();
+            int size = 0;
+
+            String fullCommand =
+                    "SELECT quantity " +
+                    "FROM Book_Quantity " +
+                    "WHERE idBook = " + bookID + " AND idBranch = " + 1 + ";";
+
+            Statement stm = connection.createStatement();
+
+            // Query
+            ResultSet result;
+            boolean returningRows = stm.execute(fullCommand);
+            if (returningRows)
+                result = stm.getResultSet();
+            else
+                throw new SQLException("There are no results from the given query \n");
+
+            if(result.next()) {
+                size = result.getInt(1);
+            }
+            connection.close();
+            return size;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        }
+
+    /**
      * Adds a new user to the database with the given parameter values
      * defining the user to be added.
      *
