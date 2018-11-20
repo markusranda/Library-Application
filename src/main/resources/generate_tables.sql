@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Authors` (
   `lName` VARCHAR(45) NULL DEFAULT NULL,
   `fName` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idAuthors`))
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Books` (
   `ISBN` VARCHAR(45) NULL DEFAULT NULL,
   `image` BLOB NULL DEFAULT NULL,
   PRIMARY KEY (`idBook`))
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -51,17 +51,49 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Book_Authors` (
   `idAuthors` INT(11) NOT NULL,
   PRIMARY KEY (`idBook`, `idAuthors`),
   CONSTRAINT `fk_Book_Authors_Authors1`
-  FOREIGN KEY (`idAuthors`)
-  REFERENCES `library_db`.`Authors` (`idAuthors`)
+    FOREIGN KEY (`idAuthors`)
+    REFERENCES `library_db`.`Authors` (`idAuthors`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Book_Authors_Books1`
-  FOREIGN KEY (`idBook`)
-  REFERENCES `library_db`.`Books` (`idBook`)
+    FOREIGN KEY (`idBook`)
+    REFERENCES `library_db`.`Books` (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `library_db`.`Genre`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `library_db`.`Genre` (
+  `idGenre` INT(11) NOT NULL,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`idGenre`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `library_db`.`Book_Genres`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `library_db`.`Book_Genres` (
+  `idGenre` INT(11) NOT NULL,
+  `idBook` INT(11) NOT NULL,
+  PRIMARY KEY (`idGenre`, `idBook`),
+  CONSTRAINT `fk_Book_Genres_Books1`
+    FOREIGN KEY (`idBook`)
+    REFERENCES `library_db`.`Books` (`idBook`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Book_Genres_Genre1`
+    FOREIGN KEY (`idGenre`)
+    REFERENCES `library_db`.`Genre` (`idGenre`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -72,8 +104,8 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Branches` (
   `name` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idBranch`))
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -85,17 +117,17 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Book_Quantity` (
   `idBranch` INT(11) NOT NULL,
   PRIMARY KEY (`idBook`, `idBranch`),
   CONSTRAINT `fk_Book_Copies_Books`
-  FOREIGN KEY (`idBook`)
-  REFERENCES `library_db`.`Books` (`idBook`)
+    FOREIGN KEY (`idBook`)
+    REFERENCES `library_db`.`Books` (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Book_Copies_Branches1`
-  FOREIGN KEY (`idBranch`)
-  REFERENCES `library_db`.`Branches` (`idBranch`)
+    FOREIGN KEY (`idBranch`)
+    REFERENCES `library_db`.`Branches` (`idBranch`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -108,27 +140,8 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Customer` (
   `address` VARCHAR(45) NOT NULL,
   `phone` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idCustomer`))
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `library_db`.`Users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
-  `idUser` INT(11) NOT NULL,
-  `username` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `usertype` VARCHAR(45) NOT NULL,
-  `idCustomer` INT(11) NOT NULL,
-  PRIMARY KEY (`idUser`, `idCustomer`),
-  CONSTRAINT `fk_Users_Customer1`
-  FOREIGN KEY (`idCustomer`)
-  REFERENCES `library_db`.`Customer` (`idCustomer`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -144,20 +157,39 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Employee` (
   `SSN` INT(11) NOT NULL,
   `position` VARCHAR(45) NOT NULL,
   `idBranch` INT(11) NOT NULL,
-  `idUser` INT(11) NOT NULL,
-  PRIMARY KEY (`idEmployee`, `idBranch`, `idUser`),
+  PRIMARY KEY (`idEmployee`, `idBranch`),
   CONSTRAINT `fk_Employee_Branches1`
-  FOREIGN KEY (`idBranch`)
-  REFERENCES `library_db`.`Branches` (`idBranch`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Employee_Users1`
-  FOREIGN KEY (`idUser`)
-  REFERENCES `library_db`.`Users` (`idUser`)
+    FOREIGN KEY (`idBranch`)
+    REFERENCES `library_db`.`Branches` (`idBranch`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `library_db`.`Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
+  `idUser` INT(11) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `usertype` VARCHAR(45) NOT NULL,
+  `idCustomer` INT(11),
+  `idEmployee` INT(11),
+  PRIMARY KEY (`idUser`, `idCustomer`, `idEmployee`),
+  CONSTRAINT `fk_Users_Customer1`
+    FOREIGN KEY (`idCustomer`)
+    REFERENCES `library_db`.`Customer` (`idCustomer`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Users_Employee1`
+    FOREIGN KEY (`idEmployee`)
+    REFERENCES `library_db`.`Employee` (`idEmployee`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -171,47 +203,17 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
   `idUser` INT(11) NOT NULL,
   PRIMARY KEY (`idLoans`, `idBook`, `idUser`),
   CONSTRAINT `fk_Loans_Books1`
-  FOREIGN KEY (`idBook`)
-  REFERENCES `library_db`.`Books` (`idBook`)
+    FOREIGN KEY (`idBook`)
+    REFERENCES `library_db`.`Books` (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Loans_Users1`
-  FOREIGN KEY (`idUser`)
-  REFERENCES `library_db`.`Users` (`idUser`)
+    FOREIGN KEY (`idUser`)
+    REFERENCES `library_db`.`Users` (`idUser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `library_db`.`Genre`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Genre` (
-  `idGenre` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`idGenre`))
-  ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `library_db`.`Book_Genres`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Book_Genres` (
-  `idGenre` INT NOT NULL,
-  `idBook` INT(11) NOT NULL,
-  PRIMARY KEY (`idGenre`, `idBook`),
-  CONSTRAINT `fk_Book_Genres_Genre1`
-  FOREIGN KEY (`idGenre`)
-  REFERENCES `library_db`.`Genre` (`idGenre`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Book_Genres_Books1`
-  FOREIGN KEY (`idBook`)
-  REFERENCES `library_db`.`Books` (`idBook`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-  ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

@@ -1,9 +1,12 @@
 package no.ntnu.datamod.logic;
+import com.sun.xml.internal.bind.v2.TODO;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.data.User;
+import no.ntnu.datamod.facade.LibraryClientFacade;
 
+import javax.security.auth.login.Configuration;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -235,7 +238,6 @@ public class DatabaseClient {
      * @param password password
      * @param usertype the type of user
      * @param username username
-     *
      * @return Returns number of rows affected.
      */
     public int addUserToDatabase(long idUser, String username, String password, String usertype) throws SQLException {
