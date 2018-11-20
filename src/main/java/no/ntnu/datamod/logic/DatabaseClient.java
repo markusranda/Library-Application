@@ -279,9 +279,6 @@ public class DatabaseClient implements LibraryClientFacade {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             System.out.println("Connecting to database: " + database);
-            connection = DriverManager.getConnection(
-                    connectionString);
-            ArrayList<Branch> branches =  getBranchList();
             // TODO: 16.11.2018 addUserToDatabase is called here for testing purposes. remove when done!
             addUserToDatabase(1234,"Arneboii", "ziudshfireq","Sjef");
             return true;

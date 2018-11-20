@@ -23,6 +23,8 @@ public class User {
     this.username = username;
     this.password = password;
     this.usertype = usertype;
+    idCustomer = 0;
+    idEmployee = 0;
   }
 
 

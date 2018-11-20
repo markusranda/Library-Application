@@ -13,9 +13,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Literature;
+import no.ntnu.datamod.logic.DatabaseClient;
 import no.ntnu.datamod.logic.LiteratureRegistry;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -24,7 +27,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class StoreController implements Initializable {
 
-    private LiteratureRegistry registry;
+    private DatabaseClient databaseClient;
 
     private ObservableList<String> shoppingCartObsList;
 
@@ -40,27 +43,19 @@ public class StoreController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         shoppingCartObsList = FXCollections.observableArrayList();
-        registry = new LiteratureRegistry();
-        createExampleRegistry();
+        databaseClient = new DatabaseClient();
         fillLiteratureTable();
         setKeyAndClickListeners();
-    }
-
-    /**
-     * Creates some example data in the registry for testing purposes.
-     */
-    private void createExampleRegistry() {
-        registry.addLiterature(new Book("Svaner og Spader","Roald As",1, "Roald", "1"));
-        registry.addLiterature(new Book("Spader og Svaner","Roald As",2, "Roald", "1"));
-        registry.addLiterature(new Book("Historien om Sverige","Roald As",3, "Roald", "1"));
-        registry.addLiterature(new Book("Vi er alle barn og/eller barnebarn","Roald As",4, "Roald", "69"));
     }
 
     /**
      * Fills the LiteratureTable with data from the registry
      */
     private void fillLiteratureTable() {
-        Iterator<Literature> it = registry.getIterator();
+        try {
+            ArrayList<Book> books = databaseClient.getBooksList();
+            Iterator<Book> it = books.iterator();
+
         int columnIndex = 0;
         int rowIndex = 0;
 
@@ -81,12 +76,17 @@ public class StoreController implements Initializable {
             }
         }
         literatureTable.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
+        /*
         // Calculating the required height using the number of rows and a fixed set of pixels
         int height = 0;
         int numberOfElements = registry.getSize();
         int numberOfRows = numberOfElements / 3;
         height = numberOfRows * 185;
         literatureTable.setMinHeight(height);
+        */
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
