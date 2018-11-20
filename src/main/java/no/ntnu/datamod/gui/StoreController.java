@@ -73,6 +73,7 @@ public class StoreController implements Initializable {
         try {
             branchMenu.setText("Choose Library..");
             ArrayList<Branch> branches = databaseClient.getBranchList();
+            currentBranch = new Branch(0,"No libraries", "Empty address");
             for (Branch branch : branches) {
                 MenuItem menuItem = new MenuItem(branch.getName());
                 branchMenu.getItems().add(menuItem);
@@ -93,9 +94,11 @@ public class StoreController implements Initializable {
      */
     private void fillLiteratureTable() {
         try {
+            // Removes existing rows with given IDs.
+            //databaseClient.removeBookFromDatabase(12346);
             // Adds data to the DB with addSomethingToDatabase method.
-            databaseClient.addUserToDatabase(12345,"LarsOus","JamaicaLover","Customer");
-            databaseClient.addBookToDatabase(12346,"Den tvilsomme jærnbanen","Gulldendal");
+            databaseClient.addUserToDatabase("LarsOus","JamaicaLover","Customer");
+            databaseClient.addBookToDatabase("Den tvilsomme jærnbanen","Gulldendal");
             //databaseClient.addBookToDatabase(12345,"Den tvilsomme jærnbanen","Gulldendal",null,null);
 
             ArrayList<Book> books = databaseClient.getBooksList();
