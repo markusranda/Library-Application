@@ -1,20 +1,19 @@
 package no.ntnu.datamod.logic;
-import com.sun.xml.internal.bind.v2.TODO;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.data.User;
-import no.ntnu.datamod.facade.LibraryClientFacade;
 
-import javax.security.auth.login.Configuration;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DatabaseClient implements LibraryClientFacade {
+public class DatabaseClient {
 
-    private Connection connection;
-    private String lastError = null;
+    private String host = "192.168.50.50";
+    private int port = 3306;
+    private String database = "library_db";
+
 
     /**
      * Returns all the books from the table Book as an ArrayList<Book>.
@@ -22,40 +21,44 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Book> getBooksList()  throws SQLException {
-        String fullCommand = "SELECT * FROM Books";
-        ArrayList<Book> rowList = new ArrayList<>();
-        Statement stm;
+            DatabaseConnection connector = new DatabaseConnection(host, port, database);
+            Connection connection = connector.getConnection();
 
-        // Create statement
-        stm = connection.createStatement();
+            String fullCommand = "SELECT * FROM Books";
+            ArrayList<Book> rowList = new ArrayList<>();
+            Statement stm;
 
-        // Query
-        ResultSet result;
-        boolean returningRows = stm.execute(fullCommand);
-        if (returningRows)
-            result = stm.getResultSet();
-        else
-            throw new SQLException("There are no results from the given query \n");
+            // Create statement
+            stm = connection.createStatement();
 
-        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+            // Query
+            ResultSet result;
+            boolean returningRows = stm.execute(fullCommand);
+            if (returningRows)
+                result = stm.getResultSet();
+            else
+                throw new SQLException("There are no results from the given query \n");
 
-        // Uses the previously created HashMap to match key for value
-        // and creates the required object. And puts em all into a list.
-        for (HashMap<String, Object> row : rows) {
-            String publisher = (String) row.get("publisher");
-            String title = (String) row.get("title");
-            long idBook = (int) row.get("idBook");
-            String authors = (String) row.get("authors");
-            String isbn = (String) row.get("isbn");
-            String image = (String) row.get("image");
+            ArrayList<HashMap<String,Object>> rows = createObjectList(result);
 
-            Book book = new Book(publisher, title, idBook, authors, isbn, image);
-            rowList.add(book);
-        }
+            // Uses the previously created HashMap to match key for value
+            // and creates the required object. And puts em all into a list.
+            for (HashMap<String, Object> row : rows) {
+                String publisher = (String) row.get("publisher");
+                String title = (String) row.get("title");
+                long idBook = (int) row.get("idBook");
+                String authors = (String) row.get("authors");
+                String isbn = (String) row.get("isbn");
+                String image = (String) row.get("image");
 
-        // Closes the statement
-        stm.close();
-        return rowList;
+                Book book = new Book(publisher, title, idBook, authors, isbn, image);
+                rowList.add(book);
+            }
+
+            // Closes the statement
+            stm.close();
+            connection.close();
+            return rowList;
     }
 
     /**
@@ -64,6 +67,9 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return Returns all the users from the table Book as an ArrayList<User>.
      */
     public ArrayList<User> getUsersList() throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
         String fullCommand = "SELECT * FROM Users";
         ArrayList<User> rowList = new ArrayList<>();
         Statement stm;
@@ -94,6 +100,7 @@ public class DatabaseClient implements LibraryClientFacade {
 
         // Closes the statement
         stm.close();
+        connection.close();
         return rowList;
     }
 
@@ -103,36 +110,40 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return Returns all the branches from the table Book as an ArrayList<Branch>.
      */
     public ArrayList<Branch> getBranchList() throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
         String fullCommand = "SELECT * FROM Branches";
         ArrayList<Branch> rowList = new ArrayList<>();
         Statement stm;
 
-            // Create statement
-            stm = connection.createStatement();
+        // Create statement
+        stm = connection.createStatement();
 
-            // Query
-            ResultSet result;
-            boolean returningRows = stm.execute(fullCommand);
-            if (returningRows)
-                result = stm.getResultSet();
-            else
-                throw new SQLException("There are no results from the given query \n");
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
 
-            ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
 
-            // Uses the previously created HashMap to match key for value
-            // and creates the required object. And puts em all into a list.
-            for (HashMap<String, Object> row : rows) {
-                long idBranch = (int) row.get("idBranch");
-                String name = (String) row.get("name");
-                String address = (String) row.get("address");
-                Branch branch = new Branch(idBranch, name, address);
-                rowList.add(branch);
-            }
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            long idBranch = (int) row.get("idBranch");
+            String name = (String) row.get("name");
+            String address = (String) row.get("address");
+            Branch branch = new Branch(idBranch, name, address);
+            rowList.add(branch);
+        }
 
-            // Closes the statement
-            stm.close();
-            return rowList;
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
     }
 
     /**
@@ -141,6 +152,9 @@ public class DatabaseClient implements LibraryClientFacade {
      * @return Returns all the loans from the table Book as an ArrayList<Loan>.
      */
     public ArrayList<Loan> getLoansList() throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
         String fullCommand = "SELECT * FROM Loans";
         ArrayList<Loan> rowList = new ArrayList<>();
         Statement stm;
@@ -173,6 +187,7 @@ public class DatabaseClient implements LibraryClientFacade {
 
         // Closes the statement
         stm.close();
+        connection.close();
         return rowList;
     }
 
@@ -223,7 +238,10 @@ public class DatabaseClient implements LibraryClientFacade {
      *
      * @return Returns number of rows affected.
      */
-    public int addUserToDatabase(long idUser, String username, String password, String usertype) {
+    public int addUserToDatabase(long idUser, String username, String password, String usertype) throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
         // TODO: 16.11.2018 addUserToDatabase needs idEmploee and idCustomer to work
 
         try {
@@ -248,7 +266,7 @@ public class DatabaseClient implements LibraryClientFacade {
             System.out.println(ex.getMessage());
         }
 
-
+        connection.close();
         return 0;
     }
 
@@ -265,66 +283,4 @@ public class DatabaseClient implements LibraryClientFacade {
         return null;
     }
 
-    /**
-     * Connect to a chat server.
-     *
-     * @param host host name or IP address of the chat server
-     * @param port TCP port of the chat server
-     * @return True on success, false otherwise
-     */
-    @Override
-    public boolean connect(String host, int port, String database) {
-        String connectionString = "jdbc:mysql://"+ host + ":" + port + "/" +
-                database + "?user=dbuser&password=password&useUnicode=true&characterEncoding=UTF-8";
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            System.out.println("Connecting to database: " + database);
-            // TODO: 16.11.2018 addUserToDatabase is called here for testing purposes. remove when done!
-            addUserToDatabase(1234,"Arneboii", "ziudshfireq","Sjef");
-            return true;
-        } catch (Exception ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            return false;
-        }
-
-    }
-
-    /**
-     * Disconnect from the chat server (close the socket)
-     */
-    @Override
-    public void disconnect() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Return true if the connection is active (opened), false if not.
-     *
-     * @return Return true if the connection is active (opened), false if not.
-     */
-    @Override
-    public boolean isConnectionActive() {
-        return connection != null;
-    }
-
-    /**
-     * Returns the last error message from the database
-     * if there has been an error sent from the database,
-     * otherwise returns null.
-     *
-     * @return Returns the last error message from the database,
-     * otherwise returns null.
-     */
-    @Override
-    public String getLastError() {
-        if (lastError != null) {
-            return lastError;
-        } else {
-            return null;
-        }
-    }
 }

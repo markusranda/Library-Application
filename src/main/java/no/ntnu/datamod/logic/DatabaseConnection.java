@@ -1,7 +1,5 @@
 package no.ntnu.datamod.logic;
 
-import com.mysql.cj.xdevapi.SqlDataResult;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,21 +12,41 @@ public class DatabaseConnection {
     private Connection connection;
 
     public DatabaseConnection(String host, int port, String database)
-            throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException{
+            throws SQLException{
         this.host = host;
         this.port = port;
         this.database = database;
 
-        String connectionString = "jdbc:mysql://"+ host + ":" + port + "/" +
-                database + "?user=dbuser&password=password&useUnicode=true&characterEncoding=UTF-8";
+        try {
+            String connectionString = "jdbc:mysql://"+ host + ":" + port + "/" +
+                    database + "?user=dbuser&password=password&useUnicode=true&characterEncoding=UTF-8";
 
-        Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-        connection = DriverManager.getConnection(
-                connectionString);
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+
+            connection = DriverManager.getConnection(
+                    connectionString);
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void closeConnection() throws SQLException {
         connection.close();
+    }
+
+    public boolean isConnectionAlive() {
+        try {
+            return connection.isClosed();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public String getHost() {
