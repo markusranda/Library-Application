@@ -10,6 +10,21 @@ public class User {
   private long idCustomer;
   private long idEmployee;
 
+  /**
+   * Constructs a new User.
+   *
+   * @param idUser user ID
+   * @param username username
+   * @param password password
+   * @param usertype the type of user for instance "administrator" or "librarian"
+   */
+  public User(long idUser, String username, String password, String usertype) {
+    this.idUser = idUser;
+    this.username = username;
+    this.password = password;
+    this.usertype = usertype;
+  }
+
 
   public long getIdUser() {
     return idUser;

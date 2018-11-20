@@ -8,6 +8,15 @@ public class Book extends Literature {
   private String isbn;
   private String image;
 
+  /**
+   * Creates a new book. This constructor is to be used when there is a image.
+   * @param publisher publisher
+   * @param title title
+   * @param idBook idBook
+   * @param authors authors
+   * @param isbn isbn
+   * @param image image
+   */
   public Book(String publisher, String title, long idBook, String authors, String isbn, String image) {
     super(publisher, title);
     this.idBook = idBook;
@@ -16,6 +25,14 @@ public class Book extends Literature {
     this.image = image;
   }
 
+  /**
+   * Creates a new book. This constructor is to be used when there is no image.
+   * @param publisher publisher
+   * @param title title
+   * @param idBook idBook
+   * @param authors authors
+   * @param isbn isbn
+   */
   public Book(String publisher, String title, long idBook, String authors, String isbn) {
     super(publisher, title);
     this.idBook = idBook;

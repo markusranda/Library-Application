@@ -21,76 +21,104 @@ public class DatabaseClient implements LibraryClientFacade {
      *
      * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
-    public ArrayList<Book> getBooksList() {
+    public ArrayList<Book> getBooksList()  throws SQLException {
+        String fullCommand = "SELECT * FROM Books";
+        ArrayList<Book> rowList = new ArrayList<>();
+        Statement stm;
 
+        // Create statement
+        stm = connection.createStatement();
 
-        /*
-         Todo
-         Query the database for all the books in the Book table.
-         Then create objects of the type Book, and finally place all of them in
-         the list and return it.
-          */
-        return new ArrayList<>();
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String publisher = (String) row.get("publisher");
+            String title = (String) row.get("title");
+            long idBook = (int) row.get("idBook");
+            String authors = (String) row.get("authors");
+            String isbn = (String) row.get("isbn");
+            String image = (String) row.get("image");
+
+            Book book = new Book(publisher, title, idBook, authors, isbn, image);
+            rowList.add(book);
+        }
+
+        // Closes the statement
+        stm.close();
+        return rowList;
     }
 
     /**
-     * Returns all the books from the table Book as an ArrayList<Book>.
+     * Returns all the users from the table Users as an ArrayList<User>.
      *
-     * @return Returns all the books from the table Book as an ArrayList<Book>.
+     * @return Returns all the users from the table Book as an ArrayList<User>.
      */
-    public ArrayList<User> getUsersList() {
-        /*
-         Todo
-         Query the database for all the User in the User table.
-         Then create objects of the type User, and finally place all of them in
-         the list and return it.
-          */
-        return new ArrayList<>();
+    public ArrayList<User> getUsersList() throws SQLException {
+        String fullCommand = "SELECT * FROM Users";
+        ArrayList<User> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            long idUser = (int) row.get("idUser");
+            String username = (String) row.get("username");
+            String password = (String) row.get("password");
+            String usertype = (String)row.get("usertype");
+            User user = new User(idUser, username, password, usertype);
+            rowList.add(user);
+        }
+
+        // Closes the statement
+        stm.close();
+        return rowList;
     }
 
     /**
-     * Returns all the books from the table Book as an ArrayList<Book>.
+     * Returns all the branches from the table Branches as an ArrayList<Branch>.
      *
-     * @return Returns all the books from the table Book as an ArrayList<Book>.
+     * @return Returns all the branches from the table Book as an ArrayList<Branch>.
      */
-    public ArrayList<Branch> getBranchList() {
+    public ArrayList<Branch> getBranchList() throws SQLException {
         String fullCommand = "SELECT * FROM Branches";
-        ArrayList<HashMap<String,Object>> rows = new ArrayList<>();
         ArrayList<Branch> rowList = new ArrayList<>();
-        Statement stm = null;
-        try {
+        Statement stm;
+
             // Create statement
             stm = connection.createStatement();
 
             // Query
-            ResultSet result = null;
+            ResultSet result;
             boolean returningRows = stm.execute(fullCommand);
             if (returningRows)
                 result = stm.getResultSet();
             else
-                // Returns a empty ArrayList if can't execute
-                return new ArrayList<>();
+                throw new SQLException("There are no results from the given query \n");
 
-            // Get metadata
-            ResultSetMetaData meta = null;
-            meta = result.getMetaData();
-
-            // Get column names
-            int colCount = meta.getColumnCount();
-            ArrayList<String> cols = new ArrayList<>();
-            for (int index=1; index <= colCount; index++)
-                cols.add(meta.getColumnName(index));
-
-            // Creates an ArrayList with a HashMap that contains mappings
-            // to each of the fields values.
-            while (result.next()) {
-                HashMap<String,Object> row = new HashMap<>();
-                for (String colName:cols) {
-                    Object val = result.getObject(colName);
-                    row.put(colName,val);
-                }
-                rows.add(row);
-            }
+            ArrayList<HashMap<String,Object>> rows = createObjectList(result);
 
             // Uses the previously created HashMap to match key for value
             // and creates the required object. And puts em all into a list.
@@ -105,26 +133,81 @@ public class DatabaseClient implements LibraryClientFacade {
             // Closes the statement
             stm.close();
             return rowList;
-
-        } catch (Exception ex) {
-            System.out.print(ex.getMessage());
-            return new ArrayList<>();
-        }
     }
 
     /**
-     * Returns all the books from the table Book as an ArrayList<Book>.
+     * Returns all the loans from the table Loans as an ArrayList<Loan>.
      *
-     * @return Returns all the books from the table Book as an ArrayList<Book>.
+     * @return Returns all the loans from the table Book as an ArrayList<Loan>.
      */
-    public ArrayList<Loan> getLoansList() {
-        /*
-         Todo
-         Query the database for all the loans in the Loan table.
-         Then create objects of the type loan, and finally place all of them in
-         the list and return it.
-          */
-        return new ArrayList<>();
+    public ArrayList<Loan> getLoansList() throws SQLException{
+        String fullCommand = "SELECT * FROM Loans";
+        ArrayList<Loan> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            long idLoans = (int) row.get("idLoans");
+            java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
+            java.sql.Date loanDue = (java.sql.Date) row.get("loanDate");
+            long idBook = (int) row.get("idBook");
+            long idUser = (int) row.get("idUser");
+
+            Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, idUser);
+            rowList.add(loan);
+        }
+
+        // Closes the statement
+        stm.close();
+        return rowList;
+    }
+
+    /**
+     * Creates an ArrayList with a HashMap that contains mappings
+     * to each of the field's values.
+     * @param result the ResultSet
+     * @return Returns an ArrayList with HashMap that contains mappings
+     *      to each of the field's values.
+     * @throws SQLException todo
+     */
+    private ArrayList<HashMap<String,Object>> createObjectList(ResultSet result) throws SQLException {
+
+        ArrayList<HashMap<String, Object>> rows = new ArrayList<>();
+
+        // Get metadata
+        ResultSetMetaData meta ;
+        meta = result.getMetaData();
+
+        // Get column names
+        int colCount = meta.getColumnCount();
+        ArrayList<String> cols = new ArrayList<>();
+        for (int index=1; index <= colCount; index++)
+            cols.add(meta.getColumnName(index));
+
+        while (result.next()) {
+            HashMap<String,Object> row = new HashMap<>();
+            for (String colName:cols) {
+                Object val = result.getObject(colName);
+                row.put(colName,val);
+            }
+            rows.add(row);
+        }
+
+        return rows;
     }
 
     /**
@@ -180,64 +263,6 @@ public class DatabaseClient implements LibraryClientFacade {
         and returns it as a Book.
          */
         return null;
-    }
-
-    /**
-     * An example on how to do a query and retrieve an entire "table" from the database which can be parsed further.
-     *
-     * @param fullCommand The SQL statement
-     * @return Returns a "table" as a result of the SQL statement
-     */
-    public ArrayList<HashMap<String,Object>> rawQuery(String fullCommand) {
-        try {
-
-            // Create statement
-            Statement stm = null;
-            stm = connection.createStatement();
-
-            // Query
-            ResultSet result = null;
-            boolean returningRows = stm.execute(fullCommand);
-            if (returningRows)
-                result = stm.getResultSet();
-            else
-                // Returns a empty ArrayList if can't execute
-                return new ArrayList<>();
-
-            // Get metadata
-            ResultSetMetaData meta = null;
-            meta = result.getMetaData();
-
-            // Get column names
-            int colCount = meta.getColumnCount();
-            ArrayList<String> cols = new ArrayList<>();
-            for (int index=1; index <= colCount; index++)
-                cols.add(meta.getColumnName(index));
-
-            // Fetch out rows
-            ArrayList<HashMap<String,Object>> rows =
-                    new ArrayList<>();
-
-
-            while (result.next()) {
-                HashMap<String,Object> row = new HashMap<>();
-                for (String colName:cols) {
-                    Object val = result.getObject(colName);
-                    row.put(colName,val);
-                }
-                rows.add(row);
-            }
-
-            //close statement
-            stm.close();
-
-            //pass back rows
-            return rows;
-        }
-        catch (Exception ex) {
-            System.out.print(ex.getMessage());
-            return new ArrayList<>();
-        }
     }
 
     /**
