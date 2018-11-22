@@ -94,11 +94,13 @@ public class StoreController implements Initializable {
      */
     private void fillLiteratureTable() {
         try {
-            // Removes existing rows with given IDs.
-            //databaseClient.removeBookFromDatabase(12346);
+            // TODO: 22.11.2018 This is only for testing purposes. Delete when done!
             // Adds data to the DB with addSomethingToDatabase method.
             databaseClient.addUserToDatabase("LarsOus","JamaicaLover","Customer");
             databaseClient.addBookToDatabase("Den tvilsomme jærnbanen","Gulldendal");
+
+            //Adds loans
+            databaseClient.addLoanToDatabase(3,5);
             //databaseClient.addBookToDatabase(12345,"Den tvilsomme jærnbanen","Gulldendal",null,null);
 
             ArrayList<Book> books = databaseClient.getBooksList();

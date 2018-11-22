@@ -287,14 +287,11 @@ public class DatabaseClient {
                     usertype + "' );";
 
 
-            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
-
             // Create statement
             Statement stm = null;
             stm = connection.createStatement();
 
             // Query
-            ResultSet result = null;
             int execution = stm.executeUpdate(fullCommand);
             connection.close();
             return execution;
@@ -325,14 +322,11 @@ public class DatabaseClient {
                     ISBN + "', '" +
                     image + "');";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
-
             // Create statement
             Statement stm = null;
             stm = connection.createStatement();
 
             // Query
-            ResultSet result = null;
             int execution = stm.executeUpdate(fullCommand);
             connection.close();
             return execution;
@@ -361,14 +355,11 @@ public class DatabaseClient {
                     null + ", " +
                     null + ");";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
-
             // Create statement
             Statement stm = null;
             stm = connection.createStatement();
 
             // Query
-            ResultSet result = null;
             int execution = stm.executeUpdate(fullCommand);
             connection.close();
             return execution;
@@ -379,6 +370,44 @@ public class DatabaseClient {
         }
     }
 
+    /**
+     *
+     * @param idBook The book ID of the book that is borrowed.
+     * @param idUser The borrowers user ID.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addLoanToDatabase(long idBook, long idUser) throws SQLException{
+            DatabaseConnection connector = new DatabaseConnection(host, port, database);
+            Connection connection = connector.getConnection();
+
+            try {
+                String loanDate = "CURDATE()";
+                String loanDue = "DATE_ADD(CURDATE(), INTERVAL 2 MONTH)";
+
+                String fullCommand = "INSERT INTO Loans (loanDate, loanDue, idBook, idUser) VALUES (" +
+                        loanDate + ", " +
+                        loanDue + ", " +
+                        idBook + ", " +
+                        idUser + ");";
+
+
+
+                // Create statement
+                Statement stm = null;
+                stm = connection.createStatement();
+
+                // Query
+                int execution = stm.executeUpdate(fullCommand);
+                connection.close();
+                return execution;
+            }catch (Exception ex){
+                System.out.println(ex.getMessage());
+                connection.close();
+                return 0;
+            }
+    }
+
 
     public int removeBookFromDatabase(long idBook) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
@@ -386,14 +415,12 @@ public class DatabaseClient {
 
         try {
             String fullCommand = "DELETE FROM Books WHERE idBook = " + idBook + ";";
-            PreparedStatement preparedStatement = connection.prepareStatement(fullCommand);
 
             // Create statement
             Statement stm = null;
             stm = connection.createStatement();
 
             // Query
-            ResultSet result = null;
             int execution = stm.executeUpdate(fullCommand);
             connection.close();
             return execution;
