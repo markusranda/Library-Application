@@ -54,21 +54,20 @@ public class LoginController implements Initializable {
                         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
                         window.setTitle("Library Leopard Leo - Main Menu");
                         window.setScene(scene);
+
+                        Model.getInstance().currentUser().setUsername(username);
+
                         window.show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
+                    // TODO: 22.11.2018 Add real feedback to the user.
                     System.out.println("WRONG USERNAME OR PASSWORD");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-            //Todo
-            // Use the strings username and password to authenticate with the database.
-            // Then change to the welcomeWindow with buttons unlocked corresponding to the usertype.
-
         });
     }
 }

@@ -57,6 +57,7 @@ public class StoreController implements Initializable {
         shoppingCartObsList = FXCollections.observableArrayList();
         shoppingCartMappings = new HashMap<>();
         databaseClient = new DatabaseClient();
+        System.out.println(Model.getInstance().currentUser().getUsername());
         fillBranchMenu();
         fillLiteratureTable();
         setKeyAndClickListeners();
