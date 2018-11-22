@@ -57,7 +57,6 @@ public class StoreController implements Initializable {
         shoppingCartObsList = FXCollections.observableArrayList();
         shoppingCartMappings = new HashMap<>();
         databaseClient = new DatabaseClient();
-        System.out.println(Model.getInstance().currentUser().getUsername());
         fillBranchMenu();
         fillLiteratureTable();
         setKeyAndClickListeners();
@@ -195,7 +194,11 @@ public class StoreController implements Initializable {
 
             HashMap<Literature, Branch> leftoverBooks = databaseClient.updateQuantity(shoppingCartMappings);
 
-            // TODO: 22.11.2018 add loans in the database for all the books that was lent.
+            // TODO: 22.11.2018 add loans in the database for all the books that was lent out.
+            boolean successFullyCreated = databaseClient.createLoans(shoppingCartMappings, leftoverBooks);
+            System.out.println(successFullyCreated);
+
+            // TODO: 22.11.2018 Add feedback to the user using successFullyCreated boolean.
 
             shoppingCartObsList.clear();
             shoppingCartMappings.clear();

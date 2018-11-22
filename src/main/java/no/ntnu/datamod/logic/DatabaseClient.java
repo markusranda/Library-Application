@@ -1,5 +1,6 @@
 package no.ntnu.datamod.logic;
 import no.ntnu.datamod.data.*;
+import no.ntnu.datamod.gui.Model;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -371,11 +372,12 @@ public class DatabaseClient {
     /**
      *
      * @param idBook The book ID of the book that is borrowed.
-     * @param idUser The borrowers user ID.
+     * @param idBranch The branch where the book resides.
+     * @param username The borrowers username.
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addLoanToDatabase(long idBook, long idUser) throws SQLException{
+    public int addLoanToDatabase(long idBook, long idBranch, String username) throws SQLException{
             DatabaseConnection connector = new DatabaseConnection(host, port, database);
             Connection connection = connector.getConnection();
 
@@ -383,12 +385,12 @@ public class DatabaseClient {
                 String loanDate = "CURDATE()";
                 String loanDue = "DATE_ADD(CURDATE(), INTERVAL 2 MONTH)";
 
-                String fullCommand = "INSERT INTO Loans (loanDate, loanDue, idBook, idUser) VALUES (" +
+                String fullCommand = "INSERT INTO Loans (loanDate, loanDue, idBook, idBranch, username) VALUES (" +
                         loanDate + ", " +
                         loanDue + ", " +
                         idBook + ", " +
-                        idUser + ");";
-
+                        idBranch + ", '" +
+                        username + "');";
 
 
                 // Create statement
@@ -508,5 +510,38 @@ public class DatabaseClient {
         connector.closeConnection();
 
         return result;
+    }
+
+    /**
+     * Finds out which books were borrowed and creates new loans for each book that
+     * was lent from the library.
+     *
+     * @param literatureBefore The books tried to lend from the library
+     * @param literatureAfter The books that didn't get lent from the library
+     */
+    public boolean createLoans(HashMap<Literature, Branch> literatureBefore, HashMap<Literature, Branch> literatureAfter) {
+        boolean result = false;
+
+        for (HashMap.Entry<Literature, Branch> litBefore : literatureBefore.entrySet())
+
+            for (HashMap.Entry<Literature, Branch> litAfter : literatureBefore.entrySet())
+
+            if ( litBefore.getKey().equals(litAfter.getKey()) &&
+                    litBefore.getValue().equals(litAfter.getValue()) ) {
+
+                result = true;
+
+                long idBook = litAfter.getKey().getIdBook();
+                long idBranch = litAfter.getKey().getIdBook();
+                String username = Model.getInstance().currentUser().getUsername();
+                try {
+
+                    addLoanToDatabase(idBook, idBranch, username);
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            return result;
     }
 }

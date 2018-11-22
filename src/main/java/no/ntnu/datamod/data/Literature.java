@@ -29,4 +29,6 @@ public abstract class Literature
     }
 
     public abstract String getImageURL();
+
+    public abstract long getIdBook();
 }
