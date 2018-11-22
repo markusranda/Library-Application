@@ -45,6 +45,11 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Returns the Connection instance from the connection.
+     *
+     * @return Returns the Connection instance from the connection.
+     */
     public Connection getConnection() {
         return connection;
     }

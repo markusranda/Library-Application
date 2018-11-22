@@ -1,10 +1,6 @@
 package no.ntnu.datamod.logic;
-import no.ntnu.datamod.data.Book;
-import no.ntnu.datamod.data.Branch;
-import no.ntnu.datamod.data.Loan;
-import no.ntnu.datamod.data.User;
+import no.ntnu.datamod.data.*;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -338,7 +334,7 @@ public class DatabaseClient {
             int execution = stm.executeUpdate(fullCommand);
             connection.close();
             return execution;
-        }catch (Exception ex){
+        } catch (Exception ex){
             System.out.println(ex.getMessage());
             connection.close();
             return 0;
@@ -423,31 +419,68 @@ public class DatabaseClient {
     /**
      * Removes one book copy in the Book_Quantity table
      *
-     * @param idBook idBook
-     * @return Returns true if all went well, returns false if remaining copies is zero.
+     * @return Returns back the shoppingCart with all the remaining books that couldn't be borrowed.
+     * If it returns an empty HashMap all went well.
      */
-    public boolean updateQuantity(long idBook, long idBranch) {
+    public HashMap<Literature, Branch> updateQuantity(HashMap<Literature, Branch> shoppingCart) {
         try {
             DatabaseConnection connector = new DatabaseConnection(host, port, database);
             Connection connection = connector.getConnection();
-
-            String fullCommand = 
-                            "UPDATE Book_Quantity " +
-                            "SET quantity = quantity - 1 " +
-                            "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
-
-            int currentQuantity = getQuantity(idBook, idBranch);
             Statement stm = connection.createStatement();
 
-            if (currentQuantity > 1) {
-                stm.execute(fullCommand);
-                return true;
-            } else {
-                return false;
-            }
+             for (HashMap.Entry<Literature, Branch> entry : shoppingCart.entrySet()) {
+                 Book book = (Book) entry.getKey();
+                 Branch branch = entry.getValue();
+                 long idBook = book.getIdBook();
+                 long idBranch = branch.getIdBranch();
+
+                 if (getQuantity(idBook, idBranch) >= 1) {
+                     String fullCommand =
+                             "UPDATE Book_Quantity " +
+                                     "SET quantity = quantity - 1 " +
+                                     "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
+                     stm.execute(fullCommand);
+                     shoppingCart.remove(entry, branch);
+                 }
+             }
+
+             stm.close();
+             connector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return shoppingCart;
         }
+        return shoppingCart;
+    }
+
+    /**
+     * Tries to login to the application checking the database's users table for
+     * a match on username and password.
+     *
+     * @param username username
+     * @param password password
+     * @return
+     */
+    public boolean tryLogin(String username, String password) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+        Statement stm = connection.createStatement();
+
+        boolean result = false;
+
+        String fullCommand =
+                        "SELECT * FROM Users WHERE username = '" + username + "' AND password = '" + password + "';";
+
+        // Query
+        stm.execute(fullCommand);
+        ResultSet queryResult = stm.getResultSet();
+        if (queryResult.next()) {
+            result = true;
+        }
+
+        stm.close();
+        connector.closeConnection();
+
+        return result;
     }
 }

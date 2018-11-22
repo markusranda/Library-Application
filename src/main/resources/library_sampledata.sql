@@ -97,8 +97,8 @@ Null),
 Null)
 ;
 
-INSERT INTO `library_db`.`Book_Copies`
-(`copies`,
+INSERT INTO `library_db`.`Book_Quantity`
+(`quantity`,
 `idBook`,
 `idBranch`)
 VALUES

@@ -33,7 +33,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class StoreController implements Initializable {
 
     private DatabaseClient databaseClient;
-    private HashMap<Literature, Branch> shoppingCartSet;
+    private HashMap<Literature, Branch> shoppingCartMappings;
     private ObservableList<String> shoppingCartObsList;
     private Branch currentBranch;
 
@@ -55,7 +55,7 @@ public class StoreController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         shoppingCartObsList = FXCollections.observableArrayList();
-        shoppingCartSet = new HashMap<>();
+        shoppingCartMappings = new HashMap<>();
         databaseClient = new DatabaseClient();
         fillBranchMenu();
         fillLiteratureTable();
@@ -90,13 +90,8 @@ public class StoreController implements Initializable {
      */
     private void fillLiteratureTable() {
         try {
-            // Removes existing rows with given IDs.
-            //databaseClient.removeBookFromDatabase(12346);
-            // Adds data to the DB with addSomethingToDatabase method.
-            databaseClient.addUserToDatabase("LarsOus","JamaicaLover","Customer");
-            databaseClient.addBookToDatabase("Den tvilsomme jærnbanen","Gulldendal");
-            //databaseClient.addBookToDatabase(12345,"Den tvilsomme jærnbanen","Gulldendal",null,null);
-
+            // Clear remove all child objects from the table, if there are any.
+            literatureTable.getChildren().clear();
             ArrayList<Book> books = databaseClient.getBooksList();
             Iterator<Book> it = books.iterator();
 
@@ -120,14 +115,7 @@ public class StoreController implements Initializable {
             }
         }
         literatureTable.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
-        /*
-        // Calculating the required height using the number of rows and a fixed set of pixels
-        int height = 0;
-        int numberOfElements = registry.getSize();
-        int numberOfRows = numberOfElements / 3;
-        height = numberOfRows * 185;
-        literatureTable.setMinHeight(height);
-        */
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -149,10 +137,17 @@ public class StoreController implements Initializable {
         loanBtn.setAlignment(Pos.TOP_RIGHT);
         loanBtn.setOnAction( e -> {
             //todo add loan functionality
-            shoppingCartSet.put(lit, currentBranch);
-            updateObsList();
-            shoppingCartObsList.add(lit.getTitle());
-            shoppingCartListView.setItems(shoppingCartObsList);
+            if (!shoppingCartMappings.containsKey(lit)) {
+
+                shoppingCartMappings.put(lit, currentBranch);
+                shoppingCartObsList.add(lit.getTitle());
+                shoppingCartListView.setItems(shoppingCartObsList);
+
+            } else {
+
+                System.out.println("! ! ! Only one of each book, you slacker ! ! ! ");
+
+            }
         });
         Label title;
         if (lit.getTitle().length() > 17) {
@@ -168,7 +163,7 @@ public class StoreController implements Initializable {
         // a default image will be set.
         Image productImg;
         try {
-            productImg = new Image(((Book) lit).getImageURL());
+            productImg = new Image(lit.getImageURL());
         }
         catch (IllegalArgumentException | NullPointerException e) {
             productImg = new Image("image/default_store_img.png");
@@ -191,26 +186,19 @@ public class StoreController implements Initializable {
     }
 
     /**
-     *
-     */
-    private void updateObsList() {
-        shoppingCartObsList.clear();
-
-        for (Object o : shoppingCartSet.entrySet()) {
-            Literature lit = (Literature) o;
-            shoppingCartObsList.add(lit.getTitle());
-        }
-    }
-
-    /**
      * Setup mouse and keyboard event handlers.
      */
     private void setKeyAndClickListeners() {
         checkoutBtn.setOnMouseClicked(event -> {
-            //TODO Update the database with borrowers name and shoppingcartlist.
+            // TODO: 22.11.2018 use the leftoverBooks collection to tell the user which books are out of stock.
 
-            //if (databaseClient.updateQuantity(book.getIdBook(), branchID))
+            HashMap<Literature, Branch> leftoverBooks = databaseClient.updateQuantity(shoppingCartMappings);
+
+            // TODO: 22.11.2018 add loans in the database for all the books that was lent.
+
             shoppingCartObsList.clear();
+            shoppingCartMappings.clear();
+            fillLiteratureTable();
         });
         backBtn.setOnMouseClicked(event -> {
             //noinspection Duplicates
