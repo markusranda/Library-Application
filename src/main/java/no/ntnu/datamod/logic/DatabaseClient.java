@@ -263,8 +263,6 @@ public class DatabaseClient {
         }
         }
 
-        // Add rows to the database //
-
     /**
      * Adds a new user to the database with the given parameter values
      * defining the user to be added.
@@ -725,8 +723,6 @@ public class DatabaseClient {
         }
     }
 
-    // Remove rows from database // TODO: We might not delete rows at all. So we could probably delete the remove*FomDatabase() methods.
-
     public int removeBookFromDatabase(long idBook) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
@@ -748,7 +744,6 @@ public class DatabaseClient {
             return 0;
         }
     }
-
 
     /**
      * Searches for all books that match the given keyword.

@@ -188,6 +188,7 @@ public class StoreController implements Initializable {
     /**
      * Setup mouse and keyboard event handlers.
      */
+    @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
         checkoutBtn.setOnMouseClicked(event -> {
             // TODO: 22.11.2018 use the leftoverBooks collection to tell the user which books are out of stock.
