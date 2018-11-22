@@ -263,6 +263,8 @@ public class DatabaseClient {
         }
         }
 
+        // Add rows to the database //
+
     /**
      * Adds a new user to the database with the given parameter values
      * defining the user to be added.
@@ -408,6 +410,322 @@ public class DatabaseClient {
             }
     }
 
+    /**
+     *
+     * @param fName Firstname of author.
+     * @param lName Lastname of author
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addAuthorToDatabase(String fName, String lName) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Authors (lName, fName) VALUES ('" +
+                    lName + "', '" +
+                    fName + "');";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param name Name of the branch.
+     * @param address The branches address.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addBranchToDatabase(String name, String address) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Branches (name, address) VALUES ('" +
+                    name + "', '" +
+                    address + "');";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param fname Firstname of the customer.
+     * @param lname Lastname of the customer.
+     * @param address Customers address.
+     * @param phone Customers phone number
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addCustomerToDatabase(String fname, String lname, String address, String phone) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Customer (fname, lname, address, phone) VALUES ('" +
+                    fname + "', '" +
+                    lname + "', '" +
+                    address + "', '" +
+                    phone + "');";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param fname Firstname of the employee.
+     * @param lname Lastname of the employee.
+     * @param address Employees address.
+     * @param phone Employees phone number.
+     * @param accountNumber Employees accountnumber.
+     * @param SSN Employees social security number.
+     * @param position Employees working position.
+     * @param idBranch Branch ID of where the employee working at.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addEmployeeToDatabase(String fname, String lname, String address, String phone, String accountNumber, int SSN, String position, float idBranch) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Employee (fname, lname, address, phone, accountNumber, SSN, position, idBranch) VALUES ('" +
+                    fname + "', '" +
+                    lname + "', '" +
+                    address + "', '" +
+                    phone + "', '" +
+                    accountNumber + "', " +
+                    SSN + ", '" +
+                    position + "', " +
+                    idBranch + ");";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param name The genre name.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addGenreToDatabase(String name) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Genre (name) VALUES ('" +
+                    name + "');";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param idBook Book ID.
+     * @param idAuthor Author ID.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addBookAuthorJunctionToDatabase(long idBook, long idAuthor) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Book_Authors (idBook, idAuthors) VALUES (" +
+                    idBook + ", " +
+                    idAuthor + ");";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param idBook Book ID.
+     * @param idGenre Genre ID.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addBookGenreJunctionToDatabase(long idBook, long idGenre) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Book_Genres (idBook, idGenre) VALUES (" +
+                    idBook + ", " +
+                    idGenre + ");";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param idUser User ID.
+     * @param idCustomer Customer ID.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addCustomerUserJunctionToDatabase(long idUser, long idCustomer) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+
+
+            String fullCommand = "INSERT INTO Customer_Users (Users_idUser, Customer_idCustomer) VALUES (" +
+                    idUser + ", " +
+                    idCustomer + ");";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param idUser User ID.
+     * @param idEmployee Employee ID.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addEmployeeUserJunctionToDatabase(long idUser, long idEmployee) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+
+
+            String fullCommand = "INSERT INTO Employee_Users (Users_idUser, Employee_idEmployee) VALUES (" +
+                    idUser + ", " +
+                    idEmployee + ");";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    // Remove rows from database // TODO: We might not delete rows at all. So we could probably delete the remove*FomDatabase() methods.
 
     public int removeBookFromDatabase(long idBook) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
@@ -430,6 +748,7 @@ public class DatabaseClient {
             return 0;
         }
     }
+
 
     /**
      * Searches for all books that match the given keyword.
