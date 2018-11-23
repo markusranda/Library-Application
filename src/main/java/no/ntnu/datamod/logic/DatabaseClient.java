@@ -60,6 +60,95 @@ public class DatabaseClient {
     }
 
     /**
+     * Returns all the books from the table Book as an ArrayList<Author>.
+     *
+     * @return Returns all the books from the table Book as an ArrayList<Author>.
+     */
+    public ArrayList<Author> getAuthorList()  throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        String fullCommand = "SELECT * FROM Authors";
+        ArrayList<Author> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String lName = (String) row.get("lName");
+            String fName = (String) row.get("fName");
+            long idAuthors = (int) row.get("idAuthors");
+
+            Author author = new Author(idAuthors, lName, fName);
+            rowList.add(author);
+        }
+
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
+    }
+
+    /**
+     * Returns all the books from the table Book as an ArrayList<Customer>.
+     *
+     * @return Returns all the books from the table Book as an ArrayList<Customer>.
+     */
+    public ArrayList<Customer> getCustomerList()  throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        String fullCommand = "SELECT * FROM Customer";
+        ArrayList<Customer> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String lname = (String) row.get("lname");
+            String fname = (String) row.get("fname");
+            long idCustomer = (int) row.get("idCustomer");
+            String address = (String) row.get("address");
+            String phone = (String) row.get("phone");
+
+            Customer customer = new Customer(idCustomer, lname, fname, address, phone);
+            rowList.add(customer);
+        }
+
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
+    }
+
+
+    /**
      * Returns all the users from the table Users as an ArrayList<User>.
      *
      * @return Returns all the users from the table Book as an ArrayList<User>.
@@ -262,6 +351,8 @@ public class DatabaseClient {
             return 0;
         }
         }
+
+        // Add rows to the database //
 
     /**
      * Adds a new user to the database with the given parameter values

@@ -65,9 +65,9 @@
       </Pane>
    </bottom>
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <Pane fx:id="tableContainer" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
    <left>
-      <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listMenu" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </left>
 </BorderPane>
