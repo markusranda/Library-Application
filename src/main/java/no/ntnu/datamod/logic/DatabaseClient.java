@@ -177,9 +177,9 @@ public class DatabaseClient {
             java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
             java.sql.Date loanDue = (java.sql.Date) row.get("loanDate");
             long idBook = (int) row.get("idBook");
-            long idUser = (int) row.get("idUser");
+            String username = (String) row.get("username");
 
-            Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, idUser);
+            Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username);
             rowList.add(loan);
         }
 
@@ -857,5 +857,64 @@ public class DatabaseClient {
                 }
             }
             return result;
+    }
+
+    /**
+     * Returns an ArrayList with data compatible for the MyPage in library application. This includes information
+     * about loans done by the current user, with loan date, due date, remaining days until due, book title,
+     * book author, library, Fine.
+     *
+     * The fine will be calculated by the query based on how long it's been since the book went due.
+     *
+     * @return Returns an arraylist with Strings containing data mentioned above.
+     */
+    public ArrayList<String> getLoansForUser() throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        ArrayList<String> list = new ArrayList<>();
+        String currentUser = Model.getInstance().currentUser().getUsername();
+        Statement stm = null;
+
+        try {
+            String fullCommand = "SELECT * FROM Loans WHERE username = " + currentUser;
+            ArrayList<Loan> rowList = new ArrayList<>();
+
+            // Create statement
+            stm = connection.createStatement();
+
+            // Query
+            ResultSet result;
+            boolean returningRows = stm.execute(fullCommand);
+            if (returningRows)
+                result = stm.getResultSet();
+            else
+                throw new SQLException("There are no results from the given query \n");
+
+            ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+            // Uses the previously created HashMap to match key for value
+            // and creates the required object. And puts em all into a list.
+            for (HashMap<String, Object> row : rows) {
+                long idLoans = (int) row.get("idLoans");
+                java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
+                java.sql.Date loanDue = (java.sql.Date) row.get("loanDate");
+                long idBook = (int) row.get("idBook");
+                String username = (String) row.get("username");
+
+                Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username);
+                rowList.add(loan);
+            }
+
+
+        } catch (SQLException | NullPointerException e) {
+
+            e.printStackTrace();
+
+        }
+        stm.close();
+        connection.close();
+
+        return list;
     }
 }

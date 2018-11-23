@@ -9,14 +9,14 @@ public class Loan {
   private java.sql.Date loanDate;
   private java.sql.Date loanDue;
   private long idBook;
-  private long idUser;
+  private String username;
 
-  public Loan(long idLoans, Date loanDate, Date loanDue, long idBook, long idUser) {
+  public Loan(long idLoans, Date loanDate, Date loanDue, long idBook, String username) {
     this.idLoans = idLoans;
     this.loanDate = loanDate;
     this.loanDue = loanDue;
     this.idBook = idBook;
-    this.idUser = idUser;
+    this.username = username;
   }
 
 
@@ -56,12 +56,12 @@ public class Loan {
   }
 
 
-  public long getIdUser() {
-    return idUser;
+  public String getUsername() {
+    return username;
   }
 
-  public void setIdUser(long idUser) {
-    this.idUser = idUser;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
 }

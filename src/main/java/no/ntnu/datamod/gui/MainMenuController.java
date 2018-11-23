@@ -71,4 +71,19 @@ public class MainMenuController implements Initializable {
         window.setScene(scene);
         window.show();
     }
+
+    /**
+     * When this method is called it will change the scene to the manage inventory page.
+     */
+    @FXML
+    private void openMyPage(ActionEvent event) throws IOException {
+        Parent myPageParent;
+        myPageParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("myPage.fxml")));
+        Scene scene = new Scene(myPageParent);
+        // This line gets the Stage information
+        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        window.setTitle("Library Leopard Leo - My Page");
+        window.setScene(scene);
+        window.show();
+    }
 }

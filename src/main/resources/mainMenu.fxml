@@ -13,9 +13,9 @@
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="122.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="BOTTOM_LEFT" layoutY="100.0" prefHeight="100.0" prefWidth="303.0">
+            <HBox alignment="BOTTOM_LEFT" layoutX="14.0" layoutY="42.0" prefHeight="69.0" prefWidth="413.0">
                <children>
                   <Button fx:id="storeBtn" mnemonicParsing="false" onAction="#openStoreWindow" text="Store">
                      <HBox.margin>
@@ -33,9 +33,17 @@
                         <Font size="16.0" />
                      </font>
                   </Button>
+                  <Button fx:id="myPageBtn" mnemonicParsing="false" onAction="#openMyPage" text="My Page">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
-            <HBox alignment="BOTTOM_RIGHT" layoutX="322.0" layoutY="100.0" prefHeight="100.0" prefWidth="278.0">
+            <HBox alignment="BOTTOM_RIGHT" layoutX="469.0" layoutY="49.0" prefHeight="62.0" prefWidth="117.0">
                <children>
                   <Button fx:id="exitBtn" mnemonicParsing="false" onAction="#closeWindow" text="Exit">
                      <HBox.margin>

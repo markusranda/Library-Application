@@ -120,7 +120,7 @@ VALUES
 (6,5,1);
 
 INSERT INTO `library_db`.`Users`
-(`idUser`,
+(`username`,
 `fname`,
 `lname`,
 `address`,
@@ -159,7 +159,7 @@ INSERT INTO `library_db`.`Loans`
 `loanDate`,
 `loanDue`,
 `idBook`,
-`idUser`)
+`username`)
 VALUES
 (1,
 "1980-12-24",
