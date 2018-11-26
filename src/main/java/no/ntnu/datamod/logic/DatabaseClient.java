@@ -928,7 +928,7 @@ public class DatabaseClient {
 
         for (HashMap.Entry<Literature, Branch> litBefore : literatureBefore.entrySet())
 
-            for (HashMap.Entry<Literature, Branch> litAfter : literatureBefore.entrySet())
+            for (HashMap.Entry<Literature, Branch> litAfter : literatureAfter.entrySet())
 
             if ( litBefore.getKey().equals(litAfter.getKey()) &&
                     litBefore.getValue().equals(litAfter.getValue()) ) {
@@ -968,7 +968,7 @@ public class DatabaseClient {
 
         try {
             String fullCommand =
-                    "SELECT  branch.name, title_authors.title, Authors," +
+                    "SELECT  l.idLoans, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
                             "l.loanDate, l.loanDue, DATEDIFF(l.loanDue, CURDATE()) AS 'Remaining days'," +
                             "DATEDIFF(CURDATE(), l.loanDue) * 5 AS 'Fine'" +
 
@@ -1003,6 +1003,10 @@ public class DatabaseClient {
             // Uses the previously created HashMap to match key for value
             // and creates the required object. And puts em all into a list.
             for (HashMap<String, Object> row : rows) {
+                int idLoans = (int) row.get("idLoans");
+                int idBooks = (int) row.get("idBook");
+                int idBranch = (int) row.get("idBranch");
+                String username = (String) row.get("username");
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
@@ -1011,7 +1015,7 @@ public class DatabaseClient {
                 long remainingDays = (long) row.get("Remaining days");
                 long fine = (long) row.get("Fine");
 
-                DetailedLoan detailedLoan = new DetailedLoan(library, bookTitle, authors, loanDate, loanDue, remainingDays, fine);
+                DetailedLoan detailedLoan = new DetailedLoan(idLoans, idBooks, idBranch, username, library, bookTitle, authors, loanDate, loanDue, remainingDays, fine);
                 rowlist.add(detailedLoan);
             }
 
@@ -1027,5 +1031,27 @@ public class DatabaseClient {
         }
 
         return rowlist;
+    }
+
+    public void returnBook(DetailedLoan detailedLoan) throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+        Statement stm = connection.createStatement();
+
+        int idBook = detailedLoan.getIdBook();
+        int idBranch = detailedLoan.getIdBranch();
+        int idLoan = detailedLoan.getIdLoan();
+
+        String updateQuantityQuery =
+                "UPDATE Book_Quantity " +
+                        "SET quantity = quantity + 1 " +
+                        "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
+        stm.execute(updateQuantityQuery);
+
+        String removeFromLoans =
+                "DELETE FROM Loans WHERE idLoans = '" + idLoan + "';";
+
+        stm.execute(removeFromLoans);
+
     }
 }

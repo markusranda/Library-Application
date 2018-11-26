@@ -185,13 +185,13 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `library_db`.`Loans`;
 CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
-  `idLoans` INT(11) NOT NULL AUTO_INCREMENT,
+  `idLoan` INT(11) NOT NULL AUTO_INCREMENT,
   `loanDate` DATE NOT NULL,
   `loanDue` DATE NOT NULL,
   `idBook` INT(11) NOT NULL,
   `idBranch` INT(11) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idLoans`, `idBook`, `username`, `idBranch`),
+  PRIMARY KEY (`idLoan`, `idBook`, `username`, `idBranch`),
   CONSTRAINT `fk_Loans_Books1`
     FOREIGN KEY (`idBook`)
     REFERENCES `library_db`.`Books` (`idBook`)

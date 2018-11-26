@@ -155,7 +155,7 @@ VALUES
 "Customer");
 
 INSERT INTO `library_db`.`Loans`
-(`idLoans`,
+(`idLoan`,
 `loanDate`,
 `loanDue`,
 `idBook`,

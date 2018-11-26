@@ -4,6 +4,10 @@ import java.sql.Date;
 
 public class DetailedLoan {
 
+    private int idLoan;
+    private int idBook;
+    private int idBranch;
+    private String username;
     private String library;
     private String bookTitle;
     private String authors;
@@ -12,7 +16,11 @@ public class DetailedLoan {
     private long remainingDays;
     private long fine;
 
-    public DetailedLoan(String library, String bookTitle, String authors, Date loanDate, Date loanDue, long remainingDays, long fine) {
+    public DetailedLoan(int idLoan, int idBook, int idBranch, String username, String library, String bookTitle, String authors, Date loanDate, Date loanDue, long remainingDays, long fine) {
+        this.idLoan = idLoan;
+        this.idBook = idBook;
+        this.idBranch = idBranch;
+        this.username = username;
         this.library = library;
         this.bookTitle = bookTitle;
         this.authors = authors;
@@ -20,6 +28,22 @@ public class DetailedLoan {
         this.loanDue = loanDue;
         this.remainingDays = remainingDays;
         this.fine = fine;
+    }
+
+    public int getIdBranch() {
+        return idBranch;
+    }
+
+    public int getIdBook() {
+        return idBook;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getIdLoan() {
+        return idLoan;
     }
 
     public String getLibrary() {

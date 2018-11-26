@@ -145,7 +145,6 @@ public class StoreController implements Initializable {
 
             } else {
 
-                System.out.println("! ! ! Only one of each book, you slacker ! ! ! ");
 
             }
         });
@@ -197,7 +196,6 @@ public class StoreController implements Initializable {
 
             // TODO: 22.11.2018 add loans in the database for all the books that was lent out.
             boolean successFullyCreated = databaseClient.createLoans(shoppingCartMappings, leftoverBooks);
-            System.out.println(successFullyCreated);
 
             // TODO: 22.11.2018 Add feedback to the user using successFullyCreated boolean.
 
