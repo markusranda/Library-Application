@@ -52,31 +52,36 @@ public class MyPageController implements Initializable {
 
             // Table column variables
 
-            TableColumn<Loan, String> loanDateCol = new TableColumn<>("Loan Date");
-            loanDateCol.setMinWidth(300);
-            loanDateCol.setCellValueFactory(new PropertyValueFactory<>("Loan Date"));
-
-            TableColumn<Loan, String> loanDueCol = new TableColumn<>("Due Date");
-            loanDueCol.setMinWidth(300);
-            loanDueCol.setCellValueFactory(new PropertyValueFactory<>("Due Date"));
-
-            TableColumn<Loan, String> remainingDaysCol = new TableColumn<>("Remaining Days until due");
-            remainingDaysCol.setMinWidth(100);
-            remainingDaysCol.setCellValueFactory(new PropertyValueFactory<>("Remaining Days until due"));
+            TableColumn<Loan, String> libraryCol = new TableColumn<>("Library");
+            libraryCol.setMinWidth(300);
+            libraryCol.setCellValueFactory(new PropertyValueFactory<>("library"));
 
             TableColumn<Loan, String> bookTitleCol = new TableColumn<>("Book Title");
-            bookTitleCol.setMinWidth(77);
-            bookTitleCol.setCellValueFactory(new PropertyValueFactory<>("Book Title"));
+            bookTitleCol.setMinWidth(300);
+            bookTitleCol.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
 
-            TableColumn<Loan, String> libraryCol = new TableColumn<>("Library");
-            libraryCol.setMinWidth(150);
-            libraryCol.setCellValueFactory(new PropertyValueFactory<>("Library"));
+            TableColumn<Loan, String> authorsCol = new TableColumn<>("Authors");
+            authorsCol.setMinWidth(100);
+            authorsCol.setCellValueFactory(new PropertyValueFactory<>("authors"));
 
-            TableColumn<Loan, String> fineCol = new TableColumn<>("Fine");
+            TableColumn<Loan, String> loanDateCol = new TableColumn<>("Date Loaned");
+            loanDateCol.setMinWidth(77);
+            loanDateCol.setCellValueFactory(new PropertyValueFactory<>("loanDate"));
+
+            TableColumn<Loan, String> loanDueCol = new TableColumn<>("Date Due");
+            loanDueCol.setMinWidth(150);
+            loanDueCol.setCellValueFactory(new PropertyValueFactory<>("loanDue"));
+
+            TableColumn<Loan, String> remainingDaysCol = new TableColumn<>("Remaining Days for loan");
+            remainingDaysCol.setMinWidth(150);
+            remainingDaysCol.setCellValueFactory(new PropertyValueFactory<>("remainingDays"));
+
+            TableColumn<Loan, String> fineCol = new TableColumn<>("Fine (NOK)");
             fineCol.setMinWidth(150);
-            fineCol.setCellValueFactory(new PropertyValueFactory<>("Fine"));
+            fineCol.setCellValueFactory(new PropertyValueFactory<>("fine"));
 
-            table.getColumns().addAll(loanDateCol, loanDueCol, remainingDaysCol, bookTitleCol, libraryCol, fineCol);
+            table.getColumns().addAll
+                    (libraryCol, bookTitleCol, authorsCol, loanDateCol, loanDueCol, remainingDaysCol, fineCol);
 
 
         } catch (SQLException e) {

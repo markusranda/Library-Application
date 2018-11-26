@@ -147,7 +147,6 @@ public class DatabaseClient {
         return rowList;
     }
 
-
     /**
      * Returns all the users from the table Users as an ArrayList<User>.
      *
@@ -959,17 +958,34 @@ public class DatabaseClient {
      *
      * @return Returns an arraylist with Strings containing data mentioned above.
      */
-    public ArrayList<String> getLoansForUser() throws SQLException {
+    public ArrayList<DetailedLoan> getLoansForUser() throws SQLException {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<DetailedLoan> rowlist = new ArrayList<>();
         String currentUser = Model.getInstance().currentUser().getUsername();
         Statement stm = null;
 
         try {
-            String fullCommand = "SELECT * FROM Loans WHERE username = " + currentUser;
-            ArrayList<Loan> rowList = new ArrayList<>();
+            String fullCommand =
+                    "SELECT  branch.name, title_authors.title, Authors," +
+                            "l.loanDate, l.loanDue, DATEDIFF(l.loanDue, CURDATE()) AS 'Remaining days'," +
+                            "DATEDIFF(CURDATE(), l.loanDue) * 5 AS 'Fine'" +
+
+                            "FROM Loans l, Branches branch," +
+
+                            "(SELECT  b.idBook, b.title, " +
+                            "GROUP_CONCAT(CONCAT(a.fName, ' ', a.lName) ORDER BY CONCAT(a.fName, ' ', a.lName)) AS Authors " +
+                            "FROM Books b " +
+                            "LEFT JOIN Book_Authors ba " +
+                            "ON b.idBook = ba.idBook " +
+                            "LEFT JOIN Authors a " +
+                            "ON ba.idAuthors = a.idAuthors " +
+                            "GROUP BY b.idBook " +
+                            ") AS title_authors " +
+
+            "WHERE title_authors.idBook = l.idBook AND branch.idBranch = l.idBranch AND l.username = '" + currentUser + "' " +
+            "ORDER BY l.idLoans";
 
             // Create statement
             stm = connection.createStatement();
@@ -987,15 +1003,21 @@ public class DatabaseClient {
             // Uses the previously created HashMap to match key for value
             // and creates the required object. And puts em all into a list.
             for (HashMap<String, Object> row : rows) {
-                long idLoans = (int) row.get("idLoans");
+                String library = (String) row.get("name");
+                String bookTitle = (String) row.get("title");
+                String authors = (String) row.get("Authors");
                 java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
-                java.sql.Date loanDue = (java.sql.Date) row.get("loanDate");
-                long idBook = (int) row.get("idBook");
-                String username = (String) row.get("username");
+                java.sql.Date loanDue = (java.sql.Date) row.get("loanDue");
+                long remainingDays = (long) row.get("Remaining days");
+                long fine = (long) row.get("Fine");
 
-                Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username);
-                rowList.add(loan);
+                DetailedLoan detailedLoan = new DetailedLoan(library, bookTitle, authors, loanDate, loanDue, remainingDays, fine);
+                rowlist.add(detailedLoan);
             }
+
+            stm.close();
+            connection.close();
+            return rowlist;
 
 
         } catch (SQLException | NullPointerException e) {
@@ -1003,9 +1025,7 @@ public class DatabaseClient {
             e.printStackTrace();
 
         }
-        stm.close();
-        connection.close();
 
-        return list;
+        return rowlist;
     }
 }
