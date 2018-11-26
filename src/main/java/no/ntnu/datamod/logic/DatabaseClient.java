@@ -1035,14 +1035,20 @@ public class DatabaseClient {
         return rowlist;
     }
 
-    public void returnBook(Loan detailedLoan) throws SQLException {
+    /**
+     * Uses the parameter Loan to update the database's quantity of a certain book and removes it from the Loans table.
+     *
+     * @param loan The loan which is to be removed
+     * @throws SQLException
+     */
+    public void returnBook(Loan loan) throws SQLException {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
         Statement stm = connection.createStatement();
 
-        int idBook = detailedLoan.getIdBook();
-        int idBranch = detailedLoan.getIdBranch();
-        int idLoan = detailedLoan.getIdLoan();
+        int idBook = loan.getIdBook();
+        int idBranch = loan.getIdBranch();
+        int idLoan = loan.getIdLoan();
 
         String updateQuantityQuery =
                 "UPDATE Book_Quantity " +

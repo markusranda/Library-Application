@@ -84,6 +84,7 @@ public class MainMenuController implements Initializable {
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setTitle("Library Leopard Leo - My Page");
         window.setScene(scene);
+        window.setMaximized(true);
         window.show();
     }
 }

@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.logic.DatabaseClient;
@@ -26,7 +29,7 @@ import java.util.ResourceBundle;
 public class MyPageController implements Initializable {
 
     @FXML
-    private Pane tableContainer;
+    private VBox tableContainer;
 
     @FXML
     private Button backBtn;
@@ -44,6 +47,7 @@ public class MyPageController implements Initializable {
         updateLoanView();
     }
 
+
     /**
      * Updates the view of all the users loans with data from the database
      */
@@ -53,6 +57,11 @@ public class MyPageController implements Initializable {
         tableContainer.getChildren().add(loanTableView);
     }
 
+
+    /**
+     * Creates a new TableView with loan objects from a database and returns it.
+     * @return Returns a TableView with loan objects from a database.
+     */
     private TableView<Loan> createLoansTable() {
         TableView<Loan> table = new TableView<>();
         table.setEditable(true);
@@ -95,7 +104,8 @@ public class MyPageController implements Initializable {
 
             table.getColumns().addAll
                     (libraryCol, bookTitleCol, authorsCol, loanDateCol, loanDueCol, remainingDaysCol, fineCol);
-            table.setPrefSize(1300,800);
+            table.setPrefSize(1500,600);
+            tableContainer.setMargin(loanTableView, new Insets(40, 0, 0, 40));
 
         } catch (SQLException e) {
 
@@ -105,6 +115,7 @@ public class MyPageController implements Initializable {
 
         return table;
     }
+
 
     @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
