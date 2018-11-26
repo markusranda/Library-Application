@@ -38,6 +38,7 @@ public class Book extends Literature {
     this.idBook = idBook;
     this.authors = authors;
     this.isbn = isbn;
+    this.image = null;
   }
 
   @Override

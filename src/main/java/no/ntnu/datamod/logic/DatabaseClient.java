@@ -261,10 +261,10 @@ public class DatabaseClient {
         // Uses the previously created HashMap to match key for value
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
-            long idLoans = (int) row.get("idLoans");
+            int idLoans = (int) row.get("idLoans");
             java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
             java.sql.Date loanDue = (java.sql.Date) row.get("loanDate");
-            long idBook = (int) row.get("idBook");
+            int idBook = (int) row.get("idBook");
             String username = (String) row.get("username");
 
             Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username);
@@ -958,11 +958,11 @@ public class DatabaseClient {
      *
      * @return Returns an arraylist with Strings containing data mentioned above.
      */
-    public ArrayList<DetailedLoan> getLoansForUser() throws SQLException {
+    public ArrayList<Loan> getLoansForUser() throws SQLException {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        ArrayList<DetailedLoan> rowlist = new ArrayList<>();
+        ArrayList<Loan> rowlist = new ArrayList<>();
         String currentUser = Model.getInstance().currentUser().getUsername();
         Statement stm = null;
 
@@ -1004,19 +1004,21 @@ public class DatabaseClient {
             // and creates the required object. And puts em all into a list.
             for (HashMap<String, Object> row : rows) {
                 int idLoans = (int) row.get("idLoans");
-                int idBooks = (int) row.get("idBook");
-                int idBranch = (int) row.get("idBranch");
+                java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
+                java.sql.Date loanDue = (java.sql.Date) row.get("loanDue");
+                int idBook = (int) row.get("idBook");
                 String username = (String) row.get("username");
+                int idBranch = (int) row.get("idBranch");
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
-                java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
-                java.sql.Date loanDue = (java.sql.Date) row.get("loanDue");
                 long remainingDays = (long) row.get("Remaining days");
                 long fine = (long) row.get("Fine");
 
-                DetailedLoan detailedLoan = new DetailedLoan(idLoans, idBooks, idBranch, username, library, bookTitle, authors, loanDate, loanDue, remainingDays, fine);
-                rowlist.add(detailedLoan);
+                Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
+                        authors, remainingDays, fine);
+
+                rowlist.add(loan);
             }
 
             stm.close();
@@ -1033,7 +1035,7 @@ public class DatabaseClient {
         return rowlist;
     }
 
-    public void returnBook(DetailedLoan detailedLoan) throws SQLException {
+    public void returnBook(Loan detailedLoan) throws SQLException {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
         Statement stm = connection.createStatement();

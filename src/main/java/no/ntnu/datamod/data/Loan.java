@@ -5,63 +5,82 @@ import java.sql.Date;
 
 public class Loan {
 
-  private long idLoans;
-  private java.sql.Date loanDate;
-  private java.sql.Date loanDue;
-  private long idBook;
+  private int idBook;
+  private int idLoan;
+  private int idBranch;
+  private String library;
+  private String bookTitle;
+  private String authors;
+  private Date loanDate;
+  private Date loanDue;
   private String username;
+  private long remainingDays;
+  private long fine;
 
-  public Loan(long idLoans, Date loanDate, Date loanDue, long idBook, String username) {
-    this.idLoans = idLoans;
+  public Loan(int idLoans, Date loanDate, Date loanDue, int idBook, String username) {
+    this.idLoan = idLoans;
     this.loanDate = loanDate;
     this.loanDue = loanDue;
     this.idBook = idBook;
     this.username = username;
   }
 
-
-  public long getIdLoans() {
-    return idLoans;
-  }
-
-  public void setIdLoans(long idLoans) {
-    this.idLoans = idLoans;
-  }
-
-
-  public java.sql.Date getLoanDate() {
-    return loanDate;
-  }
-
-  public void setLoanDate(java.sql.Date loanDate) {
+  public Loan(int idLoan, Date loanDate, Date loanDue, int idBook, String username, int idBranch, String library,
+              String bookTitle, String authors, long remainingDays, long fine) {
+    this.idBook = idBook;
+    this.idLoan = idLoan;
+    this.idBranch = idBranch;
+    this.library = library;
+    this.bookTitle = bookTitle;
+    this.authors = authors;
     this.loanDate = loanDate;
-  }
-
-
-  public java.sql.Date getLoanDue() {
-    return loanDue;
-  }
-
-  public void setLoanDue(java.sql.Date loanDue) {
     this.loanDue = loanDue;
+    this.username = username;
+    this.remainingDays = remainingDays;
+    this.fine = fine;
   }
 
-
-  public long getIdBook() {
+  public int getIdBook() {
     return idBook;
   }
 
-  public void setIdBook(long idBook) {
-    this.idBook = idBook;
+  public int getIdLoan() {
+    return idLoan;
   }
 
+  public int getIdBranch() {
+    return idBranch;
+  }
+
+  public String getLibrary() {
+    return library;
+  }
+
+  public String getBookTitle() {
+    return bookTitle;
+  }
+
+  public String getAuthors() {
+    return authors;
+  }
+
+  public Date getLoanDate() {
+    return loanDate;
+  }
+
+  public Date getLoanDue() {
+    return loanDue;
+  }
 
   public String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public long getRemainingDays() {
+    return remainingDays;
   }
 
+  public long getFine() {
+    return fine;
+  }
 }

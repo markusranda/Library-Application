@@ -14,7 +14,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import no.ntnu.datamod.data.DetailedLoan;
 import no.ntnu.datamod.data.Loan;
 import no.ntnu.datamod.logic.DatabaseClient;
 
@@ -36,7 +35,7 @@ public class MyPageController implements Initializable {
     private Button returnSelectedBook;
 
     private DatabaseClient databaseClient;
-    private TableView<DetailedLoan> detailedLoanTable;
+    private TableView<Loan> loanTableView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,12 +49,12 @@ public class MyPageController implements Initializable {
      */
     private void updateLoanView() {
         tableContainer.getChildren().clear();
-        detailedLoanTable = createLoansTable();
-        tableContainer.getChildren().add(detailedLoanTable);
+        loanTableView = createLoansTable();
+        tableContainer.getChildren().add(loanTableView);
     }
 
-    private TableView<DetailedLoan> createLoansTable() {
-        TableView<DetailedLoan> table = new TableView<>();
+    private TableView<Loan> createLoansTable() {
+        TableView<Loan> table = new TableView<>();
         table.setEditable(true);
 
         try {
@@ -66,31 +65,31 @@ public class MyPageController implements Initializable {
 
             // Table column variables
 
-            TableColumn<DetailedLoan, String> libraryCol = new TableColumn<>("Library");
+            TableColumn<Loan, String> libraryCol = new TableColumn<>("Library");
             libraryCol.setMinWidth(150);
             libraryCol.setCellValueFactory(new PropertyValueFactory<>("library"));
 
-            TableColumn<DetailedLoan, String> bookTitleCol = new TableColumn<>("Book Title");
+            TableColumn<Loan, String> bookTitleCol = new TableColumn<>("Book Title");
             bookTitleCol.setMinWidth(150);
             bookTitleCol.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
 
-            TableColumn<DetailedLoan, String> authorsCol = new TableColumn<>("Authors");
+            TableColumn<Loan, String> authorsCol = new TableColumn<>("Authors");
             authorsCol.setMinWidth(300);
             authorsCol.setCellValueFactory(new PropertyValueFactory<>("authors"));
 
-            TableColumn<DetailedLoan, String> loanDateCol = new TableColumn<>("Date Loaned");
+            TableColumn<Loan, String> loanDateCol = new TableColumn<>("Date Loaned");
             loanDateCol.setMinWidth(77);
             loanDateCol.setCellValueFactory(new PropertyValueFactory<>("loanDate"));
 
-            TableColumn<DetailedLoan, String> loanDueCol = new TableColumn<>("Date Due");
+            TableColumn<Loan, String> loanDueCol = new TableColumn<>("Date Due");
             loanDueCol.setMinWidth(77);
             loanDueCol.setCellValueFactory(new PropertyValueFactory<>("loanDue"));
 
-            TableColumn<DetailedLoan, String> remainingDaysCol = new TableColumn<>("Remaining Days for loan");
+            TableColumn<Loan, String> remainingDaysCol = new TableColumn<>("Remaining Days for loan");
             remainingDaysCol.setMinWidth(77);
             remainingDaysCol.setCellValueFactory(new PropertyValueFactory<>("remainingDays"));
 
-            TableColumn<DetailedLoan, String> fineCol = new TableColumn<>("Fine (NOK)");
+            TableColumn<Loan, String> fineCol = new TableColumn<>("Fine (NOK)");
             fineCol.setMinWidth(77);
             fineCol.setCellValueFactory(new PropertyValueFactory<>("fine"));
 
@@ -110,9 +109,9 @@ public class MyPageController implements Initializable {
     @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
         returnSelectedBook.setOnMouseClicked(event -> {
-                DetailedLoan detailedLoan = detailedLoanTable.getSelectionModel().getSelectedItem();
+                Loan loan = loanTableView.getSelectionModel().getSelectedItem();
                 try {
-                    databaseClient.returnBook(detailedLoan);
+                    databaseClient.returnBook(loan);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
