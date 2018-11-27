@@ -176,11 +176,10 @@ public class DatabaseClient {
         // Uses the previously created HashMap to match key for value
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
-            long idUser = (int) row.get("idUser");
             String username = (String) row.get("username");
             String password = (String) row.get("password");
             String usertype = (String)row.get("usertype");
-            User user = new User(idUser, username, password, usertype);
+            User user = new User(username, password, usertype);
             rowList.add(user);
         }
 

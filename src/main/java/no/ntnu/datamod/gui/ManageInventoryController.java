@@ -14,16 +14,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.logic.DatabaseClient;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -45,12 +48,86 @@ public class ManageInventoryController implements Initializable {
     @FXML
     private ListView listMenu;
 
+    @FXML
+    private TextField fnameField;
+
+    @FXML
+    private TextField lnameField;
+
+    @FXML
+    private TextField addressField;
+
+    @FXML
+    private TextField accNumField;
+
+    @FXML
+    private TextField ssnField;
+
+    @FXML
+    private TextField phoneNumField;
+
+    @FXML
+    private TextField positionField;
+
+    @FXML
+    private MenuButton userSelectBox;
+
+    @FXML
+    private MenuButton branchSelectBox;
+
+    @FXML
+    private Button addNewUser = new Button();
+
+    @FXML
+    private Button addNewBranch = new Button();
+
+    @FXML
+    private Button createEmployeeBtn = new Button();
+
+    @FXML
+    private Button cancelBtn = new Button();
+    private String selectedUser;
 
 
     public void initialize(URL location, ResourceBundle resources) {
-        setKeyAndClickListeners();
         databaseClient = new DatabaseClient();
         buildManageInventoryScene();
+        //buildEmployeeForm();
+
+        // Listen for user interaction
+        setKeyAndClickListeners();
+    }
+
+    /**
+     * Sets up the EmployeeForm
+     */
+    private void buildEmployeeForm() {
+
+        try {
+            userSelectBox.setText("Choose User..");
+            ArrayList<User>  userArrayList = databaseClient.getUsersList();
+
+            for (User user : userArrayList) {
+                String username = user.getUsername();
+
+                // Create menuItem with username
+                MenuItem menuItem = new MenuItem(username);
+
+                // Add menuItem to MenuButton
+                userSelectBox.getItems().add(menuItem);
+
+                // Add eventlistener to the menuItem
+                menuItem.setOnAction(event -> {
+                    userSelectBox.setText(username);
+                    selectedUser = username;
+                });
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
     }
 
     /**
@@ -91,6 +168,10 @@ public class ManageInventoryController implements Initializable {
                 e.printStackTrace();
             }
         });
+
+        // Employee Form
+        createEmployeeBtn.setOnMouseClicked(event -> { });
+        cancelBtn.setOnMouseClicked(event -> { });
     }
 
 
