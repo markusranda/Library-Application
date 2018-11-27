@@ -16,10 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import no.ntnu.datamod.data.Author;
-import no.ntnu.datamod.data.Book;
-import no.ntnu.datamod.data.Branch;
-import no.ntnu.datamod.data.Customer;
+import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.logic.DatabaseClient;
 
 import java.io.IOException;
@@ -48,7 +45,6 @@ public class ManageInventoryController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setKeyAndClickListeners();
         databaseClient = new DatabaseClient();
-
         buildManageInventoryScene();
     }
 
@@ -287,7 +283,4 @@ public class ManageInventoryController implements Initializable {
                 });
 
     }
-
-
-
 }
