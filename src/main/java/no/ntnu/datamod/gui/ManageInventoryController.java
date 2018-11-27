@@ -15,7 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.logic.DatabaseClient;
 
@@ -33,6 +35,9 @@ public class ManageInventoryController implements Initializable {
 
     @FXML
     private Button backBtn;
+
+    @FXML
+    private Button addBtn;
 
     @FXML
     private Pane tableContainer;
@@ -54,7 +59,6 @@ public class ManageInventoryController implements Initializable {
     @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
         backBtn.setOnMouseClicked(event -> {
-            //noinspection Duplicates
             try {
                 Parent welcomeParent;
                 welcomeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
@@ -63,6 +67,25 @@ public class ManageInventoryController implements Initializable {
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 window.setTitle("Library Leopard Leo - Welcome");
                 window.setScene(scene);
+                window.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        addBtn.setOnMouseClicked(event -> {
+            try {
+                Parent welcomeParent;
+                welcomeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("employeeForm.fxml")));
+                Scene scene = new Scene(welcomeParent);
+                // This line gets the Stage information
+
+                Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                Stage window = new Stage(StageStyle.DECORATED);
+                window.setTitle("Add new User");
+                window.setScene(scene);
+                window.initModality(Modality.WINDOW_MODAL);
+                window.initOwner( parentStage );
                 window.show();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -473,7 +496,6 @@ public class ManageInventoryController implements Initializable {
                         }
                         if(newValue.equals(employeeString)){
                             tableContainer.getChildren().clear();
-
                             tableContainer.getChildren().add(createEmployeeTable());
                         }
                         if(newValue.equals(genreString)){
