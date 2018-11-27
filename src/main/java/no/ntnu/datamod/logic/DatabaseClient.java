@@ -281,7 +281,12 @@ public class DatabaseClient {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        String fullCommand = "SELECT * FROM Employee";
+        String fullCommand =
+                "       SELECT E.idEmployee, fname, lname, E.address, phone, accountNumber,\n" +
+                "       SSN, position, B.name, EU.username\n" +
+                "       FROM Employee E\n" +
+                "       JOIN Branches B on E.idBranch = B.idBranch\n" +
+                "       JOIN Employee_Users EU on E.idEmployee = EU.idEmployee;\n";
         ArrayList<Employee> rowList = new ArrayList<>();
         Statement stm;
 
@@ -301,18 +306,20 @@ public class DatabaseClient {
         // Uses the previously created HashMap to match key for value
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
-            String lname = (String) row.get("lname");
+            long idEmployee = (int) row.get("idEmployee");
             String fname = (String) row.get("fname");
-            long idCustomer = (int) row.get("idEmployee");
+            String lname = (String) row.get("lname");
             String address = (String) row.get("address");
             String phone = (String) row.get("phone");
             String accountNumber = (String) row.get("accountNumber");
-            long SSN = (int) row.get("SSN");
+            String SSN = (String) row.get("SSN");
             String position = (String) row.get("position");
-            long idBranch = (int) row.get("idBranch");
+            String branch = (String) row.get("name");
+            String username = (String) row.get("username");
 
 
-            Employee employee = new Employee(idCustomer, lname, fname, address, phone, accountNumber, SSN, position, idBranch);
+            Employee employee = new Employee(idEmployee, fname, lname, address, phone,
+                    accountNumber, SSN, position, branch, username);
             rowList.add(employee);
         }
 

@@ -9,11 +9,13 @@ public class Employee {
   private String address;
   private String phone;
   private String accountNumber;
-  private long ssn;
+  private String ssn;
   private String position;
   private long idBranch;
+  private String branch;
+  private String username;
 
-  public Employee(long idEmployee, String fname, String lname, String address, String phone, String accountNumber, long ssn, String position, long idBranch) {
+  public Employee(long idEmployee, String fname, String lname, String address, String phone, String accountNumber, String ssn, String position, long idBranch) {
     this.idEmployee = idEmployee;
     this.fname = fname;
     this.lname = lname;
@@ -23,6 +25,28 @@ public class Employee {
     this.ssn = ssn;
     this.position = position;
     this.idBranch = idBranch;
+  }
+
+  public Employee(long idEmployee, String fname, String lname, String address, String phone,
+                  String accountNumber, String ssn, String position, String branch, String username) {
+    this.idEmployee = idEmployee;
+    this.fname = fname;
+    this.lname = lname;
+    this.address = address;
+    this.phone = phone;
+    this.accountNumber = accountNumber;
+    this.ssn = ssn;
+    this.position = position;
+    this.branch = branch;
+    this.username = username;
+  }
+
+  public String getBranch() {
+    return branch;
+  }
+
+  public String getUsername() {
+    return username;
   }
 
   public long getIdEmployee() {
@@ -79,11 +103,11 @@ public class Employee {
   }
 
 
-  public long getSsn() {
+  public String getSsn() {
     return ssn;
   }
 
-  public void setSsn(long ssn) {
+  public void setSsn(String ssn) {
     this.ssn = ssn;
   }
 

@@ -99,6 +99,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Branches`
 -- -----------------------------------------------------
+DROP TABLE Branches;
 CREATE TABLE IF NOT EXISTS `library_db`.`Branches` (
   `idBranch` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -147,6 +148,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Employee`
 -- -----------------------------------------------------
+DROP TABLE Employee;
 CREATE TABLE IF NOT EXISTS `library_db`.`Employee` (
   `idEmployee` INT(11) NOT NULL AUTO_INCREMENT,
   `fname` VARCHAR(45) NOT NULL,
@@ -154,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Employee` (
   `address` VARCHAR(45) NOT NULL,
   `phone` VARCHAR(45) NOT NULL,
   `accountNumber` VARCHAR(45) NULL DEFAULT NULL,
-  `SSN` INT(11) NOT NULL,
+  `SSN` VARCHAR(11) NOT NULL,
   `position` VARCHAR(45) NOT NULL,
   `idBranch` INT(11) NOT NULL,
   PRIMARY KEY (`idEmployee`, `idBranch`),

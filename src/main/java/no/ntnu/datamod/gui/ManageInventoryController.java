@@ -335,16 +335,16 @@ public class ManageInventoryController implements Initializable {
             idCol.setMinWidth(100);
             idCol.setCellValueFactory(new PropertyValueFactory<>("idEmployee"));
 
-            TableColumn<Employee, String> fnameCol = new TableColumn<>("Firstname");
+            TableColumn<Employee, String> fnameCol = new TableColumn<>("First name");
             fnameCol.setMinWidth(300);
             fnameCol.setCellValueFactory(new PropertyValueFactory<>("fname"));
 
-            TableColumn<Employee, String> lnameCol = new TableColumn<>("Lastname");
+            TableColumn<Employee, String> lnameCol = new TableColumn<>("Last name");
             lnameCol.setMinWidth(77);
             lnameCol.setCellValueFactory(new PropertyValueFactory<>("lname"));
 
             TableColumn<Employee, String> addressCol = new TableColumn<>("Address");
-            addressCol.setMinWidth(100);
+            addressCol.setMinWidth(150);
             addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
 
             TableColumn<Employee, String> phoneCol = new TableColumn<>("Phonenumber");
@@ -353,18 +353,29 @@ public class ManageInventoryController implements Initializable {
 
             TableColumn<Employee, String> accountNumberCol = new TableColumn<>("Account number");
             accountNumberCol.setMinWidth(100);
-            accountNumberCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            accountNumberCol.setCellValueFactory(new PropertyValueFactory<>("accountNumber"));
 
             TableColumn<Employee, String> ssnCol = new TableColumn<>("SSN");
             ssnCol.setMinWidth(100);
-            ssnCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            ssnCol.setCellValueFactory(new PropertyValueFactory<>("ssn"));
 
-            TableColumn<Employee, String> positionColumn = new TableColumn<>("Phonenumber");
+            TableColumn<Employee, String> positionColumn = new TableColumn<>("Position");
             positionColumn.setMinWidth(100);
-            positionColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
 
-            table.getColumns().addAll(idCol, fnameCol, lnameCol, addressCol, phoneCol, accountNumberCol, ssnCol, positionColumn);
+            TableColumn<Employee, String> branchColumn = new TableColumn<>("Branch");
+            branchColumn.setMinWidth(150);
+            branchColumn.setCellValueFactory(new PropertyValueFactory<>("branch"));
+
+            TableColumn<Employee, String> usernameCol = new TableColumn<>("Username");
+            usernameCol.setMinWidth(100);
+            usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+
+
+            table.getColumns().addAll(idCol, fnameCol, lnameCol, addressCol, phoneCol, accountNumberCol, ssnCol, positionColumn, branchColumn, usernameCol);
+            table.setPrefSize(1500, 800);
             return table;
+
         }catch (Exception e){
             return null;
         }
@@ -462,6 +473,7 @@ public class ManageInventoryController implements Initializable {
                         }
                         if(newValue.equals(employeeString)){
                             tableContainer.getChildren().clear();
+
                             tableContainer.getChildren().add(createEmployeeTable());
                         }
                         if(newValue.equals(genreString)){
