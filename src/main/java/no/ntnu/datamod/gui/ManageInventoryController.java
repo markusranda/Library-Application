@@ -16,10 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import no.ntnu.datamod.data.Author;
-import no.ntnu.datamod.data.Book;
-import no.ntnu.datamod.data.Branch;
-import no.ntnu.datamod.data.Customer;
+import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.logic.DatabaseClient;
 
 import java.io.IOException;
@@ -155,7 +152,6 @@ public class ManageInventoryController implements Initializable {
     }
 
 
-
     private TableView<Branch> createBranchTable() {
 
         try {
@@ -236,6 +232,177 @@ public class ManageInventoryController implements Initializable {
     }
 
 
+    private TableView<User> createUserTable() {
+
+        try {
+            TableView<User> table = new TableView<>();
+            {
+                try {
+                    masterData = FXCollections.observableList(databaseClient.getUsersList());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Inserts the Data to the table
+            FilteredList<User> filteredData = masterData.filtered(o -> o instanceof User);
+            table.setItems(filteredData);
+            // Table column variables
+            TableColumn<User, String> idCol = new TableColumn<>("ID");
+            idCol.setMinWidth(100);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+
+            TableColumn<User, String> usernameCol = new TableColumn<>("Username");
+            usernameCol.setMinWidth(300);
+            usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+
+            TableColumn<User, String> passwordCol = new TableColumn<>("Password");
+            passwordCol.setMinWidth(77);
+            passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
+
+            TableColumn<User, String> usertypeCol = new TableColumn<>("Usertype");
+            usertypeCol.setMinWidth(100);
+            usertypeCol.setCellValueFactory(new PropertyValueFactory<>("usertype"));
+
+            table.getColumns().addAll(idCol, usernameCol, passwordCol, usertypeCol);
+            return table;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+    private TableView<Loan> createLoanTable() {
+
+        try {
+            TableView<Loan> table = new TableView<>();
+            {
+                try {
+                    masterData = FXCollections.observableList(databaseClient.getLoansList());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Inserts the Data to the table
+            FilteredList<Loan> filteredData = masterData.filtered(o -> o instanceof Loan);
+            table.setItems(filteredData);
+            // Table column variables
+            TableColumn<Loan, String> idCol = new TableColumn<>("ID");
+            idCol.setMinWidth(100);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("idLoans"));
+
+            TableColumn<Loan, String> loanDateCol = new TableColumn<>("Loan date");
+            loanDateCol.setMinWidth(77);
+            loanDateCol.setCellValueFactory(new PropertyValueFactory<>("loanDate"));
+
+            TableColumn<Loan, String> loanDueCol = new TableColumn<>("Due date");
+            loanDueCol.setMinWidth(77);
+            loanDueCol.setCellValueFactory(new PropertyValueFactory<>("loanDue"));
+
+            TableColumn<Loan, String> idBookCol = new TableColumn<>("Book ID");
+            idBookCol.setMinWidth(30);
+            idBookCol.setCellValueFactory(new PropertyValueFactory<>("idBook"));
+
+            TableColumn<Loan, String> idUserCol = new TableColumn<>("User ID");
+            idUserCol.setMinWidth(30);
+            idUserCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+
+            table.getColumns().addAll(idCol, loanDateCol, loanDueCol, idBookCol, idUserCol);
+            return table;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+    private TableView<Employee> createEmployeeTable() {
+
+        try {
+            TableView<Employee> table = new TableView<>();
+            {
+                try {
+                    masterData = FXCollections.observableList(databaseClient.getEmployeeList());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Inserts the Data to the table
+            FilteredList<Employee> filteredData = masterData.filtered(o -> o instanceof Employee);
+            table.setItems(filteredData);
+            // Table column variables
+            TableColumn<Employee, String> idCol = new TableColumn<>("ID");
+            idCol.setMinWidth(100);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("idEmployee"));
+
+            TableColumn<Employee, String> fnameCol = new TableColumn<>("Firstname");
+            fnameCol.setMinWidth(300);
+            fnameCol.setCellValueFactory(new PropertyValueFactory<>("fname"));
+
+            TableColumn<Employee, String> lnameCol = new TableColumn<>("Lastname");
+            lnameCol.setMinWidth(77);
+            lnameCol.setCellValueFactory(new PropertyValueFactory<>("lname"));
+
+            TableColumn<Employee, String> addressCol = new TableColumn<>("Address");
+            addressCol.setMinWidth(100);
+            addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+            TableColumn<Employee, String> phoneCol = new TableColumn<>("Phonenumber");
+            phoneCol.setMinWidth(100);
+            phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+            TableColumn<Employee, String> accountNumberCol = new TableColumn<>("Account number");
+            accountNumberCol.setMinWidth(100);
+            accountNumberCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+            TableColumn<Employee, String> ssnCol = new TableColumn<>("SSN");
+            ssnCol.setMinWidth(100);
+            ssnCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+            TableColumn<Employee, String> positionColumn = new TableColumn<>("Phonenumber");
+            positionColumn.setMinWidth(100);
+            positionColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+            table.getColumns().addAll(idCol, fnameCol, lnameCol, addressCol, phoneCol, accountNumberCol, ssnCol, positionColumn);
+            return table;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+    private TableView<Genre> createGenreTable() {
+
+        try {
+            TableView<Genre> table = new TableView<>();
+            {
+                try {
+                    masterData = FXCollections.observableList(databaseClient.getGenreList());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Inserts the Data to the table
+            FilteredList<Genre> filteredData = masterData.filtered(o -> o instanceof Genre);
+            table.setItems(filteredData);
+            // Table column variables
+            TableColumn<Genre, String> idCol = new TableColumn<>("ID");
+            idCol.setMinWidth(100);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("idGenre"));
+
+            TableColumn<Genre, String> nameCol = new TableColumn<>("Genre name");
+            nameCol.setMinWidth(300);
+            nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+            table.getColumns().addAll(idCol, nameCol);
+            return table;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
 
     private void buildManageInventoryScene(){
 
@@ -250,9 +417,13 @@ public class ManageInventoryController implements Initializable {
         String authorString = "Authorlist";
         String branchString = "Branchlist";
         String customerString = "Customerlist";
+        String userString = "Userlist";
+        String loanString = "Loanlist";
+        String employeeString = "Employeelist";
+        String genreString = "Genrelist";
 
 
-        ObservableList<String> listItems =FXCollections.observableArrayList (bookString, authorString, branchString, customerString);
+        ObservableList<String> listItems =FXCollections.observableArrayList (bookString, authorString, branchString, customerString, userString, loanString, employeeString, genreString);
         listMenu.setItems(listItems);
         listMenu.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -282,7 +453,22 @@ public class ManageInventoryController implements Initializable {
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createCustomerTable());
                         }
-
+                        if(newValue.equals(userString)){
+                            tableContainer.getChildren().clear();
+                            tableContainer.getChildren().add(createUserTable());
+                        }
+                        if(newValue.equals(loanString)){
+                            tableContainer.getChildren().clear();
+                            tableContainer.getChildren().add(createLoanTable());
+                        }
+                        if(newValue.equals(employeeString)){
+                            tableContainer.getChildren().clear();
+                            tableContainer.getChildren().add(createEmployeeTable());
+                        }
+                        if(newValue.equals(genreString)){
+                            tableContainer.getChildren().clear();
+                            tableContainer.getChildren().add(createGenreTable());
+                        }
                     }
                 });
 

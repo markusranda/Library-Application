@@ -5,8 +5,13 @@ public class Book extends Literature {
 
   private long idBook;
   private String authors;
+  private long idBranch;
+  private long quantity;
+  private String genre;
+  private String publisher;
   private String isbn;
   private String image;
+
 
   /**
    * Creates a new book. This constructor is to be used when there is a image.
@@ -21,6 +26,18 @@ public class Book extends Literature {
     super(publisher, title);
     this.idBook = idBook;
     this.authors = authors;
+    this.isbn = isbn;
+    this.image = image;
+  }
+
+  public Book(long idBook, String title, String authors, long idBranch, long quantity, String genre, String publisher, String isbn, String image ) {
+      super(publisher, title);
+    this.idBook = idBook;
+    this.authors = authors;
+    this.idBranch = idBranch;
+    this.quantity = quantity;
+    this.genre = genre;
+    this.publisher = publisher;
     this.isbn = isbn;
     this.image = image;
   }
@@ -77,4 +94,36 @@ public class Book extends Literature {
     this.image = image;
   }
 
+    public long getIdBranch() {
+        return idBranch;
+    }
+
+    public void setIdBranch(long idBranch) {
+        this.idBranch = idBranch;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    @Override
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 }
