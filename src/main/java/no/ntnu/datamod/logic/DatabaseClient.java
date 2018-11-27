@@ -277,6 +277,90 @@ public class DatabaseClient {
         return rowList;
     }
 
+    public ArrayList<Employee> getEmployeeList()  throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        String fullCommand = "SELECT * FROM Employee";
+        ArrayList<Employee> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String lname = (String) row.get("lname");
+            String fname = (String) row.get("fname");
+            long idCustomer = (int) row.get("idEmployee");
+            String address = (String) row.get("address");
+            String phone = (String) row.get("phone");
+            String accountNumber = (String) row.get("accountNumber");
+            long SSN = (int) row.get("SSN");
+            String position = (String) row.get("position");
+            long idBranch = (int) row.get("idBranch");
+
+
+            Employee employee = new Employee(idCustomer, lname, fname, address, phone, accountNumber, SSN, position, idBranch);
+            rowList.add(employee);
+        }
+
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
+    }
+
+    public ArrayList<Genre> getGenreList()  throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        String fullCommand = "SELECT * FROM Genre";
+        ArrayList<Genre> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String name = (String) row.get("name");
+            long idGenre = (int) row.get("idGenre");
+
+
+            Genre genre = new Genre(idGenre, name);
+            rowList.add(genre);
+        }
+
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
+    }
+
+
     /**
      * Creates an ArrayList with a HashMap that contains mappings
      * to each of the field's values.
