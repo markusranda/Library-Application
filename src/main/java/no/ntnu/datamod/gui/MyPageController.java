@@ -54,6 +54,7 @@ public class MyPageController implements Initializable {
     private void updateLoanView() {
         tableContainer.getChildren().clear();
         loanTableView = createLoansTable();
+        tableContainer.setMargin(loanTableView, new Insets(40, 0, 0, 40));
         tableContainer.getChildren().add(loanTableView);
     }
 
@@ -105,7 +106,6 @@ public class MyPageController implements Initializable {
             table.getColumns().addAll
                     (libraryCol, bookTitleCol, authorsCol, loanDateCol, loanDueCol, remainingDaysCol, fineCol);
             table.setPrefSize(1500,600);
-            tableContainer.setMargin(loanTableView, new Insets(40, 0, 0, 40));
 
         } catch (SQLException e) {
 

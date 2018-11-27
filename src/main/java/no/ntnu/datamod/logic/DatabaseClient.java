@@ -970,7 +970,10 @@ public class DatabaseClient {
             String fullCommand =
                     "SELECT  l.idLoans, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
                             "l.loanDate, l.loanDue, DATEDIFF(l.loanDue, CURDATE()) AS 'Remaining days'," +
-                            "DATEDIFF(CURDATE(), l.loanDue) * 5 AS 'Fine'" +
+                            "CASE\n" +
+                            "        WHEN (DATEDIFF(CURDATE(), l.loanDue) * 5) < 0 THEN 0\n" +
+                            "        ELSE DATEDIFF(CURDATE(), l.loanDue) * 5\n" +
+                            "END as 'Fine'" +
 
                             "FROM Loans l, Branches branch," +
 
