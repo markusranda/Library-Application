@@ -35,7 +35,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="fnameField" layoutX="10.0" layoutY="139.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="fnameField" layoutX="10.0" layoutY="139.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="304.0" text="Last Name">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -47,7 +47,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="lnameField" layoutX="10.0" layoutY="131.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="lnameField" layoutX="10.0" layoutY="131.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="290.0" text="Address">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -59,7 +59,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="addressField" layoutX="10.0" layoutY="539.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="addressField" layoutX="10.0" layoutY="539.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="329.0" text="Account Number">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -71,7 +71,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="accNumField" layoutX="10.0" layoutY="515.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="accNumField" layoutX="10.0" layoutY="515.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="261.0" text="SSN">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -83,7 +83,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="ssnField" layoutX="10.0" layoutY="531.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="ssnField" layoutX="10.0" layoutY="531.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="300.0" text="Phone Number">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -95,7 +95,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="phoneNumField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="phoneNumField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="329.0" text="Position">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -107,7 +107,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="positionField" layoutX="10.0" layoutY="491.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="250.0" />
+                  <TextField fx:id="positionField" layoutX="10.0" layoutY="491.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
                   <Label layoutX="295.0" layoutY="358.0" text="Username">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -121,10 +121,10 @@
                   </Label>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="400.0">
                      <children>
-                        <MenuButton fx:id="userList" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" prefWidth="320.0" text="User Chooser" />
-                        <Button fx:id="addNewUser" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="79.0" text="Add new">
+                        <MenuButton fx:id="userList" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" mnemonicParsing="false" prefWidth="350.0" text="User Chooser" />
+                        <Button fx:id="addNewUser" mnemonicParsing="false" text="Add new ">
                            <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                              <Insets top="5.0" />
                            </padding>
                         </Button>
                      </children>
@@ -142,16 +142,11 @@
                   </Label>
                   <HBox alignment="CENTER" layoutX="135.0" layoutY="624.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="400.0">
                      <children>
-                        <MenuButton fx:id="branchList" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="320.0" text="Select Branch">
+                        <MenuButton fx:id="branchList" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="400.0" text="Select Branch">
                            <padding>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </padding>
                         </MenuButton>
-                        <Button fx:id="addNewBranch" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="79.0" text="Add new">
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </Button>
                      </children>
                   </HBox>
                </children>

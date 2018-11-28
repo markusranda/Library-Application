@@ -13,6 +13,7 @@ import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.User;
 import no.ntnu.datamod.logic.DatabaseClient;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -51,9 +52,6 @@ public class EmployeeFormController implements Initializable {
     private Button addNewUser = new Button();
 
     @FXML
-    private Button addNewBranch = new Button();
-
-    @FXML
     private Button createEmployeeBtn = new Button();
 
     @FXML
@@ -77,26 +75,7 @@ public class EmployeeFormController implements Initializable {
     private void buildEmployeeForm() {
 
         try {
-            // Sets up the user chooser
-            userList.setText("Choose User..");
-            // TODO: 28.11.2018 Only retrieve users that doesnt already have an Employee/Customer
-            ArrayList<User> userArrayList = databaseClient.getUsersList();
-
-            for (User user : userArrayList) {
-                String username = user.getUsername();
-
-                // Create menuItem with username
-                MenuItem menuItem = new MenuItem(username);
-
-                // Add menuItem to MenuButton
-                userList.getItems().add(menuItem);
-
-                // Add eventlistener to the menuItem
-                menuItem.setOnAction(event -> {
-                    userList.setText(username);
-                    selectedUser = username;
-                });
-            }
+            updateUserlist();
 
             // Sets up the Branch chooser
             branchList.setText("Choose Branch..");
@@ -105,7 +84,7 @@ public class EmployeeFormController implements Initializable {
             for (Branch branch : branchArrayList) {
                 String branchNameWithID = branch.getIdBranch() + " - " + branch.getName();
 
-                // Create menuItem with username
+                // Create menuItem with branch name
                 MenuItem menuItem = new MenuItem(branchNameWithID);
 
                 // Add menuItem to MenuButton
@@ -126,9 +105,46 @@ public class EmployeeFormController implements Initializable {
     }
 
     /**
+     * Sets up the userlist with all available users from the database.
+     */
+    private void updateUserlist() throws SQLException {
+            // Sets up the user chooser
+            // TODO: 28.11.2018 Only retrieve users that doesnt already have an Employee/Customer
+            ArrayList<User> userArrayList = databaseClient.getUsersList();
+            userList.getItems().clear();
+
+            for (User user : userArrayList) {
+                String username = user.getUsername();
+
+                // Create menuItem with username
+                MenuItem menuItem = new MenuItem(username);
+
+                // Add menuItem to MenuButton
+                userList.getItems().add(menuItem);
+
+                // Add eventlistener to the menuItem
+                menuItem.setOnAction(event -> {
+
+                    userList.setText(username);
+                    selectedUser = username;
+                });
+            }
+    }
+
+    /**
      * Setup mouse and keyboard event handlers.
      */
     private void setKeyAndClickListeners() {
+        userList.setOnMouseClicked(event -> {
+            try {
+                updateUserlist();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+
+        });
         createEmployeeBtn.setOnMouseClicked(event -> {
             String[] splittedBranchString = selectedBranch.split("\\ - ");
             int branchId = Integer.valueOf(splittedBranchString[0]);
@@ -147,6 +163,15 @@ public class EmployeeFormController implements Initializable {
         cancelBtn.setOnMouseClicked(event -> {
             Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
             window.close();
+        });
+        addNewUser.setOnMouseClicked(event -> {
+            Platform.runLater(() -> {
+                try {
+                    new UserFormApp().start(new Stage());
+                } catch (IOException e ) {
+                    e.printStackTrace();
+                }
+            });
         });
     }
 

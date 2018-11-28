@@ -15,23 +15,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Callback;
 import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.logic.DatabaseClient;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ManageInventoryController implements Initializable {
 
@@ -84,7 +77,7 @@ public class ManageInventoryController implements Initializable {
         addBtn.setOnMouseClicked(event -> {
                 Platform.runLater(() -> {
                     try {
-                        new FormApp().start(new Stage());
+                        new EmployeeFormApp().start(new Stage());
                     } catch (IOException e ) {
                         e.printStackTrace();
                     }
