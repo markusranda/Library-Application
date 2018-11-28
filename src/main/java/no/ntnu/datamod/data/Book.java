@@ -11,6 +11,7 @@ public class Book extends Literature {
   private String publisher;
   private String isbn;
   private String image;
+  private String branch;
 
 
   /**
@@ -30,7 +31,7 @@ public class Book extends Literature {
     this.image = image;
   }
 
-  public Book(int idBook, String title, String authors, int idBranch, int quantity, String genre, String publisher, String isbn, String image ) {
+  public Book(int idBook, String title, String authors, int idBranch, int quantity, String genre, String publisher, String isbn, String branch ) {
     super(publisher, title);
     this.idBook = idBook;
     this.authors = authors;
@@ -39,7 +40,8 @@ public class Book extends Literature {
     this.genre = genre;
     this.publisher = publisher;
     this.isbn = isbn;
-    this.image = image;
+    this.branch = branch;
+
   }
 
   /**
@@ -88,6 +90,10 @@ public class Book extends Literature {
   public String getGenre() {
         return genre;
     }
+
+  public String getBranch() {
+    return branch;
+  }
 
   @Override
   public String getPublisher() {

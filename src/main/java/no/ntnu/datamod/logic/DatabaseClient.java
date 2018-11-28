@@ -21,44 +21,119 @@ public class DatabaseClient {
      * @return Returns all the books from the table Book as an ArrayList<Book>.
      */
     public ArrayList<Book> getBooksList()  throws SQLException {
-            DatabaseConnection connector = new DatabaseConnection(host, port, database);
-            Connection connection = connector.getConnection();
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
 
-            String fullCommand = "SELECT * FROM Books";
-            ArrayList<Book> rowList = new ArrayList<>();
-            Statement stm;
+        String fullCommand = "SELECT * FROM Books";
+        ArrayList<Book> rowList = new ArrayList<>();
+        Statement stm;
 
-            // Create statement
-            stm = connection.createStatement();
+        // Create statement
+        stm = connection.createStatement();
 
-            // Query
-            ResultSet result;
-            boolean returningRows = stm.execute(fullCommand);
-            if (returningRows)
-                result = stm.getResultSet();
-            else
-                throw new SQLException("There are no results from the given query \n");
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
 
-            ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
 
-            // Uses the previously created HashMap to match key for value
-            // and creates the required object. And puts em all into a list.
-            for (HashMap<String, Object> row : rows) {
-                String publisher = (String) row.get("publisher");
-                String title = (String) row.get("title");
-                int idBook = (int) row.get("idBook");
-                String authors = (String) row.get("authors");
-                String isbn = (String) row.get("isbn");
-                String image = (String) row.get("image");
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String publisher = (String) row.get("publisher");
+            String title = (String) row.get("title");
+            int idBook = (int) row.get("idBook");
+            String authors = (String) row.get("authors");
+            String isbn = (String) row.get("isbn");
+            String image = (String) row.get("image");
 
-                Book book = new Book(publisher, title, idBook, authors, isbn, image);
+            Book book = new Book(publisher, title, idBook, authors, isbn, image);
+            rowList.add(book);
+        }
+
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
+    }
+
+
+
+    public ArrayList<Book> getDetailedBooksList()  throws SQLException {
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        String fullCommand = "SELECT DISTINCT B.idBook, Br.idBranch, B.title, B.publisher, genre, Authors, ISBN, Br.name, Br.quantity, image\n" +
+                "FROM Books B, Branches branch,\n" +
+                "     (SELECT  b.idBook, b.title,\n" +
+                "              GROUP_CONCAT(CONCAT(a.fName, ' ', a.lName) ORDER BY CONCAT(a.fName, ' ', a.lName)) AS Authors\n" +
+                "      FROM Books b\n" +
+                "             LEFT JOIN Book_Authors ba\n" +
+                "               ON b.idBook = ba.idBook\n" +
+                "             LEFT JOIN Authors a\n" +
+                "               ON ba.idAuthors = a.idAuthors\n" +
+                "      GROUP BY b.idBook\n" +
+                "     ) AS title_authors,\n" +
+                "     (SELECT B2.idBook, G2.name AS genre FROM Books B2\n" +
+                "     LEFT JOIN Book_Genres Genre2 on B2.idBook = Genre2.idBook\n" +
+                "     LEFT JOIN Genre G2 on Genre2.idGenre = G2.idGenre) AS G,\n" +
+                "     (SELECT B3.idBook, B4.idBranch, BQ.quantity, B4.name\n" +
+                "      FROM Books B3\n" +
+                "     LEFT JOIN Book_Quantity BQ on B3.idBook = BQ.idBook\n" +
+                "     LEFT JOIN Branches B4 on BQ.idBranch = B4.idBranch) AS Br\n" +
+                "WHERE title_authors.idBook = B.idBook AND G.idBook = B.idBook AND Br.idBook = B.idBook\n" +
+                "ORDER BY B.idBook";
+        ArrayList<Book> rowList = new ArrayList<>();
+        Statement stm;
+
+        // Create statement
+        stm = connection.createStatement();
+
+        // Query
+        ResultSet result;
+        boolean returningRows = stm.execute(fullCommand);
+        if (returningRows)
+            result = stm.getResultSet();
+        else
+            throw new SQLException("There are no results from the given query \n");
+
+        ArrayList<HashMap<String,Object>> rows = createObjectList(result);
+
+        // Uses the previously created HashMap to match key for value
+        // and creates the required object. And puts em all into a list.
+        for (HashMap<String, Object> row : rows) {
+            String publisher = (String) row.get("publisher");
+            String title = (String) row.get("title");
+            int idBook = (int) row.get("idBook");
+            String isbn = (String) row.get("ISBN");
+            String author = (String) row.get("Authors");
+            String genre = (String) row.get("genre");
+            try {
+                int quantity = (int) row.get("quantity");
+                String branch = (String) row.get("name");
+                int idBranch = (int) row.get("idBranch");
+                Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn);
                 rowList.add(book);
-            }
+            }catch (NullPointerException e){
 
-            // Closes the statement
-            stm.close();
-            connection.close();
-            return rowList;
+            }
+            //String image = (String) row.get("image");
+
+
+
+
+
+
+        }
+
+        // Closes the statement
+        stm.close();
+        connection.close();
+        return rowList;
     }
 
     /**
