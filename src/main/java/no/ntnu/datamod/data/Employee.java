@@ -3,7 +3,7 @@ package no.ntnu.datamod.data;
 
 public class Employee {
 
-  private long idEmployee;
+  private int idEmployee;
   private String fname;
   private String lname;
   private String address;
@@ -11,11 +11,11 @@ public class Employee {
   private String accountNumber;
   private String ssn;
   private String position;
-  private long idBranch;
+  private int idBranch;
   private String branch;
   private String username;
 
-  public Employee(long idEmployee, String fname, String lname, String address, String phone, String accountNumber, String ssn, String position, long idBranch) {
+  public Employee(int idEmployee, String fname, String lname, String address, String phone, String accountNumber, String ssn, String position, int idBranch) {
     this.idEmployee = idEmployee;
     this.fname = fname;
     this.lname = lname;
@@ -27,7 +27,7 @@ public class Employee {
     this.idBranch = idBranch;
   }
 
-  public Employee(long idEmployee, String fname, String lname, String address, String phone,
+  public Employee(int idEmployee, String fname, String lname, String address, String phone,
                   String accountNumber, String ssn, String position, String branch, String username) {
     this.idEmployee = idEmployee;
     this.fname = fname;
@@ -45,16 +45,14 @@ public class Employee {
     return branch;
   }
 
+
   public String getUsername() {
     return username;
   }
 
-  public long getIdEmployee() {
-    return idEmployee;
-  }
 
-  public void setIdEmployee(long idEmployee) {
-    this.idEmployee = idEmployee;
+  public int getIdEmployee() {
+    return idEmployee;
   }
 
 
@@ -62,17 +60,9 @@ public class Employee {
     return fname;
   }
 
-  public void setFname(String fname) {
-    this.fname = fname;
-  }
-
 
   public String getLname() {
     return lname;
-  }
-
-  public void setLname(String lname) {
-    this.lname = lname;
   }
 
 
@@ -80,17 +70,9 @@ public class Employee {
     return address;
   }
 
-  public void setAddress(String address) {
-    this.address = address;
-  }
-
 
   public String getPhone() {
     return phone;
-  }
-
-  public void setPhone(String phone) {
-    this.phone = phone;
   }
 
 
@@ -98,17 +80,9 @@ public class Employee {
     return accountNumber;
   }
 
-  public void setAccountNumber(String accountNumber) {
-    this.accountNumber = accountNumber;
-  }
-
 
   public String getSsn() {
     return ssn;
-  }
-
-  public void setSsn(String ssn) {
-    this.ssn = ssn;
   }
 
 
@@ -116,17 +90,9 @@ public class Employee {
     return position;
   }
 
-  public void setPosition(String position) {
-    this.position = position;
-  }
 
-
-  public long getIdBranch() {
+  public int getIdBranch() {
     return idBranch;
-  }
-
-  public void setIdBranch(long idBranch) {
-    this.idBranch = idBranch;
   }
 
 }

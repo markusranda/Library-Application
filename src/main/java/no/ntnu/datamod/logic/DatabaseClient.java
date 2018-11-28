@@ -5,6 +5,8 @@ import no.ntnu.datamod.gui.Model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class DatabaseClient {
 
@@ -44,7 +46,7 @@ public class DatabaseClient {
             for (HashMap<String, Object> row : rows) {
                 String publisher = (String) row.get("publisher");
                 String title = (String) row.get("title");
-                long idBook = (int) row.get("idBook");
+                int idBook = (int) row.get("idBook");
                 String authors = (String) row.get("authors");
                 String isbn = (String) row.get("isbn");
                 String image = (String) row.get("image");
@@ -90,7 +92,7 @@ public class DatabaseClient {
         for (HashMap<String, Object> row : rows) {
             String lName = (String) row.get("lName");
             String fName = (String) row.get("fName");
-            long idAuthors = (int) row.get("idAuthors");
+            int idAuthors = (int) row.get("idAuthors");
 
             Author author = new Author(idAuthors, lName, fName);
             rowList.add(author);
@@ -133,7 +135,7 @@ public class DatabaseClient {
         for (HashMap<String, Object> row : rows) {
             String lname = (String) row.get("lname");
             String fname = (String) row.get("fname");
-            long idCustomer = (int) row.get("idCustomer");
+            int idCustomer = (int) row.get("idCustomer");
             String address = (String) row.get("address");
             String phone = (String) row.get("phone");
 
@@ -218,7 +220,7 @@ public class DatabaseClient {
         // Uses the previously created HashMap to match key for value
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
-            long idBranch = (int) row.get("idBranch");
+            int idBranch = (int) row.get("idBranch");
             String name = (String) row.get("name");
             String address = (String) row.get("address");
             Branch branch = new Branch(idBranch, name, address);
@@ -305,7 +307,7 @@ public class DatabaseClient {
         // Uses the previously created HashMap to match key for value
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
-            long idEmployee = (int) row.get("idEmployee");
+            int idEmployee = (int) row.get("idEmployee");
             String fname = (String) row.get("fname");
             String lname = (String) row.get("lname");
             String address = (String) row.get("address");
@@ -353,7 +355,7 @@ public class DatabaseClient {
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
             String name = (String) row.get("name");
-            long idGenre = (int) row.get("idGenre");
+            int idGenre = (int) row.get("idGenre");
 
 
             Genre genre = new Genre(idGenre, name);
@@ -408,7 +410,7 @@ public class DatabaseClient {
      * @param branchID branchID
      * @return Returns the quantity of a specific Book, in a specific Branch. Returns 0 if an Exception occurs.
      */
-    public int getQuantity(long bookID, long branchID) {
+    public int getQuantity(int bookID, int branchID) {
         try {
             DatabaseConnection connector = new DatabaseConnection(host, port, database);
             Connection connection = connector.getConnection();
@@ -557,7 +559,7 @@ public class DatabaseClient {
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addLoanToDatabase(long idBook, long idBranch, String username) throws SQLException{
+    public int addLoanToDatabase(int idBook, int idBranch, String username) throws SQLException{
             DatabaseConnection connector = new DatabaseConnection(host, port, database);
             Connection connection = connector.getConnection();
 
@@ -780,7 +782,7 @@ public class DatabaseClient {
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addBookAuthorJunctionToDatabase(long idBook, long idAuthor) throws SQLException{
+    public int addBookAuthorJunctionToDatabase(int idBook, int idAuthor) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
@@ -813,7 +815,7 @@ public class DatabaseClient {
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addBookGenreJunctionToDatabase(long idBook, long idGenre) throws SQLException{
+    public int addBookGenreJunctionToDatabase(int idBook, int idGenre) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
@@ -846,7 +848,7 @@ public class DatabaseClient {
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addCustomerUserJunctionToDatabase(long idUser, long idCustomer) throws SQLException{
+    public int addCustomerUserJunctionToDatabase(int idUser, int idCustomer) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
@@ -881,7 +883,7 @@ public class DatabaseClient {
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addEmployeeUserJunctionToDatabase(String username, long idEmployee) throws SQLException{
+    public int addEmployeeUserJunctionToDatabase(String username, int idEmployee) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
@@ -908,7 +910,7 @@ public class DatabaseClient {
         }
     }
 
-    public int removeBookFromDatabase(long idBook) throws SQLException{
+    public int removeBookFromDatabase(int idBook) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
@@ -955,11 +957,13 @@ public class DatabaseClient {
             Connection connection = connector.getConnection();
             Statement stm = connection.createStatement();
 
-             for (HashMap.Entry<Literature, Branch> entry : shoppingCart.entrySet()) {
-                 Book book = (Book) entry.getKey();
-                 Branch branch = entry.getValue();
-                 long idBook = book.getIdBook();
-                 long idBranch = branch.getIdBranch();
+            Iterator it = shoppingCart.entrySet().iterator() ;
+             while (it.hasNext()) {
+                 Map.Entry pair = (Map.Entry)it.next();
+                 Book book = (Book) pair.getKey();
+                 Branch branch = (Branch) pair.getValue();
+                 int idBook = book.getIdBook();
+                 int idBranch = branch.getIdBranch();
 
                  if (getQuantity(idBook, idBranch) >= 1) {
                      String fullCommand =
@@ -967,7 +971,7 @@ public class DatabaseClient {
                                      "SET quantity = quantity - 1 " +
                                      "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
                      stm.execute(fullCommand);
-                     shoppingCart.remove(book, branch);
+                     it.remove();
                  }
              }
 
@@ -1021,8 +1025,8 @@ public class DatabaseClient {
 
         for (HashMap.Entry<Literature, Branch> book : booksToBeRented.entrySet()) {
 
-            long idBook = book.getKey().getIdBook();
-            long idBranch = book.getKey().getIdBook();
+            int idBook = book.getKey().getIdBook();
+            int idBranch = book.getKey().getIdBook();
             String username = Model.getInstance().currentUser().getUsername();
 
             try {
@@ -1146,7 +1150,7 @@ public class DatabaseClient {
         stm.execute(updateQuantityQuery);
 
         String removeFromLoans =
-                "DELETE FROM Loans WHERE idLoans = '" + idLoan + "';";
+                "DELETE FROM Loans WHERE idLoan = '" + idLoan + "';";
 
         stm.execute(removeFromLoans);
 

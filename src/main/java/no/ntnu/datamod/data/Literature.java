@@ -30,5 +30,5 @@ public abstract class Literature
 
     public abstract String getImageURL();
 
-    public abstract long getIdBook();
+    public abstract int getIdBook();
 }

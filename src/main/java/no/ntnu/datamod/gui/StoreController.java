@@ -184,9 +184,9 @@ public class StoreController implements Initializable {
             productImg = new Image("image/default_book_img_01.png");
         }
 
-        long bookID = ((Book) lit).getIdBook();
-        long branchID = currentBranch.getIdBranch();
-        long quantity = databaseClient.getQuantity(bookID, branchID);
+        int bookID = ((Book) lit).getIdBook();
+        int branchID = currentBranch.getIdBranch();
+        int quantity = databaseClient.getQuantity(bookID, branchID);
         quantityField.setText(String.valueOf(quantity));
         HBox hBox = new HBox(loanBtn, quantityField);
 
