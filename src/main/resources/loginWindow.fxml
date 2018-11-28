@@ -22,13 +22,13 @@
                <Label contentDisplay="CENTER" text="Username" />
                <TextField fx:id="usernameField" maxWidth="-Infinity" prefWidth="125.0">
                   <VBox.margin>
-                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     <Insets left="10.0" right="10.0" top="10.0" />
                   </VBox.margin></TextField>
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
                </VBox.margin>
             </VBox>
-            <VBox alignment="CENTER">
+            <VBox alignment="CENTER" maxHeight="-Infinity" prefWidth="392.0">
                <Label text="Password" />
                <PasswordField fx:id="passwordField" maxWidth="-Infinity" prefWidth="125.0">
                   <VBox.margin>

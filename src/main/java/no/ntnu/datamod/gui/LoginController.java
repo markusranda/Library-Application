@@ -1,5 +1,6 @@
 package no.ntnu.datamod.gui;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,37 +38,44 @@ public class LoginController implements Initializable {
     }
 
     /**
+     * Tries to login with the field values.
+     */
+    private void doLogin(Event event){
+
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        try {
+            if (databaseClient.tryLogin(username, password)) {
+                try {
+                    Parent mainMenuParent;
+                    mainMenuParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
+                    Scene scene = new Scene(mainMenuParent);
+                    // This line gets the Stage information
+                    Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                    window.setTitle("Library Leopard Leo - Main Menu");
+                    window.setScene(scene);
+
+                    Model.getInstance().currentUser().setUsername(username);
+
+                    window.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // TODO: 22.11.2018 Add real feedback to the user.
+                System.out.println("WRONG USERNAME OR PASSWORD");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Setup mouse and keyboard event handlers.
      */
     @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
-        loginBtn.setOnMouseClicked(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            try {
-                if (databaseClient.tryLogin(username, password)) {
-                    try {
-                        Parent mainMenuParent;
-                        mainMenuParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
-                        Scene scene = new Scene(mainMenuParent);
-                        // This line gets the Stage information
-                        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        window.setTitle("Library Leopard Leo - Main Menu");
-                        window.setScene(scene);
-
-                        Model.getInstance().currentUser().setUsername(username);
-
-                        window.show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    // TODO: 22.11.2018 Add real feedback to the user.
-                    System.out.println("WRONG USERNAME OR PASSWORD");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+        loginBtn.setOnMouseClicked(this::doLogin);
+        passwordField.setOnAction(this::doLogin);
     }
 }
