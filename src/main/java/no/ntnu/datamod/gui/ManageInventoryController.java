@@ -1,5 +1,6 @@
 package no.ntnu.datamod.gui;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,12 +30,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ManageInventoryController implements Initializable {
-
-    private ObservableList masterData;
-    private DatabaseClient databaseClient;
-
 
     @FXML
     private Button backBtn;
@@ -48,87 +47,20 @@ public class ManageInventoryController implements Initializable {
     @FXML
     private ListView listMenu;
 
-    @FXML
-    private TextField fnameField;
+    private ObservableList masterData;
+    private DatabaseClient databaseClient;
 
-    @FXML
-    private TextField lnameField;
-
-    @FXML
-    private TextField addressField;
-
-    @FXML
-    private TextField accNumField;
-
-    @FXML
-    private TextField ssnField;
-
-    @FXML
-    private TextField phoneNumField;
-
-    @FXML
-    private TextField positionField;
-
-    @FXML
-    private MenuButton userSelectBox;
-
-    @FXML
-    private MenuButton branchSelectBox;
-
-    @FXML
-    private Button addNewUser = new Button();
-
-    @FXML
-    private Button addNewBranch = new Button();
-
-    @FXML
-    private Button createEmployeeBtn = new Button();
-
-    @FXML
-    private Button cancelBtn = new Button();
-    private String selectedUser;
-
+    private final String TEST = "Test successful";
 
     public void initialize(URL location, ResourceBundle resources) {
         databaseClient = new DatabaseClient();
         buildManageInventoryScene();
-        //buildEmployeeForm();
 
         // Listen for user interaction
         setKeyAndClickListeners();
     }
 
-    /**
-     * Sets up the EmployeeForm
-     */
-    private void buildEmployeeForm() {
 
-        try {
-            userSelectBox.setText("Choose User..");
-            ArrayList<User>  userArrayList = databaseClient.getUsersList();
-
-            for (User user : userArrayList) {
-                String username = user.getUsername();
-
-                // Create menuItem with username
-                MenuItem menuItem = new MenuItem(username);
-
-                // Add menuItem to MenuButton
-                userSelectBox.getItems().add(menuItem);
-
-                // Add eventlistener to the menuItem
-                menuItem.setOnAction(event -> {
-                    userSelectBox.setText(username);
-                    selectedUser = username;
-                });
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-    }
 
     /**
      * Setup mouse and keyboard event handlers.
@@ -150,30 +82,15 @@ public class ManageInventoryController implements Initializable {
             }
         });
         addBtn.setOnMouseClicked(event -> {
-            try {
-                Parent welcomeParent;
-                welcomeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("employeeForm.fxml")));
-                Scene scene = new Scene(welcomeParent);
-                // This line gets the Stage information
-
-                Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-                Stage window = new Stage(StageStyle.DECORATED);
-                window.setTitle("Add new User");
-                window.setScene(scene);
-                window.initModality(Modality.WINDOW_MODAL);
-                window.initOwner( parentStage );
-                window.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                Platform.runLater(() -> {
+                    try {
+                        new FormApp().start(new Stage());
+                    } catch (IOException e ) {
+                        e.printStackTrace();
+                    }
+                });
         });
-
-        // Employee Form
-        createEmployeeBtn.setOnMouseClicked(event -> { });
-        cancelBtn.setOnMouseClicked(event -> { });
     }
-
 
     // Create Tables //
 

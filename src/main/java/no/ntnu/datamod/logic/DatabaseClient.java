@@ -701,16 +701,17 @@ public class DatabaseClient {
      * @param SSN Employees social security number.
      * @param position Employees working position.
      * @param idBranch Branch ID of where the employee working at.
-     * @return Number of edited rows in database.
+     * @return Returns the id of the created Employee, if the insert statement failed it will return 0.
      * @throws SQLException
      */
-    public int addEmployeeToDatabase(String fname, String lname, String address, String phone, String accountNumber, int SSN, String position, float idBranch) throws SQLException{
+    public int addEmployeeToDatabase(String fname, String lname, String address, String phone, String accountNumber, String SSN, String position, int idBranch) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
+        int employeeID = 0;
 
         try {
 
-            String fullCommand = "INSERT INTO Employee (fname, lname, address, phone, accountNumber, SSN, position, idBranch) VALUES ('" +
+            String queryInsertEmployee = "INSERT INTO Employee (fname, lname, address, phone, accountNumber, SSN, position, idBranch) VALUES ('" +
                     fname + "', '" +
                     lname + "', '" +
                     address + "', '" +
@@ -720,19 +721,25 @@ public class DatabaseClient {
                     position + "', " +
                     idBranch + ");";
 
-
             // Create statement
             Statement stm = null;
             stm = connection.createStatement();
 
-            // Query
-            int execution = stm.executeUpdate(fullCommand);
+            // Insert new Employee
+            stm.executeUpdate(queryInsertEmployee, Statement.RETURN_GENERATED_KEYS);
+
+            // Retrieve Employee ID
+            ResultSet rs = stm.getGeneratedKeys();
+            if(rs.next()) {
+                employeeID = rs.getInt(1); }
+
             connection.close();
-            return execution;
+            return employeeID;
+
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             connection.close();
-            return 0;
+            return employeeID;
         }
     }
 
@@ -870,23 +877,20 @@ public class DatabaseClient {
 
     /**
      *
-     * @param idUser User ID.
+     * @param username Username.
      * @param idEmployee Employee ID.
      * @return Number of edited rows in database.
      * @throws SQLException
      */
-    public int addEmployeeUserJunctionToDatabase(long idUser, long idEmployee) throws SQLException{
+    public int addEmployeeUserJunctionToDatabase(String username, long idEmployee) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
         try {
 
-
-
-            String fullCommand = "INSERT INTO Employee_Users (Users_idUser, Employee_idEmployee) VALUES (" +
-                    idUser + ", " +
-                    idEmployee + ");";
-
+            String fullCommand =
+                    "INSERT INTO Employee_Users(username, idEmployee)\n" +
+                            "VALUES('" + username + "', " + idEmployee + ")";
 
             // Create statement
             Statement stm = null;
