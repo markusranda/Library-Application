@@ -165,7 +165,7 @@ public class StoreController implements Initializable {
             productImg = new Image(lit.getImageURL());
         }
         catch (IllegalArgumentException | NullPointerException e) {
-            productImg = new Image("image/default_store_img.png");
+            productImg = new Image("image/default_book_img.png");
         }
 
         long bookID = ((Book) lit).getIdBook();
