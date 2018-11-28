@@ -262,13 +262,13 @@ public class DatabaseClient {
         // Uses the previously created HashMap to match key for value
         // and creates the required object. And puts em all into a list.
         for (HashMap<String, Object> row : rows) {
-            int idLoans = (int) row.get("idLoans");
+            int idLoan = (int) row.get("idLoan");
             java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
             java.sql.Date loanDue = (java.sql.Date) row.get("loanDate");
             int idBook = (int) row.get("idBook");
             String username = (String) row.get("username");
 
-            Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username);
+            Loan loan = new Loan(idLoan, loanDate, loanDue, idBook, username);
             rowList.add(loan);
         }
 
@@ -952,12 +952,14 @@ public class DatabaseClient {
      * If it returns an empty HashMap all went well.
      */
     public HashMap<Literature, Branch> updateQuantity(HashMap<Literature, Branch> shoppingCart) {
+        HashMap<Literature, Branch> books = (HashMap) shoppingCart.clone();
+
         try {
             DatabaseConnection connector = new DatabaseConnection(host, port, database);
             Connection connection = connector.getConnection();
             Statement stm = connection.createStatement();
 
-            Iterator it = shoppingCart.entrySet().iterator() ;
+            Iterator it = books.entrySet().iterator() ;
              while (it.hasNext()) {
                  Map.Entry pair = (Map.Entry)it.next();
                  Book book = (Book) pair.getKey();
@@ -979,9 +981,9 @@ public class DatabaseClient {
              connector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
-            return shoppingCart;
+            return books;
         }
-        return shoppingCart;
+        return books;
     }
 
     /**
@@ -1105,8 +1107,8 @@ public class DatabaseClient {
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
-                int remainingDays = (int) row.get("Remaining days");
-                int fine = (int) row.get("Fine");
+                long remainingDays = (long) row.get("Remaining days");
+                long fine = (long) row.get("Fine");
 
                 Loan loan = new Loan(idLoan, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
                         authors, remainingDays, fine);
