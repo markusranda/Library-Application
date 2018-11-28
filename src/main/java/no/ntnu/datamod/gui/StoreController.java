@@ -1,5 +1,6 @@
 package no.ntnu.datamod.gui;
 
+import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,7 +17,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Literature;
@@ -32,34 +35,47 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class StoreController implements Initializable {
 
-    private DatabaseClient databaseClient;
-    private HashMap<Literature, Branch> shoppingCartMappings;
-    private ObservableList<String> shoppingCartObsList;
-    private Branch currentBranch;
-
-    @FXML
-    private GridPane literatureTable;
-
     @FXML
     private ListView<String> shoppingCartListView;
 
     @FXML
-    private Button checkoutBtn;
+    private VBox scrollPaneContainer;
 
     @FXML
     private MenuButton branchMenu;
 
     @FXML
+    private Button checkoutBtn;
+
+    @FXML
     private Button backBtn;
+
+    @FXML
+    private Text userFeedBack;
+
+    private DatabaseClient databaseClient;
+    private HashMap<Literature, Branch> shoppingCartMappings;
+    private ObservableList<String> shoppingCartObsList;
+    private Branch currentBranch;
+    private GridPane literatureTable;
+    private ScrollPane tableContainer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         shoppingCartObsList = FXCollections.observableArrayList();
         shoppingCartMappings = new HashMap<>();
         databaseClient = new DatabaseClient();
+        literatureTable = new GridPane();
+        tableContainer = new ScrollPane();
+        scrollPaneContainer.setMargin(tableContainer, new Insets(70,40,70,40));
+
         fillBranchMenu();
         fillLiteratureTable();
         setKeyAndClickListeners();
+
+        // Places the GridPane -> ScrollPane -> VBox
+        tableContainer.setContent(literatureTable);
+        scrollPaneContainer.getChildren().add(tableContainer);
     }
 
     /**
@@ -79,7 +95,9 @@ public class StoreController implements Initializable {
                     fillLiteratureTable();
                 });
                 currentBranch = branch;
+                branchMenu.setText(branch.getName());
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,7 +119,7 @@ public class StoreController implements Initializable {
         while (it.hasNext()) {
             Literature lit = it.next();
             if (lit instanceof Book) {
-                if (columnIndex > 1) {
+                if (columnIndex > 3) {
                     VBox product = createProduct(lit);
                     literatureTable.add(product, columnIndex, rowIndex,1, 1);
                     columnIndex = 0;
@@ -132,17 +150,15 @@ public class StoreController implements Initializable {
         TextField quantityField = new TextField();
         quantityField.setMaxWidth(60);
         Button loanBtn = new Button("Borrow");
-        final double MAX_IMAGE_WIDTH = 200;
+        final double MAX_IMAGE_WIDTH = 190;
         VBox product = new VBox();
         loanBtn.setAlignment(Pos.TOP_RIGHT);
         loanBtn.setOnAction( e -> {
-            //todo add loan functionality
-            if (!shoppingCartMappings.containsKey(lit)) {
 
+            if (!shoppingCartMappings.containsKey(lit)) {
                 shoppingCartMappings.put(lit, currentBranch);
                 shoppingCartObsList.add(lit.getTitle());
                 shoppingCartListView.setItems(shoppingCartObsList);
-
             } else {
 
 
@@ -165,7 +181,7 @@ public class StoreController implements Initializable {
             productImg = new Image(lit.getImageURL());
         }
         catch (IllegalArgumentException | NullPointerException e) {
-            productImg = new Image("image/default_book_img.png");
+            productImg = new Image("image/default_book_img_01.png");
         }
 
         long bookID = ((Book) lit).getIdBook();
@@ -180,7 +196,7 @@ public class StoreController implements Initializable {
         productImgView.setImage(productImg);
         product.getChildren().addAll(productImgView, title, hBox);
         product.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
-        product.setPadding(new Insets(10,10,10,10));
+        product.setPadding(new Insets(10,8,10,8));
         return product;
     }
 
@@ -190,14 +206,42 @@ public class StoreController implements Initializable {
     @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
         checkoutBtn.setOnMouseClicked(event -> {
-            // TODO: 22.11.2018 use the leftoverBooks collection to tell the user which books are out of stock.
 
-            HashMap<Literature, Branch> leftoverBooks = databaseClient.updateQuantity(shoppingCartMappings);
+            HashMap<Literature, Branch> booksToBeRented = shoppingCartMappings;
 
-            // TODO: 22.11.2018 add loans in the database for all the books that was lent out.
-            boolean successFullyCreated = databaseClient.createLoans(shoppingCartMappings, leftoverBooks);
+            HashMap<Literature, Branch> leftoverBooks = databaseClient.updateQuantity(booksToBeRented);
 
-            // TODO: 22.11.2018 Add feedback to the user using successFullyCreated boolean.
+            databaseClient.createLoans(booksToBeRented);
+
+            if (!leftoverBooks.isEmpty()) {
+                StringBuilder books = new StringBuilder();
+
+                for (HashMap.Entry<Literature, Branch> entry : leftoverBooks.entrySet())
+                {
+                    Book book = (Book) entry.getKey();
+                    String title = book.getTitle();
+                    books.append(title).append("\n");
+                }
+
+                FadeTransition ft = new FadeTransition(Duration.millis(15000), userFeedBack);
+                userFeedBack.setText(
+                        "These books did not get rented: \n" + books.toString());
+                userFeedBack.setStyle("-fx-font: 10 arial;");
+                ft.setFromValue(1.0);
+                ft.setToValue(0.0);
+                ft.setCycleCount(1);
+                ft.play();
+
+            } else {
+
+                FadeTransition ft = new FadeTransition(Duration.millis(7000), userFeedBack);
+                userFeedBack.setText("Books was rented successfully");
+                ft.setFromValue(1.0);
+                ft.setToValue(0.0);
+                ft.setCycleCount(1);
+                ft.play();
+            }
+
 
             shoppingCartObsList.clear();
             shoppingCartMappings.clear();

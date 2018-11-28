@@ -582,7 +582,6 @@ public class DatabaseClient {
                 connection.close();
                 return execution;
             }catch (Exception ex){
-                System.out.println(ex.getMessage());
                 connection.close();
                 return 0;
             }
@@ -900,7 +899,9 @@ public class DatabaseClient {
             int execution = stm.executeUpdate(fullCommand);
             connection.close();
             return execution;
-        }catch (Exception ex){
+
+        } catch (Exception ex){
+
             System.out.println(ex.getMessage());
             connection.close();
             return 0;
@@ -943,7 +944,7 @@ public class DatabaseClient {
     }
 
     /**
-     * Removes one book copy in the Book_Quantity table
+     * Updates the quantity of books in the database, and returns all the books weren't available.
      *
      * @return Returns back the shoppingCart with all the remaining books that couldn't be borrowed.
      * If it returns an empty HashMap all went well.
@@ -966,7 +967,7 @@ public class DatabaseClient {
                                      "SET quantity = quantity - 1 " +
                                      "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
                      stm.execute(fullCommand);
-                     shoppingCart.remove(entry, branch);
+                     shoppingCart.remove(book, branch);
                  }
              }
 
@@ -1014,33 +1015,24 @@ public class DatabaseClient {
      * Finds out which books were borrowed and creates new loans for each book that
      * was lent from the library.
      *
-     * @param literatureBefore The books tried to lend from the library
-     * @param literatureAfter The books that didn't get lent from the library
+     * @param booksToBeRented The Books that's going to be rented.
      */
-    public boolean createLoans(HashMap<Literature, Branch> literatureBefore, HashMap<Literature, Branch> literatureAfter) {
-        boolean result = false;
+    public void createLoans(HashMap<Literature, Branch> booksToBeRented) {
 
-        for (HashMap.Entry<Literature, Branch> litBefore : literatureBefore.entrySet())
+        for (HashMap.Entry<Literature, Branch> book : booksToBeRented.entrySet()) {
 
-            for (HashMap.Entry<Literature, Branch> litAfter : literatureAfter.entrySet())
+            long idBook = book.getKey().getIdBook();
+            long idBranch = book.getKey().getIdBook();
+            String username = Model.getInstance().currentUser().getUsername();
 
-            if ( litBefore.getKey().equals(litAfter.getKey()) &&
-                    litBefore.getValue().equals(litAfter.getValue()) ) {
+            try {
 
-                result = true;
+                addLoanToDatabase(idBook, idBranch, username);
 
-                long idBook = litAfter.getKey().getIdBook();
-                long idBranch = litAfter.getKey().getIdBook();
-                String username = Model.getInstance().currentUser().getUsername();
-                try {
-
-                    addLoanToDatabase(idBook, idBranch, username);
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            return result;
+        }
     }
 
     /**
