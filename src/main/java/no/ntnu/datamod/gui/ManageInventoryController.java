@@ -93,15 +93,15 @@ public class ManageInventoryController implements Initializable {
             TableView<Book> table = new TableView<>();
             {
                 try {
-                    masterData = FXCollections.observableList(databaseClient.getBooksList());
+                    masterData = FXCollections.observableList(databaseClient.getDetailedBooksList());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
 
             // Inserts the Data to the table
-            FilteredList<Book> filteredData = masterData.filtered(o -> o instanceof Book);
-            table.setItems(filteredData);
+            //FilteredList<Book> filteredData = masterData.filtered(o -> o instanceof Book);
+            table.setItems(masterData);
             // Table column variables
             TableColumn<Book, String> idCol = new TableColumn<>("ID");
             idCol.setMinWidth(100);
@@ -119,11 +119,34 @@ public class ManageInventoryController implements Initializable {
             ISBNCol.setMinWidth(100);
             ISBNCol.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
 
+            TableColumn<Book, String> authorsCol = new TableColumn<>("Authors");
+            authorsCol.setMinWidth(100);
+            authorsCol.setCellValueFactory(new PropertyValueFactory<>("Authors"));
 
+            TableColumn<Book, String> genreCol = new TableColumn<>("Genre");
+            genreCol.setMinWidth(100);
+            genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
-            table.getColumns().addAll(idCol, titleCol, publisherCol, ISBNCol);
+            TableColumn<Book, String> quantityCol = new TableColumn<>("Quantity");
+            quantityCol.setMinWidth(100);
+            quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+            TableColumn<Book, String> branchCol = new TableColumn<>("Branch");
+            branchCol.setMinWidth(100);
+            branchCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+            TableColumn<Book, String> idBranchCol = new TableColumn<>("Branch ID");
+            idBranchCol.setMinWidth(100);
+            idBranchCol.setCellValueFactory(new PropertyValueFactory<>("idBranch"));
+
+            TableColumn<Book, String> imageCol = new TableColumn<>("Image");
+            imageCol.setMinWidth(100);
+            imageCol.setCellValueFactory(new PropertyValueFactory<>("image"));
+
+            table.getColumns().addAll(idCol, titleCol, authorsCol, publisherCol, ISBNCol, genreCol, idBranchCol, branchCol, quantityCol);
             return table;
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -142,8 +165,7 @@ public class ManageInventoryController implements Initializable {
             }
 
             // Inserts the Data to the table
-            FilteredList<Author> filteredData = masterData.filtered(o -> o instanceof Author);
-            table.setItems(filteredData);
+            table.setItems(masterData);
             // Table column variables
             TableColumn<Author, String> idCol = new TableColumn<>("ID");
             idCol.setMinWidth(100);
@@ -303,7 +325,7 @@ public class ManageInventoryController implements Initializable {
             // Table column variables
             TableColumn<Loan, String> idCol = new TableColumn<>("ID");
             idCol.setMinWidth(100);
-            idCol.setCellValueFactory(new PropertyValueFactory<>("idLoans"));
+            idCol.setCellValueFactory(new PropertyValueFactory<>("idLoan"));
 
             TableColumn<Loan, String> loanDateCol = new TableColumn<>("Loan date");
             loanDateCol.setMinWidth(77);
@@ -317,9 +339,9 @@ public class ManageInventoryController implements Initializable {
             idBookCol.setMinWidth(30);
             idBookCol.setCellValueFactory(new PropertyValueFactory<>("idBook"));
 
-            TableColumn<Loan, String> idUserCol = new TableColumn<>("User ID");
+            TableColumn<Loan, String> idUserCol = new TableColumn<>("Username");
             idUserCol.setMinWidth(30);
-            idUserCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+            idUserCol.setCellValueFactory(new PropertyValueFactory<>("username"));
 
             table.getColumns().addAll(idCol, loanDateCol, loanDueCol, idBookCol, idUserCol);
             return table;
