@@ -1062,7 +1062,7 @@ public class DatabaseClient {
 
         try {
             String fullCommand =
-                    "SELECT  l.idLoans, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
+                    "SELECT  l.idLoan, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
                             "l.loanDate, l.loanDue, DATEDIFF(l.loanDue, CURDATE()) AS 'Remaining days'," +
                             "CASE\n" +
                             "        WHEN (DATEDIFF(CURDATE(), l.loanDue) * 5) < 0 THEN 0\n" +
@@ -1082,7 +1082,7 @@ public class DatabaseClient {
                             ") AS title_authors " +
 
             "WHERE title_authors.idBook = l.idBook AND branch.idBranch = l.idBranch AND l.username = '" + currentUser + "' " +
-            "ORDER BY l.idLoans";
+            "ORDER BY l.idLoan";
 
             // Create statement
             stm = connection.createStatement();
@@ -1100,7 +1100,7 @@ public class DatabaseClient {
             // Uses the previously created HashMap to match key for value
             // and creates the required object. And puts em all into a list.
             for (HashMap<String, Object> row : rows) {
-                int idLoans = (int) row.get("idLoans");
+                int idLoan = (int) row.get("idLoan");
                 java.sql.Date loanDate = (java.sql.Date) row.get("loanDate");
                 java.sql.Date loanDue = (java.sql.Date) row.get("loanDue");
                 int idBook = (int) row.get("idBook");
@@ -1109,10 +1109,10 @@ public class DatabaseClient {
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
-                long remainingDays = (long) row.get("Remaining days");
-                long fine = (long) row.get("Fine");
+                int remainingDays = (int) row.get("Remaining days");
+                int fine = (int) row.get("Fine");
 
-                Loan loan = new Loan(idLoans, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
+                Loan loan = new Loan(idLoan, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
                         authors, remainingDays, fine);
 
                 rowlist.add(loan);
