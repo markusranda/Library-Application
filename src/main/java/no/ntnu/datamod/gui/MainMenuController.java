@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import no.ntnu.datamod.logic.DatabaseClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,13 +37,18 @@ public class MainMenuController implements Initializable {
     @FXML
     private Pane navBar;
 
+    private DatabaseClient databaseClient;
+
     /**
      * Called by the FXML loader after the labels declared above are injected.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        String username = Model.getInstance().currentUser().getUsername();
-        welcomeText.setText("Welcome to the Library " + username);
+        databaseClient = new DatabaseClient();
+
+        // Get the full name of current user, and display it
+        String name = databaseClient.getNameOfCurrentUser();
+        welcomeText.setText("Welcome to the Library " + name);
     }
 
     /**

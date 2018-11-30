@@ -16,6 +16,98 @@ public class DatabaseClient {
 
 
     /**
+     * Retrieves the first- and last name of a specific username.
+     *
+     * @return Returns the first- and last name of a person if and only if there is a currently logged on user,
+     * returns null otherwise.
+     */
+    public String getNameOfCurrentUser(){
+        String name = null;
+
+        // Retrieve the username of currently logged on user
+        String username = Model.getInstance().currentUser().getUsername();
+
+        try {
+            DatabaseConnection connector = new DatabaseConnection(host, port, database);
+            Connection connection = connector.getConnection();
+
+            Statement stm = connection.createStatement();
+
+
+            String queryCustomer = "SELECT * FROM Customer_Users " +
+                    "WHERE username = '" + username + "' ;";
+
+            String queryEmployee = "SELECT * FROM Employee_Users " +
+                    "WHERE username = '" + username + "' ;";
+
+
+            if ( resultSetHasRows(queryCustomer, stm) ) {
+
+                String queryName = "SELECT CONCAT(C.fname, ' ', C.lname) as name\n" +
+                        "FROM Customer_Users CU JOIN Customer C on CU.idCustomer = C.idCustomer\n" +
+                        "WHERE CU.username = '" + username + "';";
+
+                ResultSet resultSet = stm.executeQuery(queryName);
+
+                if(resultSet.last()){
+                    resultSet = stm.getResultSet();
+                    name = resultSet.getString(1);
+                }
+            }
+
+            else if ( resultSetHasRows(queryEmployee, stm) ) {
+
+                String queryName = "SELECT CONCAT(E.fname, ' ', E.lname) as name\n" +
+                        "FROM Employee_Users EU JOIN Employee E on EU.idEmployee = E.idEmployee\n" +
+                        "WHERE EU.username = '" + username + "';";
+
+
+                ResultSet resultSet = stm.executeQuery(queryName);
+
+                if(resultSet.last()){
+                    resultSet = stm.getResultSet();
+                    name = resultSet.getString(1);
+                }
+            }
+            else {
+                throw new SQLException("No results from query.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return name;
+    }
+
+    /**
+     * Returns true if and only if the ResultSet returns any rows, otherwise returns false.
+     *
+     * @param query Query
+     * @param stm Statement
+     * @return Returns true if and only if the ResultSet returns any rows, otherwise returns false.
+     */
+    private boolean resultSetHasRows(String query, Statement stm){
+        
+        try {
+            boolean result = false;
+            stm.execute(query);
+            ResultSet resultSet = stm.getResultSet();
+            resultSet.last();
+
+            if ( !(resultSet.getRow() == 0) ) {
+                result = true;
+            }
+
+            return result;
+
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Returns all the books from the table Book as an ArrayList<Book>.
      *
      * @return Returns all the books from the table Book as an ArrayList<Book>.
@@ -60,8 +152,6 @@ public class DatabaseClient {
         connection.close();
         return rowList;
     }
-
-
 
     public ArrayList<Book> getDetailedBooksList()  throws SQLException {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
@@ -118,8 +208,10 @@ public class DatabaseClient {
                 int idBranch = (int) row.get("idBranch");
                 Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn);
                 rowList.add(book);
+
             }catch (NullPointerException e){
 
+                e.printStackTrace();
             }
             //String image = (String) row.get("image");
 
@@ -780,7 +872,9 @@ public class DatabaseClient {
      * @return Returns the id of the created Employee, if the insert statement failed it will return 0.
      * @throws SQLException
      */
-    public int addEmployeeToDatabase(String fname, String lname, String address, String phone, String accountNumber, String SSN, String position, int idBranch) throws SQLException{
+    public int addEmployeeToDatabase(String fname, String lname, String address, String phone, String accountNumber,
+                                     String SSN, String position, int idBranch) throws SQLException{
+
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
         int employeeID = 0;

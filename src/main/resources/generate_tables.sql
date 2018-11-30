@@ -218,16 +218,16 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 DROP TABLE `library_db`.`Customer_Users`;
 CREATE TABLE IF NOT EXISTS `library_db`.`Customer_Users` (
-  `Users_username` VARCHAR(45) NOT NULL,
-  `Customer_idCustomer` INT(11) NOT NULL,
-  PRIMARY KEY (`Users_username`, `Customer_idCustomer`),
+  username VARCHAR(45) NOT NULL,
+  idCustomer INT(11) NOT NULL,
+  PRIMARY KEY (username, idCustomer),
   CONSTRAINT `fk_Customer_Users_Users1`
-    FOREIGN KEY (`Users_username`)
+    FOREIGN KEY (username)
     REFERENCES `library_db`.`Users` (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Customer_Users_Customer1`
-    FOREIGN KEY (`Customer_idCustomer`)
+    FOREIGN KEY (idCustomer)
     REFERENCES `library_db`.`Customer` (`idCustomer`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
