@@ -14,8 +14,8 @@ public class Loan {
   private Date loanDate;
   private Date loanDue;
   private String username;
-  private long remainingDays;
-  private long fine;
+  private int remainingDays;
+  private int fine;
 
   public Loan(int idLoans, Date loanDate, Date loanDue, int idBook, String username) {
     this.idLoan = idLoans;
@@ -26,7 +26,7 @@ public class Loan {
   }
 
   public Loan(int idLoan, Date loanDate, Date loanDue, int idBook, String username, int idBranch, String library,
-              String bookTitle, String authors, long remainingDays, long fine) {
+              String bookTitle, String authors, int remainingDays, int fine) {
     this.idBook = idBook;
     this.idLoan = idLoan;
     this.idBranch = idBranch;
@@ -76,11 +76,11 @@ public class Loan {
     return username;
   }
 
-  public long getRemainingDays() {
+  public int getRemainingDays() {
     return remainingDays;
   }
 
-  public long getFine() {
+  public int getFine() {
     return fine;
   }
 }
