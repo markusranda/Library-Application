@@ -8,6 +8,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,11 +30,20 @@ public class MainMenuController implements Initializable {
     @FXML
     private Button manageBtn;
 
+    @FXML
+    private Text welcomeText;
+
+    @FXML
+    private Pane navBar;
+
     /**
      * Called by the FXML loader after the labels declared above are injected.
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) {
+        String username = Model.getInstance().currentUser().getUsername();
+        welcomeText.setText("Welcome to the Library " + username);
+    }
 
     /**
      * When this method is called it will change the scene to the store page.
@@ -41,6 +53,7 @@ public class MainMenuController implements Initializable {
         Parent storeParent;
         storeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("storeWindow.fxml")));
         Scene scene = new Scene(storeParent);
+        scene.getStylesheets().add("styles/style.css");
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setTitle("Library Leopard Leo - Store");
@@ -66,6 +79,7 @@ public class MainMenuController implements Initializable {
         Parent manageParent;
         manageParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("manageInventory.fxml")));
         Scene scene = new Scene(manageParent);
+        scene.getStylesheets().add("styles/style.css");
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setTitle("Library Leopard Leo - Manage inventory");
@@ -82,6 +96,7 @@ public class MainMenuController implements Initializable {
         Parent myPageParent;
         myPageParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("myPage.fxml")));
         Scene scene = new Scene(myPageParent);
+        scene.getStylesheets().add("styles/style.css");
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setTitle("Library Leopard Leo - My Page");

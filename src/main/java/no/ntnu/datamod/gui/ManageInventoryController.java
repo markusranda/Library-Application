@@ -65,6 +65,7 @@ public class ManageInventoryController implements Initializable {
                 Parent welcomeParent;
                 welcomeParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
                 Scene scene = new Scene(welcomeParent);
+                scene.getStylesheets().add("styles/style.css");
                 // This line gets the Stage information
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 window.setTitle("Library Leopard Leo - Welcome");

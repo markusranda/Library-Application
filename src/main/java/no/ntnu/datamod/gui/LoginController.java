@@ -47,16 +47,18 @@ public class LoginController implements Initializable {
         try {
             if (databaseClient.tryLogin(username, password)) {
                 try {
+                    // Set current user
+                    Model.getInstance().currentUser().setUsername(username);
+
                     Parent mainMenuParent;
                     mainMenuParent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("mainMenu.fxml")));
                     Scene scene = new Scene(mainMenuParent);
+                    scene.getStylesheets().add("styles/style.css");
                     // This line gets the Stage information
                     Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
                     window.setTitle("Library Leopard Leo - Main Menu");
+
                     window.setScene(scene);
-
-                    Model.getInstance().currentUser().setUsername(username);
-
                     window.show();
                 } catch (IOException e) {
                     e.printStackTrace();

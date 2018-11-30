@@ -4,13 +4,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.User;
+import no.ntnu.datamod.logic.AutoCompleteComboBoxListener;
 import no.ntnu.datamod.logic.DatabaseClient;
 
 import java.io.IOException;
@@ -43,10 +41,10 @@ public class EmployeeFormController implements Initializable {
     private TextField positionField;
 
     @FXML
-    private MenuButton branchList;
+    private ComboBox<String> branchList;
 
     @FXML
-    private MenuButton userList;
+    private ComboBox<String> userList;
 
     @FXML
     private Button addNewUser = new Button();
@@ -75,27 +73,27 @@ public class EmployeeFormController implements Initializable {
     private void buildEmployeeForm() {
 
         try {
-            updateUserlist();
 
             // Sets up the Branch chooser
-            branchList.setText("Choose Branch..");
             ArrayList<Branch> branchArrayList = databaseClient.getBranchList();
+            ArrayList<User> userArrayList = databaseClient.getUsersList();
+
+
+            // Adds all the users and branches to the comboboxes
+            for (User user : userArrayList) {
+                userList.getItems().add(user.getUsername());
+            }
 
             for (Branch branch : branchArrayList) {
-                String branchNameWithID = branch.getIdBranch() + " - " + branch.getName();
-
-                // Create menuItem with branch name
-                MenuItem menuItem = new MenuItem(branchNameWithID);
-
-                // Add menuItem to MenuButton
-                branchList.getItems().add(menuItem);
-
-                // Add eventlistener to the menuItem
-                menuItem.setOnAction(event -> {
-                    branchList.setText(branchNameWithID);
-                    selectedBranch = branchNameWithID;
-                });
+                branchList.getItems().add(branch.getIdBranch() + " - " + branch.getName());
             }
+
+            new AutoCompleteComboBoxListener<>(userList);
+            new AutoCompleteComboBoxListener<>(branchList);
+
+            userList.setVisibleRowCount(5);
+            branchList.setVisibleRowCount(5);
+
 
         } catch (SQLException e) {
 
@@ -104,51 +102,20 @@ public class EmployeeFormController implements Initializable {
         }
     }
 
-    /**
-     * Sets up the userlist with all available users from the database.
-     */
-    private void updateUserlist() throws SQLException {
-            // Sets up the user chooser
-            // TODO: 28.11.2018 Only retrieve users that doesnt already have an Employee/Customer
-            ArrayList<User> userArrayList = databaseClient.getUsersList();
-            userList.getItems().clear();
-
-            for (User user : userArrayList) {
-                String username = user.getUsername();
-
-                // Create menuItem with username
-                MenuItem menuItem = new MenuItem(username);
-
-                // Add menuItem to MenuButton
-                userList.getItems().add(menuItem);
-
-                // Add eventlistener to the menuItem
-                menuItem.setOnAction(event -> {
-
-                    userList.setText(username);
-                    selectedUser = username;
-                });
-            }
-    }
 
     /**
      * Setup mouse and keyboard event handlers.
      */
     private void setKeyAndClickListeners() {
-        userList.setOnMouseClicked(event -> {
-            try {
-                updateUserlist();
 
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-            }
-
-        });
         createEmployeeBtn.setOnMouseClicked(event -> {
-            String[] splittedBranchString = selectedBranch.split("\\ - ");
-            int branchId = Integer.valueOf(splittedBranchString[0]);
+
             try {
+                selectedUser = userList.getValue();
+                selectedBranch = branchList.getValue();
+                String[] splittedBranchString = selectedBranch.split("\\ - ");
+                int branchId = Integer.valueOf(splittedBranchString[0]);
+
                 int employeeID = databaseClient.addEmployeeToDatabase(
                         fnameField.getText(), lnameField.getText(), addressField.getText(),
                         phoneNumField.getText(), accNumField.getText(), ssnField.getText(), positionField.getText(), branchId);
@@ -156,9 +123,11 @@ public class EmployeeFormController implements Initializable {
                 databaseClient.addEmployeeUserJunctionToDatabase(selectedUser, employeeID);
                 Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
                 window.close();
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
         });
         cancelBtn.setOnMouseClicked(event -> {
             Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
