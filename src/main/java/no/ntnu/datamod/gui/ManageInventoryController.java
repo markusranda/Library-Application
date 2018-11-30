@@ -483,55 +483,51 @@ public class ManageInventoryController implements Initializable {
         listMenu.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         listMenu.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<String>() {
+                .addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
 
-                    public void changed(
-                            ObservableValue<? extends String> observable,
-                            String oldValue, String newValue) {
-                        // change the label text value to the newly selected
-                        // item.
-                        //productLabel.setText("You Selected " + newValue);
+                    // change the label text value to the newly selected
+                    // item.
+                    //productLabel.setText("You Selected " + newValue);
 
-                        if(newValue.equals(bookString)){
-                            selectedItem = "book";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createBookTable());
-                        }
-                        if(newValue.equals(authorString)){
-                            selectedItem = "author";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createAuthorTable());
-                        }
-                        if(newValue.equals(branchString)){
-                            selectedItem = "branch";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createBranchTable());
-                        }
-                        if(newValue.equals(customerString)){
-                            selectedItem = "customer";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createCustomerTable());
-                        }
-                        if(newValue.equals(userString)){
-                            selectedItem = "user";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createUserTable());
-                        }
-                        if(newValue.equals(loanString)){
-                            selectedItem = "loan";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createLoanTable());
-                        }
-                        if(newValue.equals(employeeString)){
-                            selectedItem = "employee";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createEmployeeTable());
-                        }
-                        if(newValue.equals(genreString)){
-                            selectedItem = "genre";
-                            tableContainer.getChildren().clear();
-                            tableContainer.getChildren().add(createGenreTable());
-                        }
+                    if(newValue.equals(bookString)){
+                        selectedItem = "book";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createBookTable());
+                    }
+                    if(newValue.equals(authorString)){
+                        selectedItem = "author";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createAuthorTable());
+                    }
+                    if(newValue.equals(branchString)){
+                        selectedItem = "branch";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createBranchTable());
+                    }
+                    if(newValue.equals(customerString)){
+                        selectedItem = "customer";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createCustomerTable());
+                    }
+                    if(newValue.equals(userString)){
+                        selectedItem = "user";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createUserTable());
+                    }
+                    if(newValue.equals(loanString)){
+                        selectedItem = "loan";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createLoanTable());
+                    }
+                    if(newValue.equals(employeeString)){
+                        selectedItem = "employee";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createEmployeeTable());
+                    }
+                    if(newValue.equals(genreString)){
+                        selectedItem = "genre";
+                        tableContainer.getChildren().clear();
+                        tableContainer.getChildren().add(createGenreTable());
                     }
                 });
 

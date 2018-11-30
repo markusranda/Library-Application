@@ -10,14 +10,13 @@ import javafx.scene.input.KeyEvent;
 public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
     private ComboBox comboBox;
-    private StringBuilder sb;
-    private ObservableList<T> data;
+    private ObservableList data;
     private boolean moveCaretToPos = false;
     private int caretPos;
 
     public AutoCompleteComboBoxListener(final ComboBox comboBox) {
         this.comboBox = comboBox;
-        sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         data = comboBox.getItems();
 
         this.comboBox.setEditable(true);

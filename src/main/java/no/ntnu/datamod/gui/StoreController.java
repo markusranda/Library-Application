@@ -1,6 +1,7 @@
 package no.ntnu.datamod.gui;
 
 import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import no.ntnu.datamod.data.Book;
 import no.ntnu.datamod.data.Branch;
+import no.ntnu.datamod.data.Genre;
 import no.ntnu.datamod.data.Literature;
 import no.ntnu.datamod.logic.DatabaseClient;
 
@@ -45,20 +47,30 @@ public class StoreController implements Initializable {
     private MenuButton branchMenu;
 
     @FXML
+    private MenuButton genreMenu;
+
+    @FXML
     private Button checkoutBtn;
 
     @FXML
     private Button backBtn;
 
     @FXML
+    private Button clearBtn;
+
+    @FXML
     private Text userFeedBack;
+
+    @FXML
+    private Button updateContent;
+
 
     private DatabaseClient databaseClient;
     private HashMap<Literature, Branch> shoppingCartMappings;
     private ObservableList<String> shoppingCartObsList;
     private Branch currentBranch;
+    private Genre currentGenre;
     private GridPane literatureTable;
-    private ScrollPane tableContainer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,16 +78,47 @@ public class StoreController implements Initializable {
         shoppingCartMappings = new HashMap<>();
         databaseClient = new DatabaseClient();
         literatureTable = new GridPane();
-        tableContainer = new ScrollPane();
-        scrollPaneContainer.setMargin(tableContainer, new Insets(70,40,70,40));
+        ScrollPane tableContainer = new ScrollPane();
+        VBox.setMargin(tableContainer, new Insets(70,40,70,40));
 
         fillBranchMenu();
-        fillLiteratureTable();
+        fillGenreContainer();
         setKeyAndClickListeners();
+        fillLiteratureTable();
 
         // Places the GridPane -> ScrollPane -> VBox
         tableContainer.setContent(literatureTable);
         scrollPaneContainer.getChildren().add(tableContainer);
+    }
+
+    /**
+     * Sets up the list over genre choices
+     */
+    private void fillGenreContainer() {
+
+        try {
+            genreMenu.setText("Choose Genre..");
+            ArrayList<Genre> genreArrayList = databaseClient.getGenreList();
+            for (Genre genre: genreArrayList) {
+
+                MenuItem menuItem = new MenuItem(genre.getName());
+                genreMenu.getItems().add(menuItem);
+
+                menuItem.setOnAction(event -> {
+
+                    currentGenre = genre;
+                    genreMenu.setText(genre.getName());
+                });
+
+                genreMenu.setText(genre.getName());
+
+                currentGenre = genre;
+
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -85,17 +128,17 @@ public class StoreController implements Initializable {
         try {
             branchMenu.setText("Choose Library..");
             ArrayList<Branch> branches = databaseClient.getBranchList();
-            currentBranch = new Branch(0,"No libraries", "Empty address");
             for (Branch branch : branches) {
                 MenuItem menuItem = new MenuItem(branch.getName());
                 branchMenu.getItems().add(menuItem);
                 menuItem.setOnAction(event -> {
                     currentBranch = branch;
                     branchMenu.setText(branch.getName());
-                    fillLiteratureTable();
                 });
                 currentBranch = branch;
                 branchMenu.setText(branch.getName());
+
+                currentBranch = branch;
             }
 
         } catch (SQLException e) {
@@ -110,29 +153,36 @@ public class StoreController implements Initializable {
         try {
             // Clear remove all child objects from the table, if there are any.
             literatureTable.getChildren().clear();
-            ArrayList<Book> books = databaseClient.getBooksList();
+            ArrayList<Book> books = databaseClient.getDetailedBooksList();
             Iterator<Book> it = books.iterator();
 
         int columnIndex = 0;
         int rowIndex = 0;
 
         while (it.hasNext()) {
-            Literature lit = it.next();
-            if (lit instanceof Book) {
-                if (columnIndex > 3) {
-                    VBox product = createProduct(lit);
-                    literatureTable.add(product, columnIndex, rowIndex,1, 1);
-                    columnIndex = 0;
-                    rowIndex++;
-                }
-                else {
-                    VBox product = createProduct(lit);
-                    literatureTable.add(product, columnIndex, rowIndex,1, 1);
-                    columnIndex++;
+            Book lit = it.next();
+            if (lit != null) {
+
+                if (lit.getGenre().equals(currentGenre.getName())) {
+                    if (lit.getBranch().equals(currentBranch.getName())) {
+
+                        if (columnIndex > 3) {
+                            VBox product = createProduct(lit);
+                            literatureTable.add(product, columnIndex, rowIndex,1, 1);
+                            columnIndex = 0;
+                            rowIndex++;
+                        }
+                        else {
+                            VBox product = createProduct(lit);
+                            literatureTable.add(product, columnIndex, rowIndex,1, 1);
+                            columnIndex++;
+                        }
+                    }
                 }
             }
         }
         literatureTable.setPrefSize( USE_COMPUTED_SIZE , USE_COMPUTED_SIZE );
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,9 +209,6 @@ public class StoreController implements Initializable {
                 shoppingCartMappings.put(lit, currentBranch);
                 shoppingCartObsList.add(lit.getTitle());
                 shoppingCartListView.setItems(shoppingCartObsList);
-            } else {
-
-
             }
         });
         Label title;
@@ -184,7 +231,7 @@ public class StoreController implements Initializable {
             productImg = new Image("image/default_book_img_01.png");
         }
 
-        int bookID = ((Book) lit).getIdBook();
+        int bookID = lit.getIdBook();
         int branchID = currentBranch.getIdBranch();
         int quantity = databaseClient.getQuantity(bookID, branchID);
         quantityField.setText(String.valueOf(quantity));
@@ -205,6 +252,11 @@ public class StoreController implements Initializable {
      */
     @SuppressWarnings("Duplicates")
     private void setKeyAndClickListeners() {
+        updateContent.setOnMouseClicked(event -> {
+            if ( !( (currentGenre == null) | (currentBranch == null) ) ) {
+                fillLiteratureTable();
+            }
+        });
         checkoutBtn.setOnMouseClicked(event -> {
 
             HashMap<Literature, Branch> booksToBeRented = shoppingCartMappings;
@@ -242,10 +294,8 @@ public class StoreController implements Initializable {
                 ft.play();
             }
 
-
             shoppingCartObsList.clear();
             shoppingCartMappings.clear();
-            fillLiteratureTable();
         });
         backBtn.setOnMouseClicked(event -> {
             //noinspection Duplicates
@@ -262,6 +312,10 @@ public class StoreController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+        clearBtn.setOnMouseClicked(event -> {
+            shoppingCartObsList.clear();
+            shoppingCartMappings.clear();
         });
     }
 }

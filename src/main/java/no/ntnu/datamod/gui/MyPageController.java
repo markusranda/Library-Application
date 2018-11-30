@@ -54,7 +54,7 @@ public class MyPageController implements Initializable {
     private void updateLoanView() {
         tableContainer.getChildren().clear();
         loanTableView = createLoansTable();
-        tableContainer.setMargin(loanTableView, new Insets(40, 0, 0, 40));
+        VBox.setMargin(loanTableView, new Insets(40, 0, 0, 40));
         tableContainer.getChildren().add(loanTableView);
     }
 
