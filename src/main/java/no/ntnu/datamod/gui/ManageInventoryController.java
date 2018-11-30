@@ -81,6 +81,10 @@ public class ManageInventoryController implements Initializable {
                         if (selectedItem.equals("employee")) {
                             new EmployeeFormApp().start(new Stage());
                         }
+                        if (selectedItem.equals("book")){
+                            new BookFormApp().start(new Stage());
+                        }
+
                         // TODO: 30.11.2018 add more choices like the above one.
 
                         else {
@@ -292,10 +296,6 @@ public class ManageInventoryController implements Initializable {
             FilteredList<User> filteredData = masterData.filtered(o -> o instanceof User);
             table.setItems(filteredData);
             // Table column variables
-            TableColumn<User, String> idCol = new TableColumn<>("ID");
-            idCol.setMinWidth(100);
-            idCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
-
             TableColumn<User, String> usernameCol = new TableColumn<>("Username");
             usernameCol.setMinWidth(300);
             usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -308,7 +308,7 @@ public class ManageInventoryController implements Initializable {
             usertypeCol.setMinWidth(100);
             usertypeCol.setCellValueFactory(new PropertyValueFactory<>("usertype"));
 
-            table.getColumns().addAll(idCol, usernameCol, passwordCol, usertypeCol);
+            table.getColumns().addAll(usernameCol, passwordCol, usertypeCol);
             return table;
         }catch (Exception e){
             return null;
@@ -422,6 +422,7 @@ public class ManageInventoryController implements Initializable {
             return table;
 
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }

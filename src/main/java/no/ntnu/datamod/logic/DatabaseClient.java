@@ -690,9 +690,10 @@ public class DatabaseClient {
     public int addBookToDatabase(String title, String publisher) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
+        int bookID = 0;
 
         try {
-            String fullCommand = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
+            String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
                     title + "', '" +
                     publisher + "', " +
                     null + ", " +
@@ -702,14 +703,21 @@ public class DatabaseClient {
             Statement stm = null;
             stm = connection.createStatement();
 
-            // Query
-            int execution = stm.executeUpdate(fullCommand);
+            // Insert new Employee
+            stm.executeUpdate(queryInsertBook, Statement.RETURN_GENERATED_KEYS);
+
+            // Retrieve Book ID
+            ResultSet rs = stm.getGeneratedKeys();
+            if(rs.next()) {
+                bookID = rs.getInt(1); }
+
             connection.close();
-            return execution;
+            return bookID;
+
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             connection.close();
-            return 0;
+            return bookID;
         }
     }
 
@@ -1007,6 +1015,41 @@ public class DatabaseClient {
 
     /**
      *
+     * @param idBook Book ID.
+     * @param idBranch Branch ID.
+     * @param quantity Quantity of books in given branch.
+     * @return Number of edited rows in database.
+     * @throws SQLException
+     */
+    public int addBookQuantityJunctionToDatabase(int idBook, int idBranch, int quantity) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+
+        try {
+
+            String fullCommand = "INSERT INTO Book_Quantity (idBook, idBranch, quantity) VALUES (" +
+                    idBook + ", " +
+                    idBranch + ", " +
+                    quantity + ");";
+
+
+            // Create statement
+            Statement stm = null;
+            stm = connection.createStatement();
+
+            // Query
+            int execution = stm.executeUpdate(fullCommand);
+            connection.close();
+            return execution;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            connection.close();
+            return 0;
+        }
+    }
+
+    /**
+     *
      * @param idUser User ID.
      * @param idCustomer Customer ID.
      * @return Number of edited rows in database.
@@ -1073,6 +1116,8 @@ public class DatabaseClient {
             return 0;
         }
     }
+
+
 
     public int removeBookFromDatabase(int idBook) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
