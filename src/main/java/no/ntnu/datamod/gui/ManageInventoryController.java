@@ -80,11 +80,13 @@ public class ManageInventoryController implements Initializable {
                     try {
                         if (selectedItem.equals("employee")) {
                             new EmployeeFormApp().start(new Stage());
-                        } else {
+                        }
+                        // TODO: 30.11.2018 add more choices like the above one.
+
+                        else {
                             // TODO: 30.11.2018 Add user feedback telling the user to choose a list
                             System.out.println("please choose a list");
                         }
-                        // TODO: 30.11.2018 add more choices like the above one.
                     } catch (IOException e ) {
                         e.printStackTrace();
                     }
