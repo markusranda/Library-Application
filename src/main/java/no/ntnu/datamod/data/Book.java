@@ -31,7 +31,7 @@ public class Book extends Literature {
     this.image = image;
   }
 
-  public Book(int idBook, String title, String authors, int idBranch, int quantity, String genre, String publisher, String isbn, String branch ) {
+  public Book(int idBook, String title, String authors, int idBranch, int quantity, String genre, String publisher, String branch ,String isbn) {
     super(publisher, title);
     this.idBook = idBook;
     this.authors = authors;

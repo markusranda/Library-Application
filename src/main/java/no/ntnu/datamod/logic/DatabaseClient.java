@@ -67,7 +67,7 @@ public class DatabaseClient {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        String fullCommand = "SELECT DISTINCT B.idBook, Br.idBranch, B.title, B.publisher, genre, Authors, ISBN, Br.name, Br.quantity, image\n" +
+        String fullCommand = "SELECT DISTINCT B.idBook, Br.idBranch, B.title, B.publisher, genre, Authors, ISBN, Br.name AS 'branch', Br.quantity, image\n" +
                 "FROM Books B, Branches branch,\n" +
                 "     (SELECT  b.idBook, b.title,\n" +
                 "              GROUP_CONCAT(CONCAT(a.fName, ' ', a.lName) ORDER BY CONCAT(a.fName, ' ', a.lName)) AS Authors\n" +
@@ -114,7 +114,7 @@ public class DatabaseClient {
             String genre = (String) row.get("genre");
             try {
                 int quantity = (int) row.get("quantity");
-                String branch = (String) row.get("name");
+                String branch = (String) row.get("branch");
                 int idBranch = (int) row.get("idBranch");
                 Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn);
                 rowList.add(book);

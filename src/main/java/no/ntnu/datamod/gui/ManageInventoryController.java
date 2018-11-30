@@ -117,7 +117,7 @@ public class ManageInventoryController implements Initializable {
 
             TableColumn<Book, String> ISBNCol = new TableColumn<>("ISBN");
             ISBNCol.setMinWidth(100);
-            ISBNCol.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
+            ISBNCol.setCellValueFactory(new PropertyValueFactory<>("isbn"));
 
             TableColumn<Book, String> authorsCol = new TableColumn<>("Authors");
             authorsCol.setMinWidth(100);
@@ -132,8 +132,8 @@ public class ManageInventoryController implements Initializable {
             quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
             TableColumn<Book, String> branchCol = new TableColumn<>("Branch");
-            branchCol.setMinWidth(100);
-            branchCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            branchCol.setMinWidth(200);
+            branchCol.setCellValueFactory(new PropertyValueFactory<>("branch"));
 
             TableColumn<Book, String> idBranchCol = new TableColumn<>("Branch ID");
             idBranchCol.setMinWidth(100);
