@@ -42,11 +42,11 @@ public class ManageInventoryController implements Initializable {
 
     private ObservableList masterData;
     private DatabaseClient databaseClient;
-
-    private final String TEST = "Test successful";
+    private String selectedItem;
 
     public void initialize(URL location, ResourceBundle resources) {
         databaseClient = new DatabaseClient();
+        selectedItem = "";
         buildManageInventoryScene();
 
         // Listen for user interaction
@@ -78,7 +78,13 @@ public class ManageInventoryController implements Initializable {
         addBtn.setOnMouseClicked(event -> {
                 Platform.runLater(() -> {
                     try {
-                        new EmployeeFormApp().start(new Stage());
+                        if (selectedItem.equals("employee")) {
+                            new EmployeeFormApp().start(new Stage());
+                        } else {
+                            // TODO: 30.11.2018 Add user feedback telling the user to choose a list
+                            System.out.println("please choose a list");
+                        }
+                        // TODO: 30.11.2018 add more choices like the above one.
                     } catch (IOException e ) {
                         e.printStackTrace();
                     }
@@ -485,34 +491,42 @@ public class ManageInventoryController implements Initializable {
                         //productLabel.setText("You Selected " + newValue);
 
                         if(newValue.equals(bookString)){
+                            selectedItem = "book";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createBookTable());
                         }
                         if(newValue.equals(authorString)){
+                            selectedItem = "author";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createAuthorTable());
                         }
                         if(newValue.equals(branchString)){
+                            selectedItem = "branch";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createBranchTable());
                         }
                         if(newValue.equals(customerString)){
+                            selectedItem = "customer";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createCustomerTable());
                         }
                         if(newValue.equals(userString)){
+                            selectedItem = "user";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createUserTable());
                         }
                         if(newValue.equals(loanString)){
+                            selectedItem = "loan";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createLoanTable());
                         }
                         if(newValue.equals(employeeString)){
+                            selectedItem = "employee";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createEmployeeTable());
                         }
                         if(newValue.equals(genreString)){
+                            selectedItem = "genre";
                             tableContainer.getChildren().clear();
                             tableContainer.getChildren().add(createGenreTable());
                         }
