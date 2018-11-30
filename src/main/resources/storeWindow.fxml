@@ -142,9 +142,9 @@
       </GridPane>
    </bottom>
    <top>
-      <HBox fx:id="headerContainer" alignment="CENTER" BorderPane.alignment="CENTER">
+      <HBox fx:id="headerContainer" alignment="CENTER" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
          <children>
-            <Label contentDisplay="CENTER" text="Borrow a Book" textFill="#1b1b1a">
+            <Label contentDisplay="CENTER" stylesheets="@styles/style.css" text="Borrow a Book" textFill="#1b1b1a">
                <font>
                   <Font size="42.0" />
                </font>

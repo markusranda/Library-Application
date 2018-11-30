@@ -175,7 +175,7 @@ public class DatabaseClient {
                 "      FROM Books B3\n" +
                 "     LEFT JOIN Book_Quantity BQ on B3.idBook = BQ.idBook\n" +
                 "     LEFT JOIN Branches B4 on BQ.idBranch = B4.idBranch) AS Br\n" +
-                "WHERE title_authors.idBook = B.idBook AND G.idBook = B.idBook AND Br.idBook = B.idBook\n" +
+                "WHERE title_authors.idBook = B.idBook AND G.idBook = B.idBook AND Br.idBook = B.idBook\n AND Br.quantity IS NOT NULL\n" +
                 "ORDER BY B.idBook";
         ArrayList<Book> rowList = new ArrayList<>();
         Statement stm;
@@ -202,17 +202,12 @@ public class DatabaseClient {
             String isbn = (String) row.get("ISBN");
             String author = (String) row.get("Authors");
             String genre = (String) row.get("genre");
-            try {
-                int quantity = (int) row.get("quantity");
-                String branch = (String) row.get("branch");
-                int idBranch = (int) row.get("idBranch");
-                Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn);
-                rowList.add(book);
+            int quantity = (int) row.get("quantity");
+            String branch = (String) row.get("branch");
+            int idBranch = (int) row.get("idBranch");
+            Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn);
+            rowList.add(book);
 
-            }catch (NullPointerException e){
-
-                e.printStackTrace();
-            }
             //String image = (String) row.get("image");
 
 
