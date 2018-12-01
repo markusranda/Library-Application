@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import no.ntnu.datamod.data.Author;
 import no.ntnu.datamod.data.Branch;
 import no.ntnu.datamod.data.Genre;
-import no.ntnu.datamod.data.User;
 import no.ntnu.datamod.logic.AutoCompleteComboBoxListener;
 import no.ntnu.datamod.logic.DatabaseClient;
 

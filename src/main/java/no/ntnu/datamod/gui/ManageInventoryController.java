@@ -2,7 +2,6 @@ package no.ntnu.datamod.gui;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -30,6 +29,9 @@ public class ManageInventoryController implements Initializable {
 
     @FXML
     private Button backBtn;
+
+    @FXML
+    private Button updateBtn;
 
     @FXML
     private Button addBtn;
@@ -75,6 +77,42 @@ public class ManageInventoryController implements Initializable {
                 e.printStackTrace();
             }
         });
+
+        updateBtn.setOnMouseClicked(event -> {
+            if (selectedItem.equals("book")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createBookTable());
+            }
+            if (selectedItem.equals("author")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createAuthorTable());
+            }
+            if (selectedItem.equals("branch")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createBranchTable());
+            }
+            if (selectedItem.equals("customer")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createCustomerTable());
+            }
+            if (selectedItem.equals("user")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createUserTable());
+            }
+            if (selectedItem.equals("loan")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createLoanTable());
+            }
+            if (selectedItem.equals("employee")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createEmployeeTable());
+            }
+            if (selectedItem.equals("genre")){
+                tableContainer.getChildren().clear();
+                tableContainer.getChildren().add(createGenreTable());
+            }
+        });
+
         addBtn.setOnMouseClicked(event -> {
                 Platform.runLater(() -> {
                     try {
@@ -83,6 +121,12 @@ public class ManageInventoryController implements Initializable {
                         }
                         if (selectedItem.equals("book")){
                             new BookFormApp().start(new Stage());
+                        }
+                        if (selectedItem.equals("author")){
+                            new AuthorFormApp().start(new Stage());
+                        }
+                        if (selectedItem.equals("user")){
+                            new UserFormApp().start(new Stage());
                         }
 
                         // TODO: 30.11.2018 add more choices like the above one.
