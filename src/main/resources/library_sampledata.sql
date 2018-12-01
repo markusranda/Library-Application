@@ -201,7 +201,7 @@ VALUES
       (1, 19);
 
 
-INSERT INTO `library_db`.`Book_Quantity`
+INSERT INTO Book_Quantity
 
       (`quantity`, `idBook`, `idBranch`)
 
@@ -261,7 +261,7 @@ VALUES
         (100, 19, 6);
 
 
-INSERT INTO `library_db`.`Book_Genres`
+INSERT INTO Book_Genres
 
       (`idBook`, `idGenre`)
 
@@ -274,16 +274,16 @@ VALUES
         (19, 6);
 
 
-INSERT INTO `library_db`.`Loans`
+INSERT INTO Loans
 
       (loanDate, loanDue, idBook, idBranch, username)
 
 VALUES
-        ("1980-12-24", "2002-02-24", 14, 1, "emv"),
-        ("1899-12-24", "2000-02-24", 15, 2, "emv"),
-        ("1985-12-19", "1999-10-21", 16, 3, "emv"),
-        ("1980-12-24", "2002-02-24", 17, 3, "tml"),
-        ("1899-12-24", "2000-02-24", 18, 2, "tml"),
-        ("1985-12-19", "1999-10-21", 19, 1, "tml");
+        ("1980-01-24", "1980-06-24", 14, 1, "emv"),
+        ("1899-02-24", "1899-05-24", 15, 2, "emv"),
+        ("1985-03-19", "1985-04-21", 16, 3, "emv"),
+        ("1980-04-24", "1980-03-24", 17, 3, "tml"),
+        ("2000-05-24", "2000-02-24", 18, 2, "tml"),
+        ("2012-06-19", "2012-01-21", 19, 1, "tml");
 
 

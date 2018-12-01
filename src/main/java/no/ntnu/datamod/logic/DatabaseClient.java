@@ -2,6 +2,7 @@ package no.ntnu.datamod.logic;
 import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.gui.Model;
 
+import java.io.InvalidClassException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,7 +171,7 @@ public class DatabaseClient {
                 "     ) AS title_authors,\n" +
                 "     (SELECT B2.idBook, G2.name AS genre FROM Books B2\n" +
                 "     LEFT JOIN Book_Genres Genre2 on B2.idBook = Genre2.idBook\n" +
-                "     LEFT JOIN Genre G2 on Genre2.idGenre = G2.idGenre) AS G,\n" +
+                "     LEFT JOIN Genres G2 on Genre2.idGenre = G2.idGenre) AS G,\n" +
                 "     (SELECT B3.idBook, B4.idBranch, BQ.quantity, B4.name\n" +
                 "      FROM Books B3\n" +
                 "     LEFT JOIN Book_Quantity BQ on B3.idBook = BQ.idBook\n" +
@@ -496,7 +497,7 @@ public class DatabaseClient {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        String fullCommand = "SELECT * FROM Genre";
+        String fullCommand = "SELECT * FROM Genres";
         ArrayList<Genre> rowList = new ArrayList<>();
         Statement stm;
 
@@ -1270,7 +1271,7 @@ public class DatabaseClient {
         try {
             String fullCommand =
                     "SELECT  l.idLoan, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
-                            "l.loanDate, l.loanDue, DATEDIFF(l.loanDue, CURDATE()) AS 'Remaining days'," +
+                            "l.loanDate, l.loanDue, DATEDIFF( l.loanDue, CURRENT_DATE ) AS 'Remaining days'," +
                             "CASE\n" +
                             "        WHEN (DATEDIFF(CURDATE(), l.loanDue) * 5) < 0 THEN 0\n" +
                             "        ELSE DATEDIFF(CURDATE(), l.loanDue) * 5\n" +
@@ -1316,8 +1317,25 @@ public class DatabaseClient {
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
-                int remainingDays = (int) row.get("Remaining days");
-                int fine = (int) row.get("Fine");
+
+                Object remainingDaysObj = row.get("Remaining days");
+                int remainingDays;
+                if (validateDatatype(remainingDaysObj).isSuccess()){
+                    remainingDays = validateDatatype(remainingDaysObj).getValue();
+
+                } else
+
+                    throw new InvalidClassException("The Datatype from the Database is neither int or long.");
+
+
+                Object fineObj = row.get("Fine");
+                int fine;
+                if (validateDatatype(fineObj).isSuccess()) {
+                    fine = validateDatatype(fineObj).getValue();
+
+                } else
+
+                    throw new InvalidClassException("The Datatype from the Database is neither int or long.");
 
                 Loan loan = new Loan(idLoan, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
                         authors, remainingDays, fine);
@@ -1330,13 +1348,54 @@ public class DatabaseClient {
             return rowlist;
 
 
-        } catch (SQLException | NullPointerException e) {
-
+        } catch (SQLException | NullPointerException | InvalidClassException e) {
             e.printStackTrace();
-
         }
 
         return rowlist;
+    }
+
+    /**
+     *
+     */
+    public interface ValidationResult {
+        boolean isSuccess();
+        int getValue();
+    }
+
+    /**
+     * Tries to find out what the object is castable to, returns the interface ValidationResult with methods to
+     * retrieve if the validation was successful and it's value.
+     *
+     * @param object The object to validate
+     * @return returns the interface ValidationResult with methods to retrieve if the
+     *         validation was successful and it's value.
+     */
+    private ValidationResult validateDatatype(Object object) {
+        int value = 0;
+        boolean result = false;
+
+        if (object instanceof Integer) {
+            value = (int) object;
+            result = true;
+
+        } else if (object instanceof Long) {
+            Long longValue = (long) object;
+            value = longValue.intValue();
+            result = true;
+        }
+
+        int finalValue = value;
+        boolean finalResult = result;
+
+        return new ValidationResult() {
+            public boolean isSuccess() {
+                return finalResult;
+            }
+            public int getValue() {
+                return finalValue;
+            }
+        };
     }
 
     /**

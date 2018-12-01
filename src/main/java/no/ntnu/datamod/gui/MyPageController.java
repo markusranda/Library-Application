@@ -80,7 +80,7 @@ public class MyPageController implements Initializable {
             libraryCol.setCellValueFactory(new PropertyValueFactory<>("library"));
 
             TableColumn<Loan, String> bookTitleCol = new TableColumn<>("Book Title");
-            bookTitleCol.setMinWidth(150);
+            bookTitleCol.setMinWidth(300);
             bookTitleCol.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
 
             TableColumn<Loan, String> authorsCol = new TableColumn<>("Authors");

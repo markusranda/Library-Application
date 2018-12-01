@@ -1,7 +1,6 @@
 package no.ntnu.datamod.gui;
 
 import javafx.animation.FadeTransition;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -97,6 +96,7 @@ public class StoreController implements Initializable {
     private void fillGenreContainer() {
 
         try {
+            boolean firstLoop = true;
             genreMenu.setText("Choose Genre..");
             ArrayList<Genre> genreArrayList = databaseClient.getGenreList();
             for (Genre genre: genreArrayList) {
@@ -112,7 +112,10 @@ public class StoreController implements Initializable {
 
                 genreMenu.setText(genre.getName());
 
-                currentGenre = genre;
+                if (firstLoop) {
+                    currentGenre = genre;
+                    firstLoop = false;
+                }
 
             }
         } catch (SQLException e) {
@@ -126,8 +129,10 @@ public class StoreController implements Initializable {
      */
     private void fillBranchMenu() {
         try {
+            boolean firstLoop = true;
             branchMenu.setText("Choose Library..");
             ArrayList<Branch> branches = databaseClient.getBranchList();
+
             for (Branch branch : branches) {
                 MenuItem menuItem = new MenuItem(branch.getName());
                 branchMenu.getItems().add(menuItem);
@@ -138,7 +143,10 @@ public class StoreController implements Initializable {
                 currentBranch = branch;
                 branchMenu.setText(branch.getName());
 
-                currentBranch = branch;
+                if (firstLoop) {
+                    currentBranch = branch;
+                    firstLoop = false;
+                }
             }
 
         } catch (SQLException e) {
@@ -161,7 +169,7 @@ public class StoreController implements Initializable {
 
         while (it.hasNext()) {
             Book lit = it.next();
-            if (lit != null) {
+            if ( !(lit.getGenre() == null | lit.getBranch() == null) ) {
 
                 if (lit.getGenre().equals(currentGenre.getName())) {
                     if (lit.getBranch().equals(currentBranch.getName())) {
