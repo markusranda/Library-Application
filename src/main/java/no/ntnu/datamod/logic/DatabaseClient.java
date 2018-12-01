@@ -687,7 +687,7 @@ public class DatabaseClient {
      * @return Number of edited rows
      * @throws SQLException
      */
-    public int addBookToDatabase(String title, String publisher, String ISBN, String image) throws SQLException{
+    public int addBookToDatabase(String title, String publisher, String ISBN, byte[] image) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
         int bookID = 0;
@@ -697,15 +697,12 @@ public class DatabaseClient {
             if (ISBN.isEmpty()){
                 ISBN = null;
             }
-            if (image.isEmpty()){
-                image = null;
-            }
 
-            String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
-                    title + "', '" +
-                    publisher + "', " +
-                    ISBN + ", " +
-                    image + ");";
+            String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN, image) VALUES " +
+                    "('" + title + "', '" +
+                    publisher + "', '" +
+                    ISBN + "', '" +
+                    image + "')";
 
             // Create statement
             Statement stm = null;

@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import no.ntnu.datamod.data.Author;
 import no.ntnu.datamod.data.Branch;
@@ -12,11 +14,15 @@ import no.ntnu.datamod.data.Genre;
 import no.ntnu.datamod.logic.AutoCompleteComboBoxListener;
 import no.ntnu.datamod.logic.DatabaseClient;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static java.nio.file.Files.readAllBytes;
 
 public class BookFormController implements Initializable {
 
@@ -45,18 +51,22 @@ public class BookFormController implements Initializable {
     private ComboBox<String> branchList;
 
     @FXML
-    private Button addNewAuthor = new Button();
+    private Button addNewAuthor;
 
     @FXML
-    private Button createBookBtn = new Button();
+    private Button createBookBtn;
 
     @FXML
-    private Button cancelBtn = new Button();
+    private Button cancelBtn;
+
+    @FXML
+    private Button addImageBtn;
 
     private String selectedAuthor;
     private String selectedBranch;
     private String selectedGenre;
     private DatabaseClient databaseClient;
+    private byte[] imageBytes;
 
 
     @Override
@@ -108,7 +118,28 @@ public class BookFormController implements Initializable {
      * Setup mouse and keyboard event handlers.
      */
     private void setKeyAndClickListeners() {
+        addImageBtn.setOnMouseClicked(event -> {
 
+            Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Image files", "*.png", "*.jpg"));
+            File selectedFile = fileChooser.showOpenDialog(window);
+
+            if (selectedFile != null) {
+
+                try {
+                    imageBytes = Files.readAllBytes(selectedFile.toPath());
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+
+        });
         createBookBtn.setOnMouseClicked(event -> {
 
             try {
@@ -122,7 +153,7 @@ public class BookFormController implements Initializable {
 
                 int branchId = Integer.valueOf(splittedBranchString[0]);
                 int authorID = Integer.valueOf(splittedAuthorString[0]);
-                int bookID = databaseClient.addBookToDatabase(titleField.getText(), publisherField.getText(), isbnField.getText(), imageField.getText());
+                int bookID = databaseClient.addBookToDatabase(titleField.getText(), publisherField.getText(), isbnField.getText(), imageBytes);
                 int genreID = Integer.valueOf(splittedGenreString[0]);
 
                 int quantity = quantityField.getValue();
