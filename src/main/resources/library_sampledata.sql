@@ -261,19 +261,6 @@ VALUES
         (100, 19, 6);
 
 
-INSERT INTO Book_Genres
-
-      (`idBook`, `idGenre`)
-
-VALUES
-        (14, 6),
-        (15, 6),
-        (16, 6),
-        (17, 6),
-        (18, 6),
-        (19, 6);
-
-
 INSERT INTO Loans
 
       (loanDate, loanDue, idBook, idBranch, username)

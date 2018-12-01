@@ -19,9 +19,9 @@
       <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <ListView fx:id="shoppingCartListView" minHeight="500.0" minWidth="200.0" prefWidth="200.0" />
-            <VBox alignment="CENTER">
+            <VBox alignment="CENTER" maxWidth="200.0">
                <children>
-                  <HBox alignment="BOTTOM_RIGHT">
+                  <HBox alignment="BOTTOM_RIGHT" stylesheets="@styles/style.css">
                      <children>
                         <Button fx:id="checkoutBtn" alignment="BOTTOM_LEFT" mnemonicParsing="false" text="Checkout">
                            <HBox.margin>

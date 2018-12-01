@@ -39,3 +39,7 @@
     -fx-font-weight: bold;
     -fx-font-smoothing-type: gray;
 }
+
+#userFeedBack {
+    -fx-font-size: 10px;
+}

@@ -99,21 +99,20 @@ public class StoreController implements Initializable {
             boolean firstLoop = true;
             genreMenu.setText("Choose Genre..");
             ArrayList<Genre> genreArrayList = databaseClient.getGenreList();
+
             for (Genre genre: genreArrayList) {
 
                 MenuItem menuItem = new MenuItem(genre.getName());
                 genreMenu.getItems().add(menuItem);
 
                 menuItem.setOnAction(event -> {
-
                     currentGenre = genre;
                     genreMenu.setText(genre.getName());
                 });
 
-                genreMenu.setText(genre.getName());
-
                 if (firstLoop) {
                     currentGenre = genre;
+                    genreMenu.setText(genre.getName());
                     firstLoop = false;
                 }
 
@@ -136,15 +135,17 @@ public class StoreController implements Initializable {
             for (Branch branch : branches) {
                 MenuItem menuItem = new MenuItem(branch.getName());
                 branchMenu.getItems().add(menuItem);
+
                 menuItem.setOnAction(event -> {
                     currentBranch = branch;
                     branchMenu.setText(branch.getName());
                 });
-                currentBranch = branch;
+
                 branchMenu.setText(branch.getName());
 
                 if (firstLoop) {
                     currentBranch = branch;
+                    branchMenu.setText(branch.getName());
                     firstLoop = false;
                 }
             }
@@ -207,6 +208,7 @@ public class StoreController implements Initializable {
     private VBox createProduct(Literature lit) {
         TextField quantityField = new TextField();
         quantityField.setMaxWidth(60);
+        quantityField.setEditable(false);
         Button loanBtn = new Button("Borrow");
         final double MAX_IMAGE_WIDTH = 190;
         VBox product = new VBox();
@@ -227,7 +229,7 @@ public class StoreController implements Initializable {
         else {
             title = new Label(lit.getTitle());
         }
-        title.setMaxWidth(200);
+        title.setMaxWidth(190);
 
         // In case the imageUrl field is null, empty or not working,
         // a default image will be set.
@@ -244,6 +246,7 @@ public class StoreController implements Initializable {
         int quantity = databaseClient.getQuantity(bookID, branchID);
         quantityField.setText(String.valueOf(quantity));
         HBox hBox = new HBox(loanBtn, quantityField);
+        hBox.setMaxWidth(190);
 
         ImageView productImgView = new ImageView();
         productImgView.setFitWidth(MAX_IMAGE_WIDTH);
@@ -286,7 +289,9 @@ public class StoreController implements Initializable {
                 FadeTransition ft = new FadeTransition(Duration.millis(15000), userFeedBack);
                 userFeedBack.setText(
                         "These books did not get rented: \n" + books.toString());
-                userFeedBack.setStyle("-fx-font: 10 arial;");
+
+                userFeedBack.setStyle("-fx-text-fill: red");
+
                 ft.setFromValue(1.0);
                 ft.setToValue(0.0);
                 ft.setCycleCount(1);
@@ -295,7 +300,10 @@ public class StoreController implements Initializable {
             } else {
 
                 FadeTransition ft = new FadeTransition(Duration.millis(7000), userFeedBack);
-                userFeedBack.setText("Books was rented successfully");
+                userFeedBack.setText("Books got rented successfully");
+
+                userFeedBack.setStyle("-fx-text-fill: green");
+
                 ft.setFromValue(1.0);
                 ft.setToValue(0.0);
                 ft.setCycleCount(1);
@@ -304,6 +312,7 @@ public class StoreController implements Initializable {
 
             shoppingCartObsList.clear();
             shoppingCartMappings.clear();
+            fillLiteratureTable();
         });
         backBtn.setOnMouseClicked(event -> {
             //noinspection Duplicates
