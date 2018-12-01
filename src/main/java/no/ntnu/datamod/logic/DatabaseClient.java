@@ -171,7 +171,7 @@ public class DatabaseClient {
                 "     ) AS title_authors,\n" +
                 "     (SELECT B2.idBook, G2.name AS genre FROM Books B2\n" +
                 "     LEFT JOIN Book_Genres Genre2 on B2.idBook = Genre2.idBook\n" +
-                "     LEFT JOIN Genre G2 on Genre2.idGenre = G2.idGenre) AS G,\n" +
+                "     LEFT JOIN Genres G2 on Genre2.idGenre = G2.idGenre) AS G,\n" +
                 "     (SELECT B3.idBook, B4.idBranch, BQ.quantity, B4.name\n" +
                 "      FROM Books B3\n" +
                 "     LEFT JOIN Book_Quantity BQ on B3.idBook = BQ.idBook\n" +
@@ -497,7 +497,7 @@ public class DatabaseClient {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        String fullCommand = "SELECT * FROM Genre";
+        String fullCommand = "SELECT * FROM Genres";
         ArrayList<Genre> rowList = new ArrayList<>();
         Statement stm;
 

@@ -41,7 +41,6 @@ public class Book extends Literature {
     this.publisher = publisher;
     this.isbn = isbn;
     this.branch = branch;
-
   }
 
   /**
