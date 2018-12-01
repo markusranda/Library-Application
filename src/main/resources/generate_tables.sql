@@ -20,7 +20,8 @@ USE `library_db` ;
 -- -----------------------------------------------------
 -- Table `library_db`.`Authors`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Authors` (
+DROP TABLE Authors;
+CREATE TABLE IF NOT EXISTS Authors (
   `idAuthors` INT(11) NOT NULL AUTO_INCREMENT,
   `lName` VARCHAR(45) NULL DEFAULT NULL,
   `fName` VARCHAR(45) NULL DEFAULT NULL,
@@ -32,9 +33,10 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Books`
 -- -----------------------------------------------------
+DROP TABLE Books;
 CREATE TABLE IF NOT EXISTS `library_db`.`Books` (
   `idBook` INT(11) NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(45) NOT NULL,
+  `title` VARCHAR(100) NOT NULL,
   `publisher` VARCHAR(45) NOT NULL,
   `ISBN` VARCHAR(45) NULL DEFAULT NULL,
   `image` BLOB NULL DEFAULT NULL,
@@ -46,7 +48,8 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Book_Authors`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Book_Authors` (
+DROP TABLE Book_Authors;
+CREATE TABLE IF NOT EXISTS Book_Authors (
   `idBook` INT(11) NOT NULL,
   `idAuthors` INT(11) NOT NULL,
   PRIMARY KEY (`idBook`, `idAuthors`),
@@ -65,9 +68,10 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `library_db`.`Genre`
+-- Table `library_db`.`Genres`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Genre` (
+DROP TABLE Genres;
+CREATE TABLE IF NOT EXISTS Genres (
   `idGenre` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idGenre`))
@@ -78,7 +82,8 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Book_Genres`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library_db`.`Book_Genres` (
+DROP TABLE Book_Genres;
+CREATE TABLE IF NOT EXISTS Book_Genres (
   `idGenre` INT(11) NOT NULL,
   `idBook` INT(11) NOT NULL,
   PRIMARY KEY (`idGenre`, `idBook`),
@@ -89,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Book_Genres` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Book_Genres_Genre1`
     FOREIGN KEY (`idGenre`)
-    REFERENCES `library_db`.`Genre` (`idGenre`)
+    REFERENCES `library_db`.`Genres` (`idGenre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -112,6 +117,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Book_Quantity`
 -- -----------------------------------------------------
+DROP TABLE Book_Quantity;
 CREATE TABLE IF NOT EXISTS `library_db`.`Book_Quantity` (
   `quantity` INT(11) NOT NULL,
   `idBook` INT(11) NOT NULL,
@@ -134,6 +140,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Customer`
 -- -----------------------------------------------------
+DROP TABLE Customer;
 CREATE TABLE IF NOT EXISTS `library_db`.`Customer` (
   `idCustomer` INT(11) NOT NULL AUTO_INCREMENT,
   `fname` VARCHAR(45) NOT NULL,
@@ -172,7 +179,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `library_db`.`Users`;
+DROP TABLE Users;
 CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
@@ -185,7 +192,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Loans`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `library_db`.`Loans`;
+DROP TABLE Loans;
 CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
   `idLoan` INT(11) NOT NULL AUTO_INCREMENT,
   `loanDate` DATE NOT NULL,
@@ -216,7 +223,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `library_db`.`Customer_Users`
 -- -----------------------------------------------------
-DROP TABLE `library_db`.`Customer_Users`;
+DROP TABLE Customer_Users;
 CREATE TABLE IF NOT EXISTS `library_db`.`Customer_Users` (
   username VARCHAR(45) NOT NULL,
   idCustomer INT(11) NOT NULL,
@@ -237,7 +244,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `library_db`.`Employee_Users`
 -- -----------------------------------------------------
-DROP TABLE `library_db`.`Employee_Users`;
+DROP TABLE Employee_Users;
 CREATE TABLE IF NOT EXISTS `library_db`.`Employee_Users` (
   `username` VARCHAR(45) NOT NULL,
   `idEmployee` INT(11) NOT NULL,

@@ -1316,8 +1316,8 @@ public class DatabaseClient {
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
-                long remainingDays = (long) row.get("Remaining days");
-                long fine = (long) row.get("Fine");
+                int remainingDays = (int) row.get("Remaining days");
+                int fine = (int) row.get("Fine");
 
                 Loan loan = new Loan(idLoan, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
                         authors, remainingDays, fine);
