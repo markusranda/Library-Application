@@ -37,7 +37,7 @@ public class BookFormController implements Initializable {
     private ComboBox<String> authorList;
 
     @FXML
-    private MenuButton genreList;
+    private ComboBox<String> genreList;
 
     @FXML
     private Spinner<Integer> quantityField;
@@ -85,11 +85,11 @@ public class BookFormController implements Initializable {
             }
 
             for (Author author : authorArrayList) {
-                authorList.getItems().add( author.getIdAuthors() + " - " + author.getFName() + " " + author.getLName());
+                authorList.getItems().add(author.getIdAuthors() + " - " + author.getFName() + " " + author.getLName());
             }
 
             for (Genre genre : genreArrayList){
-                genreList.getItems().add(new MenuItem(genre.getIdGenre() + " - " + genre.getName()));
+                genreList.getItems().add(genre.getIdGenre() + " - " + genre.getName());
             }
 
             new AutoCompleteComboBoxListener<>(branchList);
@@ -115,20 +115,21 @@ public class BookFormController implements Initializable {
             try {
                 selectedAuthor = authorList.getValue();
                 selectedBranch = branchList.getValue();
-                selectedGenre = genreList.getId();
+                selectedGenre = genreList.getValue();
 
                 String[] splittedAuthorString = selectedAuthor.split("\\ - ");
                 String[] splittedBranchString = selectedBranch.split("\\ - ");
+                String[] splittedGenreString = selectedGenre.split("\\ - ");
 
                 int branchId = Integer.valueOf(splittedBranchString[0]);
                 int authorID = Integer.valueOf(splittedAuthorString[0]);
                 int bookID = databaseClient.addBookToDatabase(titleField.getText(), publisherField.getText(), isbnField.getText(), imageField.getText());
-                int genreID = Integer.valueOf(selectedGenre);
+                int genreID = Integer.valueOf(splittedGenreString[0]);
 
                 int quantity = quantityField.getValue();
 
                 databaseClient.addBookQuantityJunctionToDatabase(bookID, branchId, quantity);
-                databaseClient.addBookAuthorJunctionToDatabase(authorID, bookID);
+                databaseClient.addBookAuthorJunctionToDatabase(bookID, authorID);
                 databaseClient.addBookGenreJunctionToDatabase(bookID, genreID);
                 Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
                 window.close();

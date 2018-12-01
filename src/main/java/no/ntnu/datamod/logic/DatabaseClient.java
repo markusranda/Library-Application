@@ -650,12 +650,10 @@ public class DatabaseClient {
      *
      * @param title Book title
      * @param publisher Book publisher
-     * @param ISBN Book ISBN
-     * @param image Book image???
      * @return Number of edited rows
      * @throws SQLException
      */
-    public int addBookToDatabase(String title, String publisher, String ISBN, String image) throws SQLException{
+    public int addBookToDatabase(String title, String publisher) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
@@ -663,8 +661,8 @@ public class DatabaseClient {
             String fullCommand = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
                     title + "', '" +
                     publisher + "', '" +
-                    ISBN + "', '" +
-                    image + "');";
+                    null + "', '" +
+                    null + "');";
 
             // Create statement
             Statement stm = null;
@@ -688,17 +686,25 @@ public class DatabaseClient {
      * @return Number of edited rows
      * @throws SQLException
      */
-    public int addBookToDatabase(String title, String publisher) throws SQLException{
+    public int addBookToDatabase(String title, String publisher, String ISBN, String image) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
         int bookID = 0;
 
         try {
+
+            if (ISBN.isEmpty()){
+                ISBN = null;
+            }
+            if (image.isEmpty()){
+                image = null;
+            }
+
             String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN, image) VALUES ('" +
                     title + "', '" +
                     publisher + "', " +
-                    null + ", " +
-                    null + ");";
+                    ISBN + ", " +
+                    image + ");";
 
             // Create statement
             Statement stm = null;
@@ -717,6 +723,7 @@ public class DatabaseClient {
 
         }catch (Exception ex){
             System.out.println(ex.getMessage());
+            ex.printStackTrace();
             connection.close();
             return bookID;
         }

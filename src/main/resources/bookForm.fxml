@@ -87,7 +87,7 @@
                   </Label>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="400.0">
                      <children>
-                        <ComboBox fx:id="authorList" prefWidth="189.0" promptText="Select author" />
+                        <ComboBox fx:id="authorList"  prefWidth="189.0" promptText="Select author" />
                         <Button fx:id="addNewAuthor" mnemonicParsing="false" text="Add new ">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -113,7 +113,7 @@
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </padding>
                         </ComboBox>
-                        <Spinner fx:id="quantityField" editable="true" prefWidth="69.0" />
+                        <Spinner fx:id="quantityField" editable="true" prefWidth="69.0" min="0" max="10000" />
                      </children>
                   </HBox>
                   <Label layoutX="297.0" layoutY="476.0" text="Genre">
@@ -129,11 +129,11 @@
                   </Label>
                   <HBox alignment="CENTER" layoutX="135.0" layoutY="624.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="400.0">
                      <children>
-                        <MenuButton fx:id="genreList" mnemonicParsing="false" prefWidth="250.0" text="Select Genre">
+                        <ComboBox fx:id="genreList" prefWidth="250.0" promptText="Select Genre">
                            <padding>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </padding>
-                        </MenuButton>
+                        </ComboBox>
                      </children>
                   </HBox>
                </children>
