@@ -2,6 +2,7 @@ package no.ntnu.datamod.logic;
 import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.gui.Model;
 
+import java.io.InvalidClassException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1271,8 +1272,25 @@ public class DatabaseClient {
                 String library = (String) row.get("name");
                 String bookTitle = (String) row.get("title");
                 String authors = (String) row.get("Authors");
-                int remainingDays = (int) row.get("Remaining days");
-                int fine = (int) row.get("Fine");
+
+                Object remainingDaysObj = row.get("Remaining days");
+                int remainingDays;
+                if (validateDatatype(remainingDaysObj).isSuccess()){
+                    remainingDays = validateDatatype(remainingDaysObj).getValue();
+
+                } else
+
+                    throw new InvalidClassException("The Datatype from the Database is neither int or long.");
+
+
+                Object fineObj = row.get("Fine");
+                int fine;
+                if (validateDatatype(fineObj).isSuccess()) {
+                    fine = validateDatatype(fineObj).getValue();
+
+                } else
+
+                    throw new InvalidClassException("The Datatype from the Database is neither int or long.");
 
                 Loan loan = new Loan(idLoan, loanDate, loanDue, idBook, username, idBranch, library, bookTitle,
                         authors, remainingDays, fine);
@@ -1285,13 +1303,54 @@ public class DatabaseClient {
             return rowlist;
 
 
-        } catch (SQLException | NullPointerException e) {
-
+        } catch (SQLException | NullPointerException | InvalidClassException e) {
             e.printStackTrace();
-
         }
 
         return rowlist;
+    }
+
+    /**
+     *
+     */
+    public interface ValidationResult {
+        boolean isSuccess();
+        int getValue();
+    }
+
+    /**
+     * Tries to find out what the object is castable to, returns the interface ValidationResult with methods to
+     * retrieve if the validation was successful and it's value.
+     *
+     * @param object The object to validate
+     * @return returns the interface ValidationResult with methods to retrieve if the
+     *         validation was successful and it's value.
+     */
+    private ValidationResult validateDatatype(Object object) {
+        int value = 0;
+        boolean result = false;
+
+        if (object instanceof Integer) {
+            value = (int) object;
+            result = true;
+
+        } else if (object instanceof Long) {
+            Long longValue = (long) object;
+            value = longValue.intValue();
+            result = true;
+        }
+
+        int finalValue = value;
+        boolean finalResult = result;
+
+        return new ValidationResult() {
+            public boolean isSuccess() {
+                return finalResult;
+            }
+            public int getValue() {
+                return finalValue;
+            }
+        };
     }
 
     /**
