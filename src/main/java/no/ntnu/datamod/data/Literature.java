@@ -1,5 +1,7 @@
 package no.ntnu.datamod.data;
 
+import java.sql.Blob;
+
 /**
  * Write a description of class Literature here.
  *
@@ -28,7 +30,7 @@ public abstract class Literature
         return publisher;
     }
 
-    public abstract String getImageURL();
+    public abstract byte[] getImage();
 
     public abstract int getIdBook();
 }

@@ -234,10 +234,13 @@ public class StoreController implements Initializable {
         // In case the imageUrl field is null, empty or not working,
         // a default image will be set.
         Image productImg;
+
         try {
-            productImg = new Image(lit.getImageURL());
+             productImg = App.convertToJavaFXImage(lit.getImage(), 250, 400);
+
         }
         catch (IllegalArgumentException | NullPointerException e) {
+            e.printStackTrace();
             productImg = new Image("image/default_book_img_01.png");
         }
 

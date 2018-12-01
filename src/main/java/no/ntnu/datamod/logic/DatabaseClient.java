@@ -142,7 +142,7 @@ public class DatabaseClient {
             int idBook = (int) row.get("idBook");
             String authors = (String) row.get("authors");
             String isbn = (String) row.get("isbn");
-            String image = (String) row.get("image");
+            byte[] image = (byte[]) row.get("image");
 
             Book book = new Book(publisher, title, idBook, authors, isbn, image);
             rowList.add(book);
@@ -158,7 +158,7 @@ public class DatabaseClient {
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
 
-        String fullCommand = "SELECT DISTINCT B.idBook, Br.idBranch, B.title, B.publisher, genre, Authors, ISBN, Br.name AS 'branch', Br.quantity, image\n" +
+        String fullCommand = "SELECT DISTINCT B.idBook, Br.idBranch, B.title, B.publisher, B.image, genre, Authors, ISBN, Br.name AS 'branch', Br.quantity\n" +
                 "FROM Books B, Branches branch,\n" +
                 "     (SELECT  b.idBook, b.title,\n" +
                 "              GROUP_CONCAT(CONCAT(a.fName, ' ', a.lName) ORDER BY CONCAT(a.fName, ' ', a.lName)) AS Authors\n" +
@@ -206,7 +206,8 @@ public class DatabaseClient {
             int quantity = (int) row.get("quantity");
             String branch = (String) row.get("branch");
             int idBranch = (int) row.get("idBranch");
-            Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn);
+            byte[] image = (byte[]) row.get("image");
+            Book book = new Book(idBook, title, author, idBranch, quantity, genre, publisher, branch, isbn, image);
             rowList.add(book);
 
             //String image = (String) row.get("image");
