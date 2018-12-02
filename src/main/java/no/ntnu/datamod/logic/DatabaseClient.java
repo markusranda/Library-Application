@@ -812,7 +812,8 @@ public class DatabaseClient {
                 int execution = stm.executeUpdate(fullCommand);
                 connection.close();
                 return execution;
-            }catch (Exception ex){
+            }catch (SQLException ex){
+                ex.printStackTrace();
                 connection.close();
                 return 0;
             }
@@ -1293,10 +1294,10 @@ public class DatabaseClient {
      */
     public void createLoans(HashMap<Literature, Branch> booksToBeRented) {
 
-        for (HashMap.Entry<Literature, Branch> book : booksToBeRented.entrySet()) {
+        for (HashMap.Entry<Literature, Branch> entry : booksToBeRented.entrySet()) {
 
-            int idBook = book.getKey().getIdBook();
-            int idBranch = book.getKey().getIdBook();
+            int idBook = entry.getKey().getIdBook();
+            int idBranch = entry.getValue().getIdBranch();
             String username = Model.getInstance().currentUser().getUsername();
 
             try {

@@ -240,7 +240,6 @@ public class StoreController implements Initializable {
 
         }
         catch (IllegalArgumentException | NullPointerException e) {
-            e.printStackTrace();
             productImg = new Image("image/default_book_img_01.png");
         }
 
