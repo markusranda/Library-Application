@@ -71,37 +71,45 @@ public class EmployeeFormController implements Initializable {
      * Sets up the EmployeeForm
      */
     private void buildEmployeeForm() {
-
+        updateUserlist();
         try {
-
-            // Sets up the Branch chooser
             ArrayList<Branch> branchArrayList = databaseClient.getBranchList();
-            ArrayList<User> userArrayList = databaseClient.getUsersList();
 
-
-            // Adds all the users and branches to the comboboxes
-            for (User user : userArrayList) {
-                userList.getItems().add(user.getUsername());
-            }
-
+            // Adds all the branches to the comboboxes
             for (Branch branch : branchArrayList) {
                 branchList.getItems().add(branch.getIdBranch() + " - " + branch.getName());
             }
 
-            new AutoCompleteComboBoxListener<>(userList);
             new AutoCompleteComboBoxListener<>(branchList);
 
-            userList.setVisibleRowCount(5);
             branchList.setVisibleRowCount(5);
 
-
         } catch (SQLException e) {
-
             e.printStackTrace();
-
         }
     }
 
+    /**
+     * Updates the comboboxes with information from the database
+     */
+    private void updateUserlist() {
+        try {
+            userList.getItems().clear();
+            ArrayList<User> userArrayList = databaseClient.getUsersList();
+
+            // Adds all the users to the comboboxes
+            for (User user : userArrayList) {
+                userList.getItems().add(user.getUsername());
+            }
+
+            new AutoCompleteComboBoxListener<>(userList);
+
+            userList.setVisibleRowCount(5);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Setup mouse and keyboard event handlers.
@@ -142,6 +150,7 @@ public class EmployeeFormController implements Initializable {
                 }
             });
         });
+        userList.setOnMouseClicked(event -> updateUserlist());
     }
 
 }

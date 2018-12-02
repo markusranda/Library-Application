@@ -1,11 +1,13 @@
 package no.ntnu.datamod.gui;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import no.ntnu.datamod.data.Author;
@@ -14,6 +16,8 @@ import no.ntnu.datamod.data.Genre;
 import no.ntnu.datamod.logic.AutoCompleteComboBoxListener;
 import no.ntnu.datamod.logic.DatabaseClient;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -62,11 +66,15 @@ public class BookFormController implements Initializable {
     @FXML
     private Button addImageBtn;
 
+    //test
+    @FXML
+    private ImageView imageContainer;
+
     private String selectedAuthor;
     private String selectedBranch;
     private String selectedGenre;
     private DatabaseClient databaseClient;
-    private byte[] imageBytes;
+    private File selectedFile;
 
 
     @Override
@@ -82,10 +90,11 @@ public class BookFormController implements Initializable {
     private void buildBookForm() {
 
         try {
-            //updateUserlist();
+            selectedFile = null;
+
+            updateAuthorList();
 
             // Sets up the Branch chooser
-            ArrayList<Author> authorArrayList = databaseClient.getAuthorList();
             ArrayList<Branch> branchArrayList = databaseClient.getBranchList();
             ArrayList<Genre> genreArrayList = databaseClient.getGenreList();
 
@@ -93,16 +102,11 @@ public class BookFormController implements Initializable {
                 branchList.getItems().add(branch.getIdBranch() + " - " + branch.getName());
             }
 
-            for (Author author : authorArrayList) {
-                authorList.getItems().add(author.getIdAuthors() + " - " + author.getFName() + " " + author.getLName());
-            }
-
             for (Genre genre : genreArrayList){
                 genreList.getItems().add(genre.getIdGenre() + " - " + genre.getName());
             }
 
             new AutoCompleteComboBoxListener<>(branchList);
-            new AutoCompleteComboBoxListener<>(authorList);
 
             branchList.setVisibleRowCount(5);
             authorList.setVisibleRowCount(5);
@@ -112,6 +116,27 @@ public class BookFormController implements Initializable {
             e.printStackTrace();
 
         }
+    }
+
+    /**
+     * Updates the Authorlist with authors from the database
+     */
+    private void updateAuthorList() {
+        try {
+            authorList.getItems().clear();
+            ArrayList<Author> authorArrayList = databaseClient.getAuthorList();
+
+            for (Author author : authorArrayList) {
+                authorList.getItems().add(author.getIdAuthors() + " - " + author.getFName() + " " + author.getLName());
+            }
+
+            new AutoCompleteComboBoxListener<>(authorList);
+            authorList.setVisibleRowCount(5);
+
+        } catch (SQLException e)  {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -126,12 +151,16 @@ public class BookFormController implements Initializable {
             fileChooser.setTitle("Open Resource File");
             fileChooser.getExtensionFilters().add(
                     new FileChooser.ExtensionFilter("Image files", "*.png", "*.jpg"));
-            File selectedFile = fileChooser.showOpenDialog(window);
+            selectedFile = fileChooser.showOpenDialog(window);
+
+            BufferedImage bf;
 
             if (selectedFile != null) {
 
                 try {
-                    imageBytes = Files.readAllBytes(selectedFile.toPath());
+                    bf = ImageIO.read(selectedFile);
+                    Image image = SwingFXUtils.toFXImage(bf, null);
+                    imageContainer.setImage(image);
 
                 } catch (IOException e) {
 
@@ -153,7 +182,12 @@ public class BookFormController implements Initializable {
 
                 int branchId = Integer.valueOf(splittedBranchString[0]);
                 int authorID = Integer.valueOf(splittedAuthorString[0]);
-                int bookID = databaseClient.addBookToDatabase(titleField.getText(), publisherField.getText(), isbnField.getText(), imageBytes);
+                int bookID;
+                if (selectedFile != null) {
+                    bookID = databaseClient.addBookToDatabase(titleField.getText(), publisherField.getText(), isbnField.getText(), selectedFile);
+                } else {
+                    bookID = databaseClient.addBookToDatabase(titleField.getText(), publisherField.getText(), isbnField.getText());
+                }
                 int genreID = Integer.valueOf(splittedGenreString[0]);
 
                 int quantity = quantityField.getValue();
@@ -182,5 +216,6 @@ public class BookFormController implements Initializable {
                 }
             });
         });
+        authorList.setOnMouseClicked(event -> updateAuthorList());
     }
 }

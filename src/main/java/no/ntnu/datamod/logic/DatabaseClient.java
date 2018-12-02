@@ -1,7 +1,10 @@
 package no.ntnu.datamod.logic;
+import javafx.scene.image.Image;
 import no.ntnu.datamod.data.*;
 import no.ntnu.datamod.gui.Model;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InvalidClassException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -687,10 +690,58 @@ public class DatabaseClient {
      * @return Number of edited rows
      * @throws SQLException
      */
-    public int addBookToDatabase(String title, String publisher, String ISBN, byte[] image) throws SQLException{
+    public int addBookToDatabase(String title, String publisher, String ISBN, File imageFile) throws SQLException{
         DatabaseConnection connector = new DatabaseConnection(host, port, database);
         Connection connection = connector.getConnection();
         int bookID = 0;
+        PreparedStatement stm = null;
+
+        try {
+
+            FileInputStream fin = new FileInputStream(imageFile);
+            int len = (int)imageFile.length();
+
+            if (ISBN.isEmpty()){
+                ISBN = null;
+            }
+
+            String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN, image) " +
+                    "VALUES (?, ?, ?, ?)";
+
+            stm = connection.prepareStatement(queryInsertBook, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, title);
+            stm.setString(2, publisher);
+            stm.setString(3, ISBN);
+            stm.setBinaryStream(4, fin, len);
+
+            // Insert new Employee
+            stm.executeUpdate();
+
+            // Retrieve Book ID
+            ResultSet rs = stm.getGeneratedKeys();
+            if(rs.next()) {
+                bookID = rs.getInt(1);
+            }
+
+            stm.close();
+            connection.close();
+            return bookID;
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+            connection.close();
+            return bookID;
+        } finally {
+            stm.close();
+            connection.close();
+        }
+    }
+
+    public int addBookToDatabase(String title, String publisher, String ISBN) throws SQLException{
+        DatabaseConnection connector = new DatabaseConnection(host, port, database);
+        Connection connection = connector.getConnection();
+        int bookID = 0;
+        PreparedStatement stm = null;
 
         try {
 
@@ -698,32 +749,34 @@ public class DatabaseClient {
                 ISBN = null;
             }
 
-            String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN, image) VALUES " +
-                    "('" + title + "', '" +
-                    publisher + "', '" +
-                    ISBN + "', '" +
-                    image + "')";
+            String queryInsertBook = "INSERT INTO Books (title, publisher, ISBN) " +
+                    "VALUES (?, ?, ?)";
 
-            // Create statement
-            Statement stm = null;
-            stm = connection.createStatement();
+            stm = connection.prepareStatement(queryInsertBook, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, title);
+            stm.setString(2, publisher);
+            stm.setString(3, ISBN);
 
             // Insert new Employee
-            stm.executeUpdate(queryInsertBook, Statement.RETURN_GENERATED_KEYS);
+            stm.executeUpdate();
 
             // Retrieve Book ID
             ResultSet rs = stm.getGeneratedKeys();
             if(rs.next()) {
-                bookID = rs.getInt(1); }
+                bookID = rs.getInt(1);
+            }
 
+            stm.close();
             connection.close();
             return bookID;
 
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
             ex.printStackTrace();
             connection.close();
             return bookID;
+        } finally {
+            stm.close();
+            connection.close();
         }
     }
 
