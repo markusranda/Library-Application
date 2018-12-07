@@ -34,7 +34,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Books`
 -- -----------------------------------------------------
 DROP TABLE Books;
-CREATE TABLE IF NOT EXISTS `library_db`.`Books` (
+CREATE TABLE IF NOT EXISTS Books (
   `idBook` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NOT NULL,
   `publisher` VARCHAR(45) NOT NULL,
@@ -55,12 +55,12 @@ CREATE TABLE IF NOT EXISTS Book_Authors (
   PRIMARY KEY (`idBook`, `idAuthors`),
   CONSTRAINT `fk_Book_Authors_Authors1`
     FOREIGN KEY (`idAuthors`)
-    REFERENCES `library_db`.`Authors` (`idAuthors`)
+    REFERENCES Authors (`idAuthors`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Book_Authors_Books1`
     FOREIGN KEY (`idBook`)
-    REFERENCES `library_db`.`Books` (`idBook`)
+    REFERENCES Books (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -89,12 +89,12 @@ CREATE TABLE IF NOT EXISTS Book_Genres (
   PRIMARY KEY (`idGenre`, `idBook`),
   CONSTRAINT `fk_Book_Genres_Books1`
     FOREIGN KEY (`idBook`)
-    REFERENCES `library_db`.`Books` (`idBook`)
+    REFERENCES Books (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Book_Genres_Genre1`
     FOREIGN KEY (`idGenre`)
-    REFERENCES `library_db`.`Genres` (`idGenre`)
+    REFERENCES Genres (`idGenre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -105,7 +105,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Branches`
 -- -----------------------------------------------------
 DROP TABLE Branches;
-CREATE TABLE IF NOT EXISTS `library_db`.`Branches` (
+CREATE TABLE IF NOT EXISTS Branches (
   `idBranch` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
@@ -118,19 +118,19 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Book_Quantity`
 -- -----------------------------------------------------
 DROP TABLE Book_Quantity;
-CREATE TABLE IF NOT EXISTS `library_db`.`Book_Quantity` (
+CREATE TABLE IF NOT EXISTS Book_Quantity (
   `quantity` INT(11) NOT NULL,
   `idBook` INT(11) NOT NULL,
   `idBranch` INT(11) NOT NULL,
   PRIMARY KEY (`idBook`, `idBranch`),
   CONSTRAINT `fk_Book_Copies_Books`
     FOREIGN KEY (`idBook`)
-    REFERENCES `library_db`.`Books` (`idBook`)
+    REFERENCES Books (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Book_Copies_Branches1`
     FOREIGN KEY (`idBranch`)
-    REFERENCES `library_db`.`Branches` (`idBranch`)
+    REFERENCES Branches (`idBranch`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -141,7 +141,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Customer`
 -- -----------------------------------------------------
 DROP TABLE Customer;
-CREATE TABLE IF NOT EXISTS `library_db`.`Customer` (
+CREATE TABLE IF NOT EXISTS Customer (
   `idCustomer` INT(11) NOT NULL AUTO_INCREMENT,
   `fname` VARCHAR(45) NOT NULL,
   `lname` VARCHAR(45) NOT NULL,
@@ -156,7 +156,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Employee`
 -- -----------------------------------------------------
 DROP TABLE Employee;
-CREATE TABLE IF NOT EXISTS `library_db`.`Employee` (
+CREATE TABLE IF NOT EXISTS Employee (
   `idEmployee` INT(11) NOT NULL AUTO_INCREMENT,
   `fname` VARCHAR(45) NOT NULL,
   `lname` VARCHAR(45) NOT NULL,
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Employee` (
   PRIMARY KEY (`idEmployee`, `idBranch`),
   CONSTRAINT `fk_Employee_Branches1`
     FOREIGN KEY (`idBranch`)
-    REFERENCES `library_db`.`Branches` (`idBranch`)
+    REFERENCES Branches (`idBranch`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -180,7 +180,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Users`
 -- -----------------------------------------------------
 DROP TABLE Users;
-CREATE TABLE IF NOT EXISTS `library_db`.`Users` (
+CREATE TABLE IF NOT EXISTS Users (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   `usertype` VARCHAR(45) NOT NULL,
@@ -193,7 +193,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Loans`
 -- -----------------------------------------------------
 DROP TABLE Loans;
-CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
+CREATE TABLE IF NOT EXISTS Loans (
   `idLoan` INT(11) NOT NULL AUTO_INCREMENT,
   `loanDate` DATE NOT NULL,
   `loanDue` DATE NOT NULL,
@@ -203,17 +203,17 @@ CREATE TABLE IF NOT EXISTS `library_db`.`Loans` (
   PRIMARY KEY (`idLoan`, `idBook`, `username`, `idBranch`),
   CONSTRAINT `fk_Loans_Books1`
     FOREIGN KEY (`idBook`)
-    REFERENCES `library_db`.`Books` (`idBook`)
+    REFERENCES Books (`idBook`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Loans_Users1`
     FOREIGN KEY (`username`)
-    REFERENCES `library_db`.`Users` (`username`)
+    REFERENCES Users (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Loans_Branches1`
     FOREIGN KEY (`idBranch`)
-    REFERENCES `library_db`.`Branches` (`idBranch`)
+    REFERENCES Branches (`idBranch`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -224,18 +224,18 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `library_db`.`Customer_Users`
 -- -----------------------------------------------------
 DROP TABLE Customer_Users;
-CREATE TABLE IF NOT EXISTS `library_db`.`Customer_Users` (
+CREATE TABLE IF NOT EXISTS Customer_Users (
   username VARCHAR(45) NOT NULL,
   idCustomer INT(11) NOT NULL,
   PRIMARY KEY (username, idCustomer),
   CONSTRAINT `fk_Customer_Users_Users1`
     FOREIGN KEY (username)
-    REFERENCES `library_db`.`Users` (`username`)
+    REFERENCES Users (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Customer_Users_Customer1`
     FOREIGN KEY (idCustomer)
-    REFERENCES `library_db`.`Customer` (`idCustomer`)
+    REFERENCES Customer (`idCustomer`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -245,18 +245,18 @@ ENGINE = InnoDB;
 -- Table `library_db`.`Employee_Users`
 -- -----------------------------------------------------
 DROP TABLE Employee_Users;
-CREATE TABLE IF NOT EXISTS `library_db`.`Employee_Users` (
+CREATE TABLE IF NOT EXISTS Employee_Users (
   `username` VARCHAR(45) NOT NULL,
   `idEmployee` INT(11) NOT NULL,
   PRIMARY KEY (`username`, `idEmployee`),
   CONSTRAINT `fk_Employee_Users_Users1`
     FOREIGN KEY (`username`)
-    REFERENCES `library_db`.`Users` (`username`)
+    REFERENCES Users (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Employee_Users_Employee1`
     FOREIGN KEY (`idEmployee`)
-    REFERENCES `library_db`.`Employee` (`idEmployee`)
+    REFERENCES Employee (`idEmployee`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
