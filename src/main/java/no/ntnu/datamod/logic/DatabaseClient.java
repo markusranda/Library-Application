@@ -1228,6 +1228,8 @@ public class DatabaseClient {
             Connection connection = connector.getConnection();
             Statement stm = connection.createStatement();
 
+            String username = Model.getInstance().currentUser().getUsername();
+
             Iterator it = books.entrySet().iterator() ;
              while (it.hasNext()) {
                  Map.Entry pair = (Map.Entry)it.next();
@@ -1236,12 +1238,15 @@ public class DatabaseClient {
                  int idBook = book.getIdBook();
                  int idBranch = branch.getIdBranch();
 
+                 // Checks if the books has a quantity larger or equal to one.
+                 // If it does the books will get removed from the list. And added to loans
                  if (getQuantity(idBook, idBranch) >= 1) {
                      String fullCommand =
                              "UPDATE Book_Quantity " +
                                      "SET quantity = quantity - 1 " +
                                      "WHERE idBook = " + idBook + " AND idBranch = " + idBranch + ";";
                      stm.execute(fullCommand);
+                     addLoanToDatabase(idBook, idBranch, username);
                      it.remove();
                  }
              }

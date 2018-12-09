@@ -272,11 +272,13 @@ public class StoreController implements Initializable {
         });
         checkoutBtn.setOnMouseClicked(event -> {
 
-            HashMap<Literature, Branch> booksToBeRented = shoppingCartMappings;
+            // Creates a new HashMap containing all the books
+            HashMap<Literature, Branch> booksTryRent = shoppingCartMappings;
 
-            HashMap<Literature, Branch> leftoverBooks = databaseClient.updateQuantity(booksToBeRented);
+            // Tries to update the quantity of the books we are trying to rent,
+            // and returns all the books that didn't get rented.
+            HashMap<Literature, Branch> leftoverBooks = databaseClient.updateQuantity(booksTryRent);
 
-            databaseClient.createLoans(booksToBeRented);
 
             if (!leftoverBooks.isEmpty()) {
                 StringBuilder books = new StringBuilder();
