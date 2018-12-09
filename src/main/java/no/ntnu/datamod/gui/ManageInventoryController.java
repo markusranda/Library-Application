@@ -70,7 +70,7 @@ public class ManageInventoryController implements Initializable {
                 scene.getStylesheets().add("styles/style.css");
                 // This line gets the Stage information
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                window.setTitle("Library Leopard Leo - Welcome");
+                window.setTitle("Library Application - Welcome");
                 window.setScene(scene);
                 window.show();
             } catch (IOException e) {

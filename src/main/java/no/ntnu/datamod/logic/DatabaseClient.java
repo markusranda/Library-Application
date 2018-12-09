@@ -1329,7 +1329,7 @@ public class DatabaseClient {
 
         try {
             String fullCommand =
-                    "SELECT  l.idLoan, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
+                    " SELECT  l.idLoan, l.idBook, l.idBranch, l.username,  branch.name, title_authors.title, Authors," +
                             "l.loanDate, l.loanDue, DATEDIFF( l.loanDue, CURRENT_DATE ) AS 'Remaining days'," +
                             "CASE\n" +
                             "        WHEN (DATEDIFF(CURDATE(), l.loanDue) * 5) < 0 THEN 0\n" +

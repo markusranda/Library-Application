@@ -48,7 +48,7 @@ public class MainMenuController implements Initializable {
 
         // Get the full name of current user, and display it
         String name = databaseClient.getNameOfCurrentUser();
-        welcomeText.setText("Welcome to the Library " + name);
+        welcomeText.setText("Welcome to the library, " + name);
     }
 
     /**
@@ -62,7 +62,7 @@ public class MainMenuController implements Initializable {
         scene.getStylesheets().add("styles/style.css");
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setTitle("Library Leopard Leo - Store");
+        window.setTitle("Library Application - Store");
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
@@ -88,7 +88,7 @@ public class MainMenuController implements Initializable {
         scene.getStylesheets().add("styles/style.css");
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setTitle("Library Leopard Leo - Manage inventory");
+        window.setTitle("Library Application - Manage inventory");
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
@@ -105,7 +105,7 @@ public class MainMenuController implements Initializable {
         scene.getStylesheets().add("styles/style.css");
         // This line gets the Stage information
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setTitle("Library Leopard Leo - My Page");
+        window.setTitle("Library Application - My Page");
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
