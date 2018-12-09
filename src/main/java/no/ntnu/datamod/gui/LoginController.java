@@ -56,7 +56,7 @@ public class LoginController implements Initializable {
                     scene.getStylesheets().add("styles/style.css");
                     // This line gets the Stage information
                     Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                    window.setTitle("Library Leopard Leo - Main Menu");
+                    window.setTitle("Library Application - Main Menu");
 
                     window.setScene(scene);
                     window.show();

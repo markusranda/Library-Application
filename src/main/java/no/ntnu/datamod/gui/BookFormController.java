@@ -40,9 +40,6 @@ public class BookFormController implements Initializable {
     private TextField isbnField;
 
     @FXML
-    private TextField imageField;
-
-    @FXML
     private ComboBox<String> authorList;
 
     @FXML
