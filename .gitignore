@@ -42,3 +42,4 @@ boxes/*
 /vagrant-spec.config.rb
 test/vagrant-spec/.vagrant/
 
+/META-INF/
