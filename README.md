@@ -8,3 +8,7 @@ Dependencies
 
 
 ![login_img](https://i.imgur.com/qFjZEKV.png)
+![welcome_img](https://i.imgur.com/a43FgYT.png)
+![borrow_book](https://i.imgur.com/01xc2g6.png)
+![loans](https://i.imgur.com/0TfYQKy.png)
+![inventory](https://i.imgur.com/7AaF9Cy.png)
