@@ -556,7 +556,7 @@ public class DatabaseClient {
         int colCount = meta.getColumnCount();
         ArrayList<String> cols = new ArrayList<>();
         for (int index=1; index <= colCount; index++)
-            cols.add(meta.getColumnName(index));
+            cols.add(meta.getColumnLabel(index));
 
         while (result.next()) {
             HashMap<String,Object> row = new HashMap<>();
